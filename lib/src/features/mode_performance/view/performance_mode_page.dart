@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:locations_repository/locations_repository.dart';
+import 'package:shebalin/src/features/active_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_player.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
@@ -13,13 +14,15 @@ import 'package:shebalin/src/features/mode_performance/view/widgets/tip.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class PerformanceModePage extends StatefulWidget {
   final List<Location> locations;
   final String performanceTitle;
   final String imageLink;
+  final mapbloc = PerfModeMapBloc();
 
-  const PerformanceModePage({
+  PerformanceModePage({
     super.key,
     required this.locations,
     required this.performanceTitle,
@@ -62,6 +65,11 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
               );
           },
         ),
+        BlocProvider<PerfModeMapBloc>(
+          create: (context) {
+            return widget.mapbloc;
+          },
+        ),
       ],
       child: Builder(
         builder: (context) {
@@ -84,6 +92,8 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                   ),
                   body: MapPage(
                     locations: widget.locations,
+                    initialCoords:
+                        const Point(latitude: 54.988707, longitude: 73.368659),
                   ),
                   onPanelSlide: (position) {
                     setState(() {
@@ -102,7 +112,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                       FloatingActionButton(
                         heroTag: "getUserLocation",
                         backgroundColor: Colors.white,
-                        onPressed: () {},
+                        onPressed: _getUserBloc,
                         child: const Image(
                           image: AssetImage(ImagesSources.locationIcon),
                         ),
@@ -204,5 +214,9 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
         onPressedApprove: onPressedApprove,
       ),
     );
+  }
+
+  void _getUserBloc() {
+    widget.mapbloc.add(PerfModeMapGetUserLocationEvent());
   }
 }
