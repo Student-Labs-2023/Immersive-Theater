@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "886313816389",
+    "project_id": "shebalinflutter",
+    "storage_bucket": "shebalinflutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886313816389:android:63bddb707eac24e78bae2c",
+        "android_client_info": {
+          "package_name": "com.example.shebalin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886313816389-5camh1sm9h19ebo9esjk6n1097p02nq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzSOBNRSv31NFs54YZhJff973imWCeUvY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "886313816389-5camh1sm9h19ebo9esjk6n1097p02nq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
