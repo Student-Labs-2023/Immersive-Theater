@@ -90,10 +90,14 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                     controller: panelController,
                     locations: widget.locations,
                   ),
-                  body: MapPage(
-                    locations: widget.locations,
-                    initialCoords:
-                        const Point(latitude: 54.988707, longitude: 73.368659),
+                  body: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
+                    builder: (context, state) {
+                      return MapPage(
+                        locations: widget.locations,
+                        initialCoords: const Point(
+                            latitude: 54.988707, longitude: 73.368659),
+                      );
+                    },
                   ),
                   onPanelSlide: (position) {
                     setState(() {

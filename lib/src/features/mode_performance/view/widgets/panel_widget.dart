@@ -26,6 +26,7 @@ class _PanelWidgetState extends State<PanelWidget> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(
           height: 12,
