@@ -5,6 +5,7 @@ import 'package:locations_repository/locations_repository.dart';
 import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_player.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
+import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/map_page.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/panel_widget.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/progress_bar.dart';
@@ -15,10 +16,14 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class PerformanceModePage extends StatefulWidget {
   final List<Location> locations;
+  final String performanceTitle;
+  final String imageLink;
 
   const PerformanceModePage({
     super.key,
     required this.locations,
+    required this.performanceTitle,
+    required this.imageLink,
   });
 
   @override
@@ -42,7 +47,8 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
           create: (context) => ModePerformanceBloc(
             0,
             widget.locations.length,
-            player.processingStateStream,
+            widget.performanceTitle,
+            widget.imageLink,
           ),
         ),
         BlocProvider(
@@ -168,7 +174,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
               FloatingActionButton(
                 heroTag: "closePerformance",
                 backgroundColor: Colors.white,
-                onPressed: _closePerformance,
+                onPressed: () => _closePerformance(context),
                 child: const Image(
                   image: AssetImage(ImagesSources.closePerformance),
                 ),
@@ -180,5 +186,23 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
     );
   }
 
-  void _closePerformance() {}
+  void _closePerformance(BuildContext context) {
+    onPressedCancel() => Navigator.pop(
+          context,
+        );
+    onPressedApprove() => Navigator.pop(
+          context,
+        );
+    showDialog(
+      context: context,
+      builder: (_) => DialogWindow(
+        title: "Завершить спектакль?",
+        subtitle: "Прогресс прохождения не будет сохранен.",
+        onPressedCancel: onPressedCancel,
+        titleApprove: "Завершить",
+        titleCancel: "Отмена",
+        onPressedApprove: onPressedApprove,
+      ),
+    );
+  }
 }

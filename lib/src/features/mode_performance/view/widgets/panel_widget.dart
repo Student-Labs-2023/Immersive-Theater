@@ -79,7 +79,7 @@ class _PanelWidgetState extends State<PanelWidget> {
                   return LocationItem(
                     locationName: widget.locations[index].title,
                     isCurrentLocation: state.indexLocation == index,
-                    isCompleted: index <= state.indexLocation,
+                    isCompleted: index < state.indexLocation,
                   );
                 },
               );
