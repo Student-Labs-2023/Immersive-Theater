@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:math';
-
+import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:locations_repository/locations_repository.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 part 'perf_mode_map_event.dart';
@@ -21,8 +21,8 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
     on<PerfModeMapUserLocationAddedEvent>(_onUserLocationAddedEvent);
     on<PerfModeMapMoveCameraEvent>(_onMoveCameraEvent);
     on<PerfModeMapInitialEvent>(_onInitialEvent);
-    on<PerfModeMapAddMapObjectsEvent>(_onPerfModeMapAddMapObjectsEvent);
-    on<PerfModeMaPinsLoadEvent>(_onPerfModeMapPinsLoad);
+    on<PerfModeMapPinsLoadEvent>(_onPerfModeMapPinsLoad);
+    on<PerfModeMapRoutesLoadEvent>(_onPerfModeMapRoutesLoad);
   }
 
   Future<void> _onGetUserLocationEvent(
@@ -85,13 +85,11 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
     mapcontroller = event.controller;
   }
 
-  FutureOr<void> _onPerfModeMapAddMapObjectsEvent(
-      PerfModeMapAddMapObjectsEvent event, Emitter<PerfModeMapState> emit) {
-    state.mapObjects.addAll(event.mapObjects);
-  }
-
-  FutureOr<void> _onPerfModeMapPinsLoad(
-      PerfModeMaPinsLoadEvent event, Emitter<PerfModeMapState> emit) {
+  Future<FutureOr<void>> _onPerfModeMapPinsLoad(
+    PerfModeMapPinsLoadEvent event,
+    Emitter<PerfModeMapState> emit,
+  ) async {
+    emit(PerfModeMapInProgress(state.mapObjects));
     final int indexLocation = event.index;
     final countLocations = event.countLocations;
     final locations = event.locations;
@@ -141,7 +139,84 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
                   )
                   .toList()),
     );
+    emit(PerfModeMapLoadSuccess(state.mapObjects));
+  }
 
-    emit(state.copyWith(mapObjects: state.mapObjects));
+  Future<FutureOr<void>> _onPerfModeMapRoutesLoad(
+    PerfModeMapRoutesLoadEvent event,
+    Emitter<PerfModeMapState> emit,
+  ) async {
+    emit(PerfModeMapInProgress(state.mapObjects));
+    final int indexLocation = event.index;
+    final countLocations = event.countLocations;
+    final locations = event.locations;
+    final locationsNotDone = locations.sublist(indexLocation);
+    if (indexLocation != 0) {
+      final locationsDone = locations.sublist(0, indexLocation + 1);
+      BicycleResultWithSession resultWithSessionDone =
+          YandexBicycle.requestRoutes(
+        points: locationsDone
+            .map(
+              (e) => RequestPoint(
+                point: Point(
+                  latitude: double.parse(e.latitude),
+                  longitude: double.parse(e.longitude),
+                ),
+                requestPointType: RequestPointType.wayPoint,
+              ),
+            )
+            .toList(),
+        bicycleVehicleType: BicycleVehicleType.bicycle,
+      );
+      var result = await resultWithSessionDone.result;
+
+      if (result.error != null) {
+        emit(PerfModeMapFailure(state.mapObjects));
+      }
+      result.routes!.asMap().forEach((i, route) {
+        state.mapObjects.add(
+          PolylineMapObject(
+            mapId: const MapObjectId('done'),
+            polyline: Polyline(points: route.geometry),
+            strokeColor: AppColor.grey,
+            strokeWidth: 3,
+          ),
+        );
+      });
+    }
+
+    if (indexLocation != countLocations - 1) {
+      BicycleResultWithSession resultWithSession = YandexBicycle.requestRoutes(
+        points: locationsNotDone
+            .map(
+              (e) => RequestPoint(
+                point: Point(
+                  latitude: double.parse(e.latitude),
+                  longitude: double.parse(e.longitude),
+                ),
+                requestPointType: RequestPointType.wayPoint,
+              ),
+            )
+            .toList(),
+        bicycleVehicleType: BicycleVehicleType.bicycle,
+      );
+      var resultNotDone = await resultWithSession.result;
+
+      if (resultNotDone.error != null) {
+        emit(PerfModeMapFailure(state.mapObjects));
+      }
+
+      resultNotDone.routes!.asMap().forEach((i, route) {
+        state.mapObjects.add(
+          PolylineMapObject(
+            mapId: const MapObjectId("not_done"),
+            polyline: Polyline(points: route.geometry),
+            strokeColor: AppColor.purplePrimary,
+            strokeWidth: 3,
+          ),
+        );
+      });
+    }
+    emit(PerfModeMapLoadSuccess(state.mapObjects));
   }
 }

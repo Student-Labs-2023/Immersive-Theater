@@ -37,8 +37,13 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _loadMapPins(int index) {
-    perfModeMapBloc
-        .add(PerfModeMaPinsLoadEvent(index, countLocations, widget.locations));
+    perfModeMapBloc.add(
+      PerfModeMapPinsLoadEvent(
+        index,
+        countLocations,
+        widget.locations,
+      ),
+    );
   }
 
   @override
@@ -48,11 +53,16 @@ class _MapPageState extends State<MapPage> {
         return previous.indexLocation < current.indexLocation;
       },
       listener: (context, state) async {
-        // _buildAllRoute(state.indexLocation);
         _loadMapPins(state.indexLocation);
+        _buildAllRoute(state.indexLocation);
       },
       child: Scaffold(
         body: BlocBuilder<PerfModeMapBloc, PerfModeMapState>(
+          buildWhen: (previous, current) {
+            log(previous.mapObjects.length.toString());
+            log(current.mapObjects.length.toString());
+            return true;
+          },
           builder: (context, state) {
             return YandexMap(
               mapType: MapType.vector,
@@ -61,8 +71,9 @@ class _MapPageState extends State<MapPage> {
                 context.read<PerfModeMapBloc>()
                   ..add(PerfModeMapInitialEvent(controller))
                   ..add(PerfModeMapMoveCameraEvent(widget.initialCoords));
-                // _buildAllRoute(0);
+
                 _loadMapPins(0);
+                _buildAllRoute(0);
               },
               onUserLocationAdded: _onUserLocationAddedCallback,
             );
@@ -71,77 +82,6 @@ class _MapPageState extends State<MapPage> {
       ),
     );
   }
-
-  // void _buildAllRoute(int index) async {
-  //   final locationsNotDone = widget.locations.sublist(index);
-  //   if (index != 0) {
-  //     final locationsDone = widget.locations.sublist(0, index + 1);
-  //     BicycleResultWithSession resultWithSessionDone =
-  //         YandexBicycle.requestRoutes(
-  //       points: locationsDone
-  //           .map(
-  //             (e) => RequestPoint(
-  //               point: Point(
-  //                 latitude: double.parse(e.latitude),
-  //                 longitude: double.parse(e.longitude),
-  //               ),
-  //               requestPointType: RequestPointType.wayPoint,
-  //             ),
-  //           )
-  //           .toList(),
-  //       bicycleVehicleType: BicycleVehicleType.bicycle,
-  //     );
-  //     var result = await resultWithSessionDone.result;
-
-  //     if (result.error != null) {
-  //       return;
-  //     }
-  //     result.routes!.asMap().forEach((i, route) {
-  //       mapObjects.add(
-  //         PolylineMapObject(
-  //           mapId: const MapObjectId('done'),
-  //           polyline: Polyline(points: route.geometry),
-  //           strokeColor: AppColor.grey,
-  //           strokeWidth: 3,
-  //         ),
-  //       );
-  //     });
-  //   }
-
-  //   if (index != countLocations - 1) {
-  //     BicycleResultWithSession resultWithSession = YandexBicycle.requestRoutes(
-  //       points: locationsNotDone
-  //           .map(
-  //             (e) => RequestPoint(
-  //               point: Point(
-  //                 latitude: double.parse(e.latitude),
-  //                 longitude: double.parse(e.longitude),
-  //               ),
-  //               requestPointType: RequestPointType.wayPoint,
-  //             ),
-  //           )
-  //           .toList(),
-  //       bicycleVehicleType: BicycleVehicleType.bicycle,
-  //     );
-  //     var resultNotDone = await resultWithSession.result;
-
-  //     if (resultNotDone.error != null) {
-  //       return;
-  //     }
-  //     setState(() {
-  //       resultNotDone.routes!.asMap().forEach((i, route) {
-  //         mapObjects.add(
-  //           PolylineMapObject(
-  //             mapId: const MapObjectId("not_done"),
-  //             polyline: Polyline(points: route.geometry),
-  //             strokeColor: AppColor.purplePrimary,
-  //             strokeWidth: 3,
-  //           ),
-  //         );
-  //       });
-  //     });
-  //   }
-  // }
 
   Future<UserLocationView> _onUserLocationAddedCallback(
     UserLocationView locationView,
@@ -170,5 +110,15 @@ class _MapPageState extends State<MapPage> {
     );
 
     return userLocationView;
+  }
+
+  _buildAllRoute(int index) {
+    perfModeMapBloc.add(
+      PerfModeMapRoutesLoadEvent(
+        index,
+        countLocations,
+        widget.locations,
+      ),
+    );
   }
 }

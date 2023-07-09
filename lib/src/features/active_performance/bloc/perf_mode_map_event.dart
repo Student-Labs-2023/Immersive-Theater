@@ -35,11 +35,24 @@ class PerfModeMapUserLocationAddedEvent extends PerfModeMapEvent {
   List<Object> get props => [userLocationView];
 }
 
-class PerfModeMaPinsLoadEvent extends PerfModeMapEvent {
+class PerfModeMapPinsLoadEvent extends PerfModeMapEvent {
   final int index;
   final int countLocations;
   final List<Location> locations;
-  const PerfModeMaPinsLoadEvent(
+  const PerfModeMapPinsLoadEvent(
+    this.index,
+    this.countLocations,
+    this.locations,
+  );
+  @override
+  List<Object> get props => [index];
+}
+
+class PerfModeMapRoutesLoadEvent extends PerfModeMapEvent {
+  final int index;
+  final int countLocations;
+  final List<Location> locations;
+  const PerfModeMapRoutesLoadEvent(
     this.index,
     this.countLocations,
     this.locations,
