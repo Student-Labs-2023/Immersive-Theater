@@ -75,7 +75,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
         builder: (context) {
           return Scaffold(
             extendBodyBehindAppBar: true,
-            appBar: appBar(),
+            appBar: _appBar(),
             body: Stack(
               alignment: AlignmentDirectional.center,
               children: [
@@ -171,7 +171,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
     );
   }
 
-  AppBar appBar() {
+  AppBar _appBar() {
     return AppBar(
       toolbarHeight: 100,
       backgroundColor: Colors.transparent,

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -200,6 +199,7 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
       PlacemarkIconStyle(
         image: BitmapDescriptor.fromAssetImage(ImagesSources.userPlacemark),
         scale: 4,
+        isFlat: true,
         rotationType: RotationType.rotate,
       ),
     );
