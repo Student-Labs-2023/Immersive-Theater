@@ -16,16 +16,6 @@ class PerfModeMapInitialEvent extends PerfModeMapEvent {
 
 class PerfModeMapGetUserLocationEvent extends PerfModeMapEvent {}
 
-class PerfModeMapAddMapObjectsEvent extends PerfModeMapEvent {
-  final List<MapObject> mapObjects;
-
-  const PerfModeMapAddMapObjectsEvent(
-    this.mapObjects,
-  );
-  @override
-  List<Object> get props => [mapObjects];
-}
-
 class PerfModeMapUserLocationAddedEvent extends PerfModeMapEvent {
   final UserLocationView userLocationView;
   const PerfModeMapUserLocationAddedEvent(

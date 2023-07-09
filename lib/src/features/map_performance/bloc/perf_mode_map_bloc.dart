@@ -18,7 +18,6 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
       !(await Permission.location.request().isGranted);
   PerfModeMapBloc() : super(PerfModeMapInProgress([])) {
     on<PerfModeMapGetUserLocationEvent>(_onGetUserLocationEvent);
-    on<PerfModeMapUserLocationAddedEvent>(_onUserLocationAddedEvent);
     on<PerfModeMapMoveCameraEvent>(_onMoveCameraEvent);
     on<PerfModeMapInitialEvent>(_onInitialEvent);
     on<PerfModeMapPinsLoadEvent>(_onPerfModeMapPinsLoad);
@@ -37,34 +36,6 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
         autoZoomEnabled: true,
       );
     }
-  }
-
-  void _onUserLocationAddedEvent(
-    PerfModeMapUserLocationAddedEvent event,
-    Emitter<PerfModeMapState> emit,
-  ) async {
-    userLocationView = event.userLocationView.copyWith(
-      arrow: event.userLocationView.arrow.copyWith(
-        icon: PlacemarkIcon.single(
-          PlacemarkIconStyle(
-            image: BitmapDescriptor.fromAssetImage(ImagesSources.userPlacemark),
-            scale: 3,
-          ),
-        ),
-      ),
-      pin: event.userLocationView.pin.copyWith(
-        icon: PlacemarkIcon.single(
-          PlacemarkIconStyle(
-            image: BitmapDescriptor.fromAssetImage(ImagesSources.userPlacemark),
-            scale: 3,
-          ),
-        ),
-      ),
-      accuracyCircle: event.userLocationView.accuracyCircle.copyWith(
-        fillColor: Colors.transparent,
-        strokeColor: Colors.transparent,
-      ),
-    );
   }
 
   Future<void> _onMoveCameraEvent(
@@ -100,6 +71,7 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
                   .sublist(0, indexLocation)
                   .map(
                     (location) => PlacemarkMapObject(
+                      opacity: 1,
                       mapId: MapObjectId(location.number),
                       point: Point(
                         latitude: double.parse(location.latitude),
@@ -123,6 +95,7 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
                   .map(
                     (location) => PlacemarkMapObject(
                       mapId: MapObjectId(location.number),
+                      opacity: 1,
                       point: Point(
                         latitude: double.parse(location.latitude),
                         longitude: double.parse(location.longitude),
@@ -218,5 +191,30 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
       });
     }
     emit(PerfModeMapLoadSuccess(state.mapObjects));
+  }
+
+  Future<UserLocationView>? onUserLocationAddedCallback(
+    UserLocationView locationView,
+  ) async {
+    final PlacemarkIcon userIcon = PlacemarkIcon.single(
+      PlacemarkIconStyle(
+        image: BitmapDescriptor.fromAssetImage(ImagesSources.userPlacemark),
+        scale: 4,
+        rotationType: RotationType.rotate,
+      ),
+    );
+    final userLocationView = locationView.copyWith(
+      arrow: locationView.arrow.copyWith(
+        icon: userIcon,
+      ),
+      pin: locationView.pin.copyWith(
+        icon: userIcon,
+      ),
+      accuracyCircle: locationView.accuracyCircle.copyWith(
+        fillColor: Colors.transparent,
+        strokeColor: Colors.transparent,
+      ),
+    );
+    return userLocationView;
   }
 }
