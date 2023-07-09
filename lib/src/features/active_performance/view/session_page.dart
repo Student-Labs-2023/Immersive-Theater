@@ -8,9 +8,9 @@ import 'package:shebalin/src/theme/theme.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MapPage extends StatefulWidget {
-  final List<Location> locations;
+  List<Location> locations;
   final Point initialCoords;
-  const MapPage({
+  MapPage({
     Key? key,
     required this.locations,
     required this.initialCoords,

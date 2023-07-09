@@ -95,7 +95,9 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                       return MapPage(
                         locations: widget.locations,
                         initialCoords: const Point(
-                            latitude: 54.988707, longitude: 73.368659),
+                          latitude: 54.988707,
+                          longitude: 73.368659,
+                        ),
                       );
                     },
                   ),

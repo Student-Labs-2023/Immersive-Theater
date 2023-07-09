@@ -25,63 +25,20 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  late final List<MapObject> mapObjects = [];
   final List<BicycleSessionResult> results = [];
   late final int countLocations;
+  late PerfModeMapBloc perfModeMapBloc;
 
   @override
   void initState() {
     countLocations = context.read<ModePerformanceBloc>().state.countLocations;
+    perfModeMapBloc = context.read<PerfModeMapBloc>();
     super.initState();
   }
 
   void _loadMapPins(int index) {
-    mapObjects.addAll(
-      ((index == 0
-              ? <MapObject>[]
-              : widget.locations
-                  .sublist(0, index)
-                  .map(
-                    (location) => PlacemarkMapObject(
-                      mapId: MapObjectId(location.number),
-                      point: Point(
-                        latitude: double.parse(location.latitude),
-                        longitude: double.parse(location.longitude),
-                      ),
-                      icon: PlacemarkIcon.single(
-                        PlacemarkIconStyle(
-                          image: BitmapDescriptor.fromAssetImage(
-                            ImagesSources.grayPlacemark,
-                          ),
-                          scale: 2,
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList()) +
-          (index == countLocations
-              ? <MapObject>[]
-              : widget.locations
-                  .sublist(index)
-                  .map(
-                    (location) => PlacemarkMapObject(
-                      mapId: MapObjectId(location.number),
-                      point: Point(
-                        latitude: double.parse(location.latitude),
-                        longitude: double.parse(location.longitude),
-                      ),
-                      icon: PlacemarkIcon.single(
-                        PlacemarkIconStyle(
-                          image: BitmapDescriptor.fromAssetImage(
-                            ImagesSources.purplePlacemark,
-                          ),
-                          scale: 2,
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList())),
-    );
+    perfModeMapBloc
+        .add(PerfModeMaPinsLoadEvent(index, countLocations, widget.locations));
   }
 
   @override
@@ -91,25 +48,20 @@ class _MapPageState extends State<MapPage> {
         return previous.indexLocation < current.indexLocation;
       },
       listener: (context, state) async {
-        _buildAllRoute(state.indexLocation);
+        // _buildAllRoute(state.indexLocation);
         _loadMapPins(state.indexLocation);
-        final pos = await context
-            .read<PerfModeMapBloc>()
-            .mapcontroller
-            .getUserCameraPosition();
-        log(pos!.azimuth.toString());
       },
       child: Scaffold(
         body: BlocBuilder<PerfModeMapBloc, PerfModeMapState>(
           builder: (context, state) {
             return YandexMap(
               mapType: MapType.vector,
-              mapObjects: mapObjects,
+              mapObjects: state.mapObjects,
               onMapCreated: (controller) {
                 context.read<PerfModeMapBloc>()
                   ..add(PerfModeMapInitialEvent(controller))
                   ..add(PerfModeMapMoveCameraEvent(widget.initialCoords));
-                _buildAllRoute(0);
+                // _buildAllRoute(0);
                 _loadMapPins(0);
               },
               onUserLocationAdded: _onUserLocationAddedCallback,
@@ -120,76 +72,76 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  void _buildAllRoute(int index) async {
-    final locationsNotDone = widget.locations.sublist(index);
-    if (index != 0) {
-      final locationsDone = widget.locations.sublist(0, index + 1);
-      BicycleResultWithSession resultWithSessionDone =
-          YandexBicycle.requestRoutes(
-        points: locationsDone
-            .map(
-              (e) => RequestPoint(
-                point: Point(
-                  latitude: double.parse(e.latitude),
-                  longitude: double.parse(e.longitude),
-                ),
-                requestPointType: RequestPointType.wayPoint,
-              ),
-            )
-            .toList(),
-        bicycleVehicleType: BicycleVehicleType.bicycle,
-      );
-      var result = await resultWithSessionDone.result;
+  // void _buildAllRoute(int index) async {
+  //   final locationsNotDone = widget.locations.sublist(index);
+  //   if (index != 0) {
+  //     final locationsDone = widget.locations.sublist(0, index + 1);
+  //     BicycleResultWithSession resultWithSessionDone =
+  //         YandexBicycle.requestRoutes(
+  //       points: locationsDone
+  //           .map(
+  //             (e) => RequestPoint(
+  //               point: Point(
+  //                 latitude: double.parse(e.latitude),
+  //                 longitude: double.parse(e.longitude),
+  //               ),
+  //               requestPointType: RequestPointType.wayPoint,
+  //             ),
+  //           )
+  //           .toList(),
+  //       bicycleVehicleType: BicycleVehicleType.bicycle,
+  //     );
+  //     var result = await resultWithSessionDone.result;
 
-      if (result.error != null) {
-        return;
-      }
-      result.routes!.asMap().forEach((i, route) {
-        mapObjects.add(
-          PolylineMapObject(
-            mapId: const MapObjectId('done'),
-            polyline: Polyline(points: route.geometry),
-            strokeColor: AppColor.grey,
-            strokeWidth: 3,
-          ),
-        );
-      });
-    }
+  //     if (result.error != null) {
+  //       return;
+  //     }
+  //     result.routes!.asMap().forEach((i, route) {
+  //       mapObjects.add(
+  //         PolylineMapObject(
+  //           mapId: const MapObjectId('done'),
+  //           polyline: Polyline(points: route.geometry),
+  //           strokeColor: AppColor.grey,
+  //           strokeWidth: 3,
+  //         ),
+  //       );
+  //     });
+  //   }
 
-    if (index != countLocations - 1) {
-      BicycleResultWithSession resultWithSession = YandexBicycle.requestRoutes(
-        points: locationsNotDone
-            .map(
-              (e) => RequestPoint(
-                point: Point(
-                  latitude: double.parse(e.latitude),
-                  longitude: double.parse(e.longitude),
-                ),
-                requestPointType: RequestPointType.wayPoint,
-              ),
-            )
-            .toList(),
-        bicycleVehicleType: BicycleVehicleType.bicycle,
-      );
-      var resultNotDone = await resultWithSession.result;
+  //   if (index != countLocations - 1) {
+  //     BicycleResultWithSession resultWithSession = YandexBicycle.requestRoutes(
+  //       points: locationsNotDone
+  //           .map(
+  //             (e) => RequestPoint(
+  //               point: Point(
+  //                 latitude: double.parse(e.latitude),
+  //                 longitude: double.parse(e.longitude),
+  //               ),
+  //               requestPointType: RequestPointType.wayPoint,
+  //             ),
+  //           )
+  //           .toList(),
+  //       bicycleVehicleType: BicycleVehicleType.bicycle,
+  //     );
+  //     var resultNotDone = await resultWithSession.result;
 
-      if (resultNotDone.error != null) {
-        return;
-      }
-      setState(() {
-        resultNotDone.routes!.asMap().forEach((i, route) {
-          mapObjects.add(
-            PolylineMapObject(
-              mapId: const MapObjectId("not_done"),
-              polyline: Polyline(points: route.geometry),
-              strokeColor: AppColor.purplePrimary,
-              strokeWidth: 3,
-            ),
-          );
-        });
-      });
-    }
-  }
+  //     if (resultNotDone.error != null) {
+  //       return;
+  //     }
+  //     setState(() {
+  //       resultNotDone.routes!.asMap().forEach((i, route) {
+  //         mapObjects.add(
+  //           PolylineMapObject(
+  //             mapId: const MapObjectId("not_done"),
+  //             polyline: Polyline(points: route.geometry),
+  //             strokeColor: AppColor.purplePrimary,
+  //             strokeWidth: 3,
+  //           ),
+  //         );
+  //       });
+  //     });
+  //   }
+  // }
 
   Future<UserLocationView> _onUserLocationAddedCallback(
     UserLocationView locationView,
@@ -199,7 +151,7 @@ class _MapPageState extends State<MapPage> {
         icon: PlacemarkIcon.single(
           PlacemarkIconStyle(
             image: BitmapDescriptor.fromAssetImage(ImagesSources.userPlacemark),
-            scale: 1,
+            scale: 4,
           ),
         ),
       ),
