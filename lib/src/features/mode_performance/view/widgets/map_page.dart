@@ -8,6 +8,7 @@ import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
+import 'dart:developer';
 
 class MapPage extends StatefulWidget {
   final List<Location> locations;
@@ -39,7 +40,7 @@ class _MapPageState extends State<MapPage> {
       ((index == 0
               ? <MapObject>[]
               : widget.locations
-                  .sublist(0, index + 1)
+                  .sublist(0, index)
                   .map(
                     (location) => PlacemarkMapObject(
                       mapId: MapObjectId(location.number),
@@ -58,26 +59,28 @@ class _MapPageState extends State<MapPage> {
                     ),
                   )
                   .toList()) +
-          widget.locations
-              .sublist(index)
-              .map(
-                (location) => PlacemarkMapObject(
-                  mapId: MapObjectId(location.number),
-                  point: Point(
-                    latitude: double.parse(location.latitude),
-                    longitude: double.parse(location.longitude),
-                  ),
-                  icon: PlacemarkIcon.single(
-                    PlacemarkIconStyle(
-                      image: BitmapDescriptor.fromAssetImage(
-                        ImagesSources.purplePlacemark,
+          (index == countLocations
+              ? <MapObject>[]
+              : widget.locations
+                  .sublist(index)
+                  .map(
+                    (location) => PlacemarkMapObject(
+                      mapId: MapObjectId(location.number),
+                      point: Point(
+                        latitude: double.parse(location.latitude),
+                        longitude: double.parse(location.longitude),
                       ),
-                      scale: 4,
+                      icon: PlacemarkIcon.single(
+                        PlacemarkIconStyle(
+                          image: BitmapDescriptor.fromAssetImage(
+                            ImagesSources.purplePlacemark,
+                          ),
+                          scale: 2,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              )
-              .toList()),
+                  )
+                  .toList())),
     );
   }
 
@@ -87,14 +90,20 @@ class _MapPageState extends State<MapPage> {
       listenWhen: (previous, current) {
         return previous.indexLocation < current.indexLocation;
       },
-      listener: (context, state) {
+      listener: (context, state) async {
         _buildAllRoute(state.indexLocation);
         _loadMapPins(state.indexLocation);
+        final pos = await context
+            .read<PerfModeMapBloc>()
+            .mapcontroller
+            .getUserCameraPosition();
+        log(pos!.azimuth.toString());
       },
       child: Scaffold(
         body: BlocBuilder<PerfModeMapBloc, PerfModeMapState>(
           builder: (context, state) {
             return YandexMap(
+              mapType: MapType.vector,
               mapObjects: mapObjects,
               onMapCreated: (controller) {
                 context.read<PerfModeMapBloc>()
@@ -190,7 +199,7 @@ class _MapPageState extends State<MapPage> {
         icon: PlacemarkIcon.single(
           PlacemarkIconStyle(
             image: BitmapDescriptor.fromAssetImage(ImagesSources.userPlacemark),
-            scale: 5,
+            scale: 1,
           ),
         ),
       ),
@@ -198,12 +207,16 @@ class _MapPageState extends State<MapPage> {
         icon: PlacemarkIcon.single(
           PlacemarkIconStyle(
             image: BitmapDescriptor.fromAssetImage(ImagesSources.userPlacemark),
-            scale: 7,
+            scale: 4,
           ),
         ),
       ),
-      accuracyCircle: locationView.accuracyCircle.copyWith(isVisible: false),
+      accuracyCircle: locationView.accuracyCircle.copyWith(
+        fillColor: Colors.transparent,
+        strokeColor: Colors.transparent,
+      ),
     );
+
     return userLocationView;
   }
 }

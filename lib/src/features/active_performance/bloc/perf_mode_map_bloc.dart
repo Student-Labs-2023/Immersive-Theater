@@ -56,7 +56,7 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
         ),
       ),
       accuracyCircle: event.userLocationView.accuracyCircle
-          .copyWith(fillColor: Colors.green.withOpacity(0.5)),
+          .copyWith(fillColor: Colors.green.withOpacity(0.5), isVisible: false),
     );
   }
 
@@ -72,14 +72,9 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
   }
 
   void _onInitialEvent(
-      PerfModeMapInitialEvent event, Emitter<PerfModeMapState> emit) {
+    PerfModeMapInitialEvent event,
+    Emitter<PerfModeMapState> emit,
+  ) {
     mapcontroller = event.controller;
   }
 }
-/*
-нужно хранить есть ли права на метсоположение
-нужно хранить текущее местоположение пользователя
-текущая локация должна быть известна  по индексе
-
-
-*/
