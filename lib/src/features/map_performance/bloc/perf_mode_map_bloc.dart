@@ -63,54 +63,31 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
     final int indexLocation = event.index;
     final countLocations = event.countLocations;
     final locations = event.locations;
-    state.mapObjects.addAll(
-      (indexLocation == 0
-              ? <MapObject>[]
-              : locations
-                  .sublist(0, indexLocation)
-                  .map(
-                    (location) => PlacemarkMapObject(
-                      opacity: 1,
-                      mapId: MapObjectId(location.number),
-                      point: Point(
-                        latitude: double.parse(location.latitude),
-                        longitude: double.parse(location.longitude),
-                      ),
-                      icon: PlacemarkIcon.single(
-                        PlacemarkIconStyle(
-                          image: BitmapDescriptor.fromAssetImage(
-                            ImagesSources.grayPlacemark,
-                          ),
-                          scale: 2,
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList()) +
-          (indexLocation == countLocations
-              ? <MapObject>[]
-              : locations
-                  .sublist(indexLocation)
-                  .map(
-                    (location) => PlacemarkMapObject(
-                      mapId: MapObjectId(location.number),
-                      opacity: 1,
-                      point: Point(
-                        latitude: double.parse(location.latitude),
-                        longitude: double.parse(location.longitude),
-                      ),
-                      icon: PlacemarkIcon.single(
-                        PlacemarkIconStyle(
-                          image: BitmapDescriptor.fromAssetImage(
-                            ImagesSources.purplePlacemark,
-                          ),
-                          scale: 2,
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList()),
-    );
+    final List<MapObject> placemarks = [];
+
+    for (var i = 0; i < countLocations; i++) {
+      placemarks.add(
+        PlacemarkMapObject(
+          opacity: 1,
+          mapId: MapObjectId(locations[i].number),
+          point: Point(
+            latitude: double.parse(locations[i].latitude),
+            longitude: double.parse(locations[i].longitude),
+          ),
+          icon: PlacemarkIcon.single(
+            PlacemarkIconStyle(
+              image: BitmapDescriptor.fromAssetImage(
+                i < indexLocation
+                    ? ImagesSources.grayPlacemark
+                    : ImagesSources.purplePlacemark,
+              ),
+              scale: 2,
+            ),
+          ),
+        ),
+      );
+    }
+    state.mapObjects.addAll(placemarks);
     emit(PerfModeMapLoadSuccess(state.mapObjects));
   }
 
@@ -122,7 +99,9 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
     final int indexLocation = event.index;
     final countLocations = event.countLocations;
     final locations = event.locations;
+
     final locationsNotDone = locations.sublist(indexLocation);
+
     if (indexLocation != 0) {
       final locationsDone = locations.sublist(0, indexLocation + 1);
       BicycleResultWithSession resultWithSessionDone =

@@ -80,6 +80,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
               alignment: AlignmentDirectional.center,
               children: [
                 SlidingUpPanel(
+                  backdropEnabled: true,
                   controller: panelController,
                   parallaxEnabled: true,
                   parallaxOffset: .5,
