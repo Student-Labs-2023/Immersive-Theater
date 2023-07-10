@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:locations_repository/locations_repository.dart';
+import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/map_performance/view/map_page.dart';
 import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
@@ -207,8 +208,10 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
     onPressedCancel() => Navigator.pop(
           context,
         );
-    onPressedApprove() => Navigator.pop(
+    onPressedApprove() => Navigator.pushNamedAndRemoveUntil(
           context,
+          MainScreen.routeName,
+          (route) => false,
         );
     showDialog(
       context: context,
