@@ -7,6 +7,7 @@ import 'package:shebalin/src/features/loading/view/loading_screen.dart';
 import 'package:shebalin/src/features/locations/bloc/location_bloc.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance.dart';
 import 'package:shebalin/src/features/onbording/view/onbording_screen.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/photo_slider/view/vertical_sliding_screen.dart';
@@ -42,7 +43,7 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Shebalin",
         theme: defaultTheme(),
-        initialRoute: '/ticket-page',
+        initialRoute: '/onboarding-performance',
         routes: {
           '/loading-screen': (context) => const LoadingScreen(),
           '/onbording-screen': (context) => const OnbordingScreen(),
@@ -55,6 +56,7 @@ class App extends StatelessWidget {
               const VerticalSlidningScreen(),
           '/ticket-page': (context) => const TicketPage(),
           '/images-view-page': (context) => const ImagesViewPage(),
+          '/onboarding-performance': (context) => const OnboardingPerformance(),
         },
       ),
     );
