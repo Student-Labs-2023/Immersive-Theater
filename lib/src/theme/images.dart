@@ -46,4 +46,7 @@ class ImagesSources {
   static const String backIcon = "assets/icons/back_icon.png";
   static const String tipIcon = "assets/icons/tip_icon.png";
   static const String continueButton = "assets/icons/continue_button.png";
+  static const String purplePlacemark = "assets/images/purple_placemark.png";
+  static const String grayPlacemark = "assets/images/gray_placemark.png";
+  static const String userPlacemark = "assets/images/user_placemark.png";
 }

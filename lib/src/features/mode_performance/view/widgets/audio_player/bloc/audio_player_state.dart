@@ -137,3 +137,26 @@ class AudioPlayerPauseState extends AudioPlayerState {
   @override
   List<Object> get props => [duration, position, isPlaying];
 }
+
+class AudioPlayerFailureState extends AudioPlayerState {
+  const AudioPlayerFailureState({
+    required super.duration,
+    required super.position,
+    required super.isPlaying,
+  });
+  @override
+  AudioPlayerState copyWith({
+    Duration? duration,
+    Duration? position,
+    bool? isPlaying,
+  }) {
+    return AudioPlayerFailureState(
+      duration: duration ?? this.duration,
+      position: position ?? this.position,
+      isPlaying: isPlaying ?? this.isPlaying,
+    );
+  }
+
+  @override
+  List<Object> get props => [duration, position, isPlaying];
+}
