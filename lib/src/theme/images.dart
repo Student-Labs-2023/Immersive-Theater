@@ -5,6 +5,7 @@ class ImagesSources {
   static const String loadingEmblem = 'assets/images/loadingEmblem.png';
   static const String markGift = 'assets/images/mark_gift.png';
   static const String markStar = 'assets/images/mark_star.png';
+  static const String onboarding1 = 'assets/images/onboarding1.png';
   static const String mark = 'assets/images/mark.png';
   static const String onbording = 'assets/images/onbording.png';
   static const String secondOnbording = 'assets/images/secondOnbording.png';
