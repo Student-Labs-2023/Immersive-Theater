@@ -29,9 +29,7 @@ class LocationItem extends StatelessWidget {
                 child: CustomPaint(
                   painter: LocationFigure(
                     isCurrentLocation: isCurrentLocation,
-                    color: isCompleted
-                        ? AppColor.accentTextColor
-                        : AppColor.barIndicatorColor,
+                    color: isCompleted ? AppColor.grey : AppColor.purplePrimary,
                     bias: 8,
                   ),
                 ),
