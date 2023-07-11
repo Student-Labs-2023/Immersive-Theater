@@ -6,11 +6,9 @@ import 'package:shebalin/src/theme/theme.dart';
 
 class OnboardingPage extends StatelessWidget {
   final OnboardPerformance onboardInfo;
-  final PageController pageController;
   const OnboardingPage({
     super.key,
     required this.onboardInfo,
-    required this.pageController,
   });
 
   @override
@@ -18,9 +16,12 @@ class OnboardingPage extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, 111, 8, 18),
-        child: Image.asset(
-          width: double.infinity,
-          onboardInfo.image,
+        child: Hero(
+          tag: onboardInfo.image,
+          child: Image.asset(
+            width: double.infinity,
+            onboardInfo.image,
+          ),
         ),
       ),
       bottomSheet: Container(
@@ -73,10 +74,6 @@ class OnboardingPage extends StatelessWidget {
               const SizedBox(
                 height: 40,
               ),
-              Button(
-                onTap: _next,
-                title: onboardInfo.buttonTitle,
-              ),
             ],
           ),
         ),
@@ -84,10 +81,7 @@ class OnboardingPage extends StatelessWidget {
     );
   }
 
-  void _next() {
-    pageController.nextPage(
-        duration: const Duration(milliseconds: 300), curve: Curves.ease);
-  }
+  void _next() {}
 }
 
 class Button extends StatelessWidget {

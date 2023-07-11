@@ -13,34 +13,54 @@ class OnboardingPerformance extends StatefulWidget {
 
 class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   late final List<OnboardPerformance> pages;
-  late final PageController pagecontroller;
+  int index = 0;
 
   @override
   void initState() {
-    pagecontroller = PageController();
     pages = OnboardPerformance.list;
 
     super.initState();
   }
 
   @override
-  void dispose() {
-    pagecontroller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(color: Colors.white),
-      child: PageView.builder(
-        itemCount: pages.length,
-        itemBuilder: (context, index) => OnboardingPage(
-          onboardInfo: pages[index],
-          pageController: pagecontroller,
-        ),
-        controller: pagecontroller,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: OnboardingPage(onboardInfo: pages[index]),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 34),
+        child: index != 0
+            ? Button(
+                title: pages[index].buttonTitle,
+                onTap: _nextPage,
+              )
+            : _buttonsFirstPage(),
       ),
     );
+  }
+
+  Widget _buttonsFirstPage() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Button(
+          title: pages[index].buttonTitle,
+          onTap: _nextPage,
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Button(
+          title: pages[index].buttonTitle,
+          onTap: _nextPage,
+        ),
+      ],
+    );
+  }
+
+  void _nextPage() {
+    setState(() {
+      index += 1;
+    });
   }
 }
