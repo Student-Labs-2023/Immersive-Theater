@@ -43,7 +43,7 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Shebalin",
         theme: defaultTheme(),
-        initialRoute: '/onboarding-performance',
+        initialRoute: '/ticket-page',
         routes: {
           '/loading-screen': (context) => const LoadingScreen(),
           '/onbording-screen': (context) => const OnbordingScreen(),
