@@ -4,50 +4,31 @@ import 'package:shebalin/src/features/onboarding_performance/view/widgets/page_i
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
-class OnboardingPage extends StatelessWidget {
-  final OnboardPerformance onboardInfo;
-  const OnboardingPage({
-    super.key,
-    required this.onboardInfo,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 111, 8, 18),
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 3000),
-          child: Image.asset(
-            width: double.infinity,
-            onboardInfo.image,
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _next() {}
-}
-
 class Button extends StatelessWidget {
   final String title;
   final void Function() onTap;
+  final Color textColor;
+  final Color backgroundColor;
+  final Color borderColor;
 
   const Button({
     super.key,
     required this.title,
     required this.onTap,
+    required this.textColor,
+    required this.backgroundColor,
+    required this.borderColor,
   });
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onTap,
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(accentTextColor),
+        backgroundColor: MaterialStateProperty.all(backgroundColor),
         elevation: MaterialStateProperty.all(5),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
+            side: BorderSide(color: borderColor, width: 2),
             borderRadius: BorderRadius.circular(12),
           ),
         ),
@@ -66,14 +47,14 @@ class Button extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge
-                ?.copyWith(color: Colors.white),
+                ?.copyWith(color: textColor),
           ),
           const SizedBox(
             width: 9,
           ),
-          const ImageIcon(
-            AssetImage(ImagesSources.right),
-            color: Colors.white,
+          ImageIcon(
+            const AssetImage(ImagesSources.right),
+            color: textColor,
             size: 24,
           )
         ],

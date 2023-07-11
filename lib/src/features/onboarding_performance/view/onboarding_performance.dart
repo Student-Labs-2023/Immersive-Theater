@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/onboarding_performance/models/onboard_performance.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_page.dart';
+import 'package:shebalin/src/theme/theme.dart';
 
 import 'widgets/page_indicator.dart';
 
@@ -44,6 +45,9 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
             ? Button(
                 title: pages[currentIndex].buttonTitle,
                 onTap: _nextPage,
+                textColor: Colors.white,
+                backgroundColor: accentTextColor,
+                borderColor: accentTextColor,
               )
             : _buttonsFirstPage(),
       ),
@@ -124,13 +128,19 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
         Button(
           title: pages[currentIndex].buttonTitle,
           onTap: _nextPage,
+          textColor: Colors.white,
+          backgroundColor: accentTextColor,
+          borderColor: accentTextColor,
         ),
         const SizedBox(
           height: 16,
         ),
         Button(
-          title: pages[currentIndex].buttonTitle,
+          title: "Доберусь сам",
           onTap: _nextPage,
+          textColor: Colors.black,
+          backgroundColor: Colors.white,
+          borderColor: Colors.amber,
         ),
       ],
     );
