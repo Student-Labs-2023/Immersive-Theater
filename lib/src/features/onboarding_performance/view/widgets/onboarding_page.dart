@@ -74,7 +74,7 @@ class OnboardingPage extends StatelessWidget {
                 height: 40,
               ),
               Button(
-                onTap: () {},
+                onTap: _next,
                 title: onboardInfo.buttonTitle,
               ),
             ],
@@ -82,6 +82,11 @@ class OnboardingPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _next() {
+    pageController.nextPage(
+        duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 }
 
@@ -97,7 +102,7 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onTap,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(accentTextColor),
         elevation: MaterialStateProperty.all(5),
