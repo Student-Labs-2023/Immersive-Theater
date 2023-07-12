@@ -58,8 +58,6 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
       ),
       bottomSheet: AnimatedBottomSheet(
         needMoreSpace: !showOneButtonAtHome,
-        pages: pages,
-        currentIndex: currentIndex,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
             16,
@@ -74,11 +72,14 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
               const SizedBox(
                 height: 40,
               ),
-              AnimatedTitle(currentIndex: currentIndex, pages: pages),
+              AnimatedTitle(title: pages[currentIndex].title),
               const SizedBox(
                 height: 16,
               ),
-              AnimatedSubtitle(currentIndex: currentIndex, pages: pages),
+              AnimatedSubtitle(
+                subtitle: pages[currentIndex].subtitle,
+                subtitleAccent: pages[currentIndex].subtitleAccent,
+              ),
               const SizedBox(
                 height: 40,
               ),

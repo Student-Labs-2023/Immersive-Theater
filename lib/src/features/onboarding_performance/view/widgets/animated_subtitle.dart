@@ -5,30 +5,30 @@ import 'package:shebalin/src/theme/app_color.dart';
 class AnimatedSubtitle extends StatelessWidget {
   const AnimatedSubtitle({
     super.key,
-    required this.currentIndex,
-    required this.pages,
+    required this.subtitle,
+    required this.subtitleAccent,
   });
 
-  final int currentIndex;
-  final List<OnboardPerformance> pages;
+  final String subtitle;
+  final String subtitleAccent;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
       child: RichText(
-        key: Key(currentIndex.toString()),
+        key: Key(subtitle),
         textAlign: TextAlign.center,
         text: TextSpan(
           children: [
             TextSpan(
-              text: pages[currentIndex].subtitle,
+              text: subtitle,
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: AppColor.greyText,
                   ),
             ),
             TextSpan(
-              text: pages[currentIndex].subtitleAccent,
+              text: subtitleAccent,
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!

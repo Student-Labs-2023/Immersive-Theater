@@ -20,7 +20,6 @@ class PageIndicator extends StatelessWidget {
         ...List.generate(
           pages.length,
           (index) => DotIndicator(
-            count: pages.length,
             isActive: index == currentIndex,
           ),
         ),
@@ -30,11 +29,9 @@ class PageIndicator extends StatelessWidget {
 }
 
 class DotIndicator extends StatelessWidget {
-  final int count;
   final bool isActive;
   const DotIndicator({
     super.key,
-    required this.count,
     required this.isActive,
   });
 

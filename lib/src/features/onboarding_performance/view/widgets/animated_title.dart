@@ -4,21 +4,19 @@ import 'package:shebalin/src/features/onboarding_performance/models/onboard_perf
 class AnimatedTitle extends StatelessWidget {
   const AnimatedTitle({
     super.key,
-    required this.currentIndex,
-    required this.pages,
+    required this.title,
   });
 
-  final int currentIndex;
-  final List<OnboardPerformance> pages;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
       child: Text(
-        key: Key(currentIndex.toString()),
+        key: Key(title),
         textAlign: TextAlign.center,
-        pages[currentIndex].title,
+        title,
         style: Theme.of(context)
             .textTheme
             .displaySmall!

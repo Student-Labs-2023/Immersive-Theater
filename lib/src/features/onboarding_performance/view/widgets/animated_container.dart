@@ -5,14 +5,10 @@ import 'package:shebalin/src/theme/app_color.dart';
 class AnimatedBottomSheet extends StatelessWidget {
   const AnimatedBottomSheet({
     super.key,
-    required this.pages,
-    required this.currentIndex,
     required this.child,
     required this.needMoreSpace,
   });
 
-  final List<OnboardPerformance> pages;
-  final int currentIndex;
   final Widget child;
   final bool needMoreSpace;
   @override
