@@ -70,3 +70,42 @@ class Button extends StatelessWidget {
     );
   }
 }
+
+class OnboardControllButton extends StatelessWidget {
+  final String titlePurple;
+  final void Function() onTapPurple;
+  final String titleWhite;
+  final void Function() onTapWhite;
+  const OnboardControllButton({
+    super.key,
+    required this.titlePurple,
+    required this.onTapPurple,
+    required this.titleWhite,
+    required this.onTapWhite,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Button.purpleButton(
+          title: titlePurple,
+          onTap: onTapPurple,
+          icon: ImagesSources.right,
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Button(
+          title: titleWhite,
+          onTap: onTapWhite,
+          icon: ImagesSources.right,
+          textColor: AppColor.blackText,
+          backgroundColor: AppColor.whiteBackground,
+          borderColor: AppColor.yellowSecondary,
+        ),
+      ],
+    );
+  }
+}

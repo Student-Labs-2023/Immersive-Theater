@@ -54,7 +54,13 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
                 onTap: curIndexLessLastindex ? _nextPage : _openPerfModeScreen,
                 icon: ImagesSources.right,
               )
-            : _twoButtons(),
+            : OnboardControllButton(
+                titlePurple: pages[currentIndex].buttonTitle,
+                onTapPurple: widget.listenAtHome ? _nextPage : _launchUrl,
+                titleWhite: 'Доберусь сам',
+                onTapWhite:
+                    curIndexLessLastindex ? _nextPage : _openPerfModeScreen,
+              ),
       ),
       bottomSheet: AnimatedBottomSheet(
         needMoreSpace: !showOneButtonAtHome,
@@ -87,30 +93,6 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _twoButtons() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Button.purpleButton(
-          title: pages[currentIndex].buttonTitle,
-          onTap: widget.listenAtHome ? _nextPage : _launchUrl,
-          icon: ImagesSources.right,
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        Button(
-          title: "Доберусь сам",
-          onTap: curIndexLessLastindex ? _nextPage : _openPerfModeScreen,
-          icon: ImagesSources.right,
-          textColor: AppColor.blackText,
-          backgroundColor: AppColor.whiteBackground,
-          borderColor: AppColor.yellowSecondary,
-        ),
-      ],
     );
   }
 
