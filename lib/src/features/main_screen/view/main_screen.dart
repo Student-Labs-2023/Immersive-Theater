@@ -12,6 +12,9 @@ import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../../promocodes/view/widgets/promocode_panel_page.dart';
+
+
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
   static const routeName = '/main-screen';
@@ -60,7 +63,7 @@ class _MainScreenState extends State<MainScreen> {
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Padding(padding: EdgeInsets.only(left: 20)),
                       TextButton(
@@ -68,39 +71,38 @@ class _MainScreenState extends State<MainScreen> {
                         child: Text(
                           "Спектакли",
                           style: isPerfomnceButtonPressed
-                              ? Theme.of(context).textTheme.bodyMedium
-                              : Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(color: secondaryTextColor),
+                              ? TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                                color: primaryTextColor,
+                              )
+                              : TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                                color: primaryTextColor,
+                              ).copyWith(color: secondaryTextColor),
                         ),
                       ),
                       const SizedBox(
-                        width: 20,
+                        width: 40,
                       ),
                       TextButton(
                         onPressed: () => _isPerformancePanelShowed(false),
                         child: Text(
-                          "Для вас",
+                          "Мои билеты",
                           style: isPerfomnceButtonPressed
-                              ? Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(color: secondaryTextColor)
-                              : Theme.of(context).textTheme.bodyMedium,
+                              ? TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                                color: primaryTextColor,
+                              ).copyWith(color: secondaryTextColor)
+                              :TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                                color: primaryTextColor,
+                              ) ,
                         ),
                       ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.07,
-                      ),
-                      IconButton(
-                        onPressed: () => Navigator.of(context)
-                            .pushNamed(PromocodeScreen.routeName),
-                        icon: Padding(
-                          padding: const EdgeInsets.only(top: 6),
-                          child: Image.asset(ImagesSources.promocodeIcon),
-                        ),
-                      )
                     ],
                   ),
                 ],
@@ -139,7 +141,7 @@ class _MainScreenState extends State<MainScreen> {
             if (state is MapPinInitialState) {
               return isPerfomnceButtonPressed
                   ? const PerformancesPanelPage()
-                  : PersonalPanelPage();
+                  : const PromocodePanelPage();
             } else if (state is MapPinLoadingState) {
               return Center(
                 child: CircularProgressIndicator(color: accentTextColor),
@@ -160,7 +162,7 @@ class _MainScreenState extends State<MainScreen> {
               });
               return isPerfomnceButtonPressed
                   ? const PerformancesPanelPage()
-                  : PersonalPanelPage();
+                  : PromocodeScreen();
             }
             return const Text('Упс...Что-то пошло не так');
           },

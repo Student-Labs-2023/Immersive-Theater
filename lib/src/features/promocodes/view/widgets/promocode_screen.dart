@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shebalin/src/features/promocodes/bloc/tickets_bloc.dart';
+import 'package:shebalin/src/features/promocodes/bloc/tickets_state.dart';
+import 'package:shebalin/src/features/user/view/widgets/ticket.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
@@ -16,64 +20,54 @@ class _PromocodeScreenState extends State<PromocodeScreen> {
   final PanelController _panelController = PanelController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: null,
-      body: SlidingUpPanel(
-        controller: _panelController,
-        defaultPanelState: PanelState.CLOSED,
-        minHeight: 0,
-        maxHeight: MediaQuery.of(context).size.height * 0.3,
-        header: Container(
-          margin: const EdgeInsets.fromLTRB(176, 20, 0, 0),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.12),
-            borderRadius: containerRadius,
-          ),
-          child: const SizedBox(
-            height: 3,
-            width: 50,
-          ),
+    final TicketsBloc _ticketsBloc = TicketsBloc();
+    return SlidingUpPanel(
+      borderRadius: panelRadius,
+      backdropEnabled: true,
+      parallaxEnabled: true,
+      parallaxOffset: 0.05,
+      controller: _panelController,
+      defaultPanelState: PanelState.CLOSED,
+      minHeight: 0,
+      maxHeight: MediaQuery.of(context).size.height * 0.3,
+      header: Container(
+        margin: const EdgeInsets.fromLTRB(176, 20, 0, 0),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.12),
+          borderRadius: containerRadius,
         ),
-        panel: InputPromocodePanelPage(),
-        body: Center(
-          child: Scaffold(
-            body: SafeArea(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: const SizedBox(
+          height: 3,
+          width: 50,
+        ),
+      ),
+      panel: InputPromocodePanelPage(bloc: _ticketsBloc,),
+      body: Center(
+        child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          iconSize: 34,
-                          icon: Image.asset(ImagesSources.close),
-                          splashRadius: 24,
-                        ),
-                        const SizedBox(
-                          width: 24,
-                        )
-                      ],
+                    const SizedBox(
+                      width: 24,
                     ),
                     Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Image.asset(ImagesSources.ticketOutline),
-                        const SizedBox(
-                          height: 24,
+                        Column(
+                          children: [
+                            Image.asset(ImagesSources.ticketOutline),
+                            const SizedBox(
+                              height: 24,
+                            ),
+                            Text(
+                              'У вас еще нет билетов',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                      color: Colors.black.withOpacity(0.3)),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
-                        Text(
-                          'К сожалению, у вас еще нет \n активных промокодов',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(color: Colors.black.withOpacity(0.3)),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
                         ElevatedButton(
                           onPressed: (() => _panelController.open()),
                           style: ButtonStyle(
@@ -97,22 +91,12 @@ class _PromocodeScreenState extends State<PromocodeScreen> {
                                 ?.copyWith(color: Colors.white),
                           ),
                         ),
-                        const SizedBox(
-                          height: 50,
-                        )
                       ],
                     ),
                   ],
                 ),
               ),
-            ),
-          ),
-        ),
-        borderRadius: panelRadius,
-        backdropEnabled: true,
-        parallaxEnabled: true,
-        parallaxOffset: 0.05,
-      ),
+      
     );
   }
 }
