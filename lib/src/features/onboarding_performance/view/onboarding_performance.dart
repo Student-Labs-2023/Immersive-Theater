@@ -12,33 +12,32 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 import 'widgets/page_indicator.dart';
 
-class OnboardingPerformance extends StatefulWidget {
-  const OnboardingPerformance({
+class OnboardingPerfRules extends StatefulWidget {
+  const OnboardingPerfRules({
     super.key,
   });
-  final bool listenAtHome = false;
   final Point startPoint = const Point(
     latitude: 54.988707,
     longitude: 73.368659,
   );
-  static const routeName = '/onboarding-performance';
+  static const routeName = '/onboarding-rules';
 
   @override
-  State<OnboardingPerformance> createState() => _OnboardingPerformanceState();
+  State<OnboardingPerfRules> createState() => _OnboardingPerfRulesState();
 }
 
-class _OnboardingPerformanceState extends State<OnboardingPerformance> {
+class _OnboardingPerfRulesState extends State<OnboardingPerfRules> {
   late final List<OnboardPerformance> pages;
   int currentIndex = 0;
   bool get curIndexLessLastindex => currentIndex < pages.length - 1;
-  bool get showOneButtonAtHome => currentIndex != 0 || widget.listenAtHome;
+  bool get showOneButtonAtHome => currentIndex != 0 || listenAtHome;
+  late final bool listenAtHome;
   @override
-  void initState() {
-    pages = widget.listenAtHome
-        ? OnboardPerformance.home
-        : OnboardPerformance.outside;
-
-    super.initState();
+  @override
+  void didChangeDependencies() {
+    listenAtHome = ModalRoute.of(context)!.settings.arguments as bool;
+    pages = listenAtHome ? OnboardPerformance.home : OnboardPerformance.outside;
+    super.didChangeDependencies();
   }
 
   @override
@@ -56,7 +55,7 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
               )
             : OnboardControllButton(
                 titlePurple: pages[currentIndex].buttonTitle,
-                onTapPurple: widget.listenAtHome ? _nextPage : _launchUrl,
+                onTapPurple: listenAtHome ? _nextPage : _launchUrl,
                 titleWhite: 'Доберусь сам',
                 onTapWhite:
                     curIndexLessLastindex ? _nextPage : _openPerfModeScreen,

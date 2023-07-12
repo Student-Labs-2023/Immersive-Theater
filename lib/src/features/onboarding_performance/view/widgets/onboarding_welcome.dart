@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_image.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_title.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/button.dart';
-import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 
 class OnboardWelcome extends StatelessWidget {
+  static const routeName = '/onboarding-performance';
   const OnboardWelcome({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         child: Column(
           children: [
             const AnimatedImage(image: ImagesSources.onboardHeadPhones),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             Text(
@@ -27,10 +27,11 @@ class OnboardWelcome extends StatelessWidget {
                   .displayMedium!
                   .copyWith(fontWeight: FontWeight.w700),
             ),
-            AnimatedSubtitle(
-                subtitle:
-                    'Перед началом выберите, как вы будете слушать спектакль',
-                subtitleAccent: ''),
+            const AnimatedSubtitle(
+              subtitle:
+                  'Перед началом выберите, как вы будете слушать спектакль',
+              subtitleAccent: '',
+            ),
           ],
         ),
       ),
@@ -39,14 +40,16 @@ class OnboardWelcome extends StatelessWidget {
         child: OnboardControllButton(
           titlePurple: 'Прослушивание в городе',
           titleWhite: 'Свободное прослушивание',
-          onTapPurple: _onTapPurple,
-          onTapWhite: _onTapWhite,
+          onTapPurple: () => Navigator.of(context).pushReplacementNamed(
+            OnboardingPerfRules.routeName,
+            arguments: false,
+          ),
+          onTapWhite: () => Navigator.of(context).pushReplacementNamed(
+            OnboardingPerfRules.routeName,
+            arguments: true,
+          ),
         ),
       ),
     );
   }
-
-  void _onTapPurple() {}
-
-  void _onTapWhite() {}
 }
