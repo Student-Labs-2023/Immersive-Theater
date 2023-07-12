@@ -43,7 +43,7 @@ class DotIndicator extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 2),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
         height: 8,
         width: 8,
         decoration: BoxDecoration(

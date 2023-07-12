@@ -57,10 +57,16 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
             : _twoButtons(),
       ),
       bottomSheet: AnimatedBottomSheet(
+        needMoreSpace: !showOneButtonAtHome,
         pages: pages,
         currentIndex: currentIndex,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 34),
+          padding: const EdgeInsets.fromLTRB(
+            16,
+            16,
+            16,
+            0,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

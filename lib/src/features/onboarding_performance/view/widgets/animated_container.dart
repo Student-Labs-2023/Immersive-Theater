@@ -8,32 +8,36 @@ class AnimatedBottomSheet extends StatelessWidget {
     required this.pages,
     required this.currentIndex,
     required this.child,
+    required this.needMoreSpace,
   });
 
   final List<OnboardPerformance> pages;
   final int currentIndex;
   final Widget child;
-
+  final bool needMoreSpace;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.5,
+    return AnimatedContainer(
+      height: needMoreSpace
+          ? MediaQuery.of(context).size.height * 0.29
+          : MediaQuery.of(context).size.height * 0.26,
+      duration: const Duration(milliseconds: 300),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 44,
+              spreadRadius: 0,
+              offset: const Offset(0, -12),
+              color: AppColor.blackText.withOpacity(0.12),
+            )
+            // blurStyle: BlurStyle.solid)
+          ],
+          color: AppColor.whiteBackground,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: child,
       ),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 44,
-            spreadRadius: 0,
-            offset: const Offset(0, -12),
-            color: AppColor.blackText.withOpacity(0.12),
-          )
-          // blurStyle: BlurStyle.solid)
-        ],
-        color: AppColor.whiteBackground,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      child: child,
     );
   }
 }
