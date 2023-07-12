@@ -45,7 +45,7 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.whiteBackground,
-      body: AnimatedImage(currentIndex: currentIndex, pages: pages),
+      body: AnimatedImage(image: pages[currentIndex].image),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 34),
         child: showOneButtonAtHome

@@ -4,22 +4,21 @@ import 'package:shebalin/src/features/onboarding_performance/models/onboard_perf
 class AnimatedImage extends StatelessWidget {
   const AnimatedImage({
     super.key,
-    required this.currentIndex,
-    required this.pages,
+    required this.image,
   });
 
-  final int currentIndex;
-  final List<OnboardPerformance> pages;
+  final String image;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
-      child: SafeArea(
-        key: Key(currentIndex.toString()),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 111, 8, 0),
+        key: Key(image),
         child: Image.asset(
           width: double.infinity,
-          pages[currentIndex].image,
+          image,
         ),
       ),
     );
