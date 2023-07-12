@@ -16,7 +16,7 @@ class OnboardWelcome extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         child: Column(
           children: [
-            const AnimatedImage(image: ImagesSources.onboardHeadPhones),
+            const AnimatedImage(image: ImagesSources.onboardWelcome),
             const SizedBox(
               height: 16,
             ),
@@ -26,6 +26,9 @@ class OnboardWelcome extends StatelessWidget {
                   .textTheme
                   .displayMedium!
                   .copyWith(fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(
+              height: 16,
             ),
             const AnimatedSubtitle(
               subtitle:
