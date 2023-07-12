@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class PageIndicator extends StatelessWidget {
+class DotIndicator extends StatelessWidget {
   final int count;
   final bool isActive;
-  const PageIndicator({super.key, required this.count, required this.isActive});
+  const DotIndicator({super.key, required this.count, required this.isActive});
 
   @override
   Widget build(BuildContext context) {

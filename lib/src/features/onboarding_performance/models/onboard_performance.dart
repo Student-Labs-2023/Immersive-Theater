@@ -42,13 +42,6 @@ class OnboardPerformance {
 
   static List<OnboardPerformance> home = [
     OnboardPerformance(
-      title: 'Доберитесь до стартовой точки спектакля',
-      subtitle: 'Стартовая точка спектакля находится по адресу: ',
-      subtitleAccent: 'улица Ленина, 4',
-      buttonTitle: "Составить маршрут",
-      image: ImagesSources.onboardMap,
-    ),
-    OnboardPerformance(
       title: 'Используйте наушники во время спектакля',
       subtitle:
           'Чтобы уменьшить внешний шум и погрузиться в настроение спектакля',

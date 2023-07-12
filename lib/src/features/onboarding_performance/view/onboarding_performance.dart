@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/onboarding_performance/models/onboard_performance.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_page.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/button.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 
 import 'widgets/page_indicator.dart';
@@ -17,7 +17,8 @@ class OnboardingPerformance extends StatefulWidget {
 class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   late final List<OnboardPerformance> pages;
   int currentIndex = 0;
-
+  bool get curIndexLessLastindex => currentIndex < pages.length - 1;
+  bool get showOneButtonAtHome => currentIndex != 0 || widget.listenAtHome;
   @override
   void initState() {
     pages = widget.listenAtHome
@@ -31,15 +32,13 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.whiteBackground,
-      body: _animatedImage(),
+      body: AnimatedImage(currentIndex: currentIndex, pages: pages),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 34),
-        child: currentIndex != 0
+        child: showOneButtonAtHome
             ? Button(
                 title: pages[currentIndex].buttonTitle,
-                onTap: currentIndex < pages.length - 1
-                    ? _nextPage
-                    : _openPerfModeScreen,
+                onTap: curIndexLessLastindex ? _nextPage : _openPerfModeScreen,
                 textColor: AppColor.whiteText,
                 backgroundColor: AppColor.purplePrimary,
                 borderColor: AppColor.purplePrimary,
@@ -68,61 +67,15 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ...List.generate(
-                    pages.length,
-                    (index) => PageIndicator(
-                      count: pages.length,
-                      isActive: index == currentIndex,
-                    ),
-                  ),
-                ],
-              ),
+              PageIndicator(pages: pages, currentIndex: currentIndex),
               const SizedBox(
                 height: 40,
               ),
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 500),
-                child: Text(
-                  key: Key(currentIndex.toString()),
-                  textAlign: TextAlign.center,
-                  pages[currentIndex].title,
-                  style: Theme.of(context)
-                      .textTheme
-                      .displaySmall!
-                      .copyWith(fontWeight: FontWeight.w700),
-                ),
-              ),
+              AnimatedTitle(currentIndex: currentIndex, pages: pages),
               const SizedBox(
                 height: 16,
               ),
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 500),
-                child: RichText(
-                  key: Key(currentIndex.toString()),
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: pages[currentIndex].subtitle,
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              color: AppColor.greyText,
-                            ),
-                      ),
-                      TextSpan(
-                        text: pages[currentIndex].subtitleAccent,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(color: AppColor.purpleLightPrimary),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+              AnimatedSubtitle(currentIndex: currentIndex, pages: pages),
               const SizedBox(
                 height: 40,
               ),
@@ -139,7 +92,7 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
       children: [
         Button(
           title: pages[currentIndex].buttonTitle,
-          onTap: _nextPage,
+          onTap: widget.listenAtHome ? _nextPage : _buildRoute,
           textColor: AppColor.whiteText,
           backgroundColor: AppColor.purplePrimary,
           borderColor: AppColor.purplePrimary,
@@ -149,8 +102,7 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
         ),
         Button(
           title: "Доберусь сам",
-          onTap:
-              currentIndex < pages.length - 1 ? _nextPage : _openPerfModeScreen,
+          onTap: curIndexLessLastindex ? _nextPage : _openPerfModeScreen,
           textColor: AppColor.blackText,
           backgroundColor: AppColor.whiteBackground,
           borderColor: AppColor.yellowSecondary,
@@ -165,11 +117,25 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
     });
   }
 
+  void _buildRoute() {}
+
   void _openPerfModeScreen() {
     // Navigator.of(context).pushReplacementNamed(PerformanceModePage.routeName);
   }
+}
 
-  Widget _animatedImage() {
+class AnimatedImage extends StatelessWidget {
+  const AnimatedImage({
+    super.key,
+    required this.currentIndex,
+    required this.pages,
+  });
+
+  final int currentIndex;
+  final List<OnboardPerformance> pages;
+
+  @override
+  Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
       child: SafeArea(
@@ -177,6 +143,100 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
         child: Image.asset(
           width: double.infinity,
           pages[currentIndex].image,
+        ),
+      ),
+    );
+  }
+}
+
+class PageIndicator extends StatelessWidget {
+  const PageIndicator({
+    super.key,
+    required this.pages,
+    required this.currentIndex,
+  });
+
+  final List<OnboardPerformance> pages;
+  final int currentIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        ...List.generate(
+          pages.length,
+          (index) => DotIndicator(
+            count: pages.length,
+            isActive: index == currentIndex,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class AnimatedTitle extends StatelessWidget {
+  const AnimatedTitle({
+    super.key,
+    required this.currentIndex,
+    required this.pages,
+  });
+
+  final int currentIndex;
+  final List<OnboardPerformance> pages;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 500),
+      child: Text(
+        key: Key(currentIndex.toString()),
+        textAlign: TextAlign.center,
+        pages[currentIndex].title,
+        style: Theme.of(context)
+            .textTheme
+            .displaySmall!
+            .copyWith(fontWeight: FontWeight.w700),
+      ),
+    );
+  }
+}
+
+class AnimatedSubtitle extends StatelessWidget {
+  const AnimatedSubtitle({
+    super.key,
+    required this.currentIndex,
+    required this.pages,
+  });
+
+  final int currentIndex;
+  final List<OnboardPerformance> pages;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 500),
+      child: RichText(
+        key: Key(currentIndex.toString()),
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: pages[currentIndex].subtitle,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: AppColor.greyText,
+                  ),
+            ),
+            TextSpan(
+              text: pages[currentIndex].subtitleAccent,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(color: AppColor.purpleLightPrimary),
+            )
+          ],
         ),
       ),
     );
