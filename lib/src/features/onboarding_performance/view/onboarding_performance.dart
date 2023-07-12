@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/onboarding_performance/models/onboard_performance.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_container.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_image.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_title.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/button.dart';
 import 'package:shebalin/src/theme/app_color.dart';
+import 'package:shebalin/src/theme/images.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 import 'widgets/page_indicator.dart';
 
 class OnboardingPerformance extends StatefulWidget {
-  const OnboardingPerformance({super.key});
+  const OnboardingPerformance({
+    super.key,
+  });
   final bool listenAtHome = false;
+  final Point startPoint = const Point(
+    latitude: 54.988707,
+    longitude: 73.368659,
+  );
   static const routeName = '/onboarding-performance';
 
   @override
@@ -36,32 +49,16 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 34),
         child: showOneButtonAtHome
-            ? Button(
+            ? Button.purpleButton(
                 title: pages[currentIndex].buttonTitle,
                 onTap: curIndexLessLastindex ? _nextPage : _openPerfModeScreen,
-                textColor: AppColor.whiteText,
-                backgroundColor: AppColor.purplePrimary,
-                borderColor: AppColor.purplePrimary,
+                icon: ImagesSources.right,
               )
-            : _buttonsFirstPage(),
+            : _twoButtons(),
       ),
-      bottomSheet: Container(
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.5,
-        ),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 44,
-              spreadRadius: 0,
-              offset: const Offset(0, -12),
-              color: AppColor.blackText.withOpacity(0.12),
-            )
-            // blurStyle: BlurStyle.solid)
-          ],
-          color: AppColor.whiteBackground,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        ),
+      bottomSheet: AnimatedBottomSheet(
+        pages: pages,
+        currentIndex: currentIndex,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 34),
           child: Column(
@@ -86,16 +83,14 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
     );
   }
 
-  Widget _buttonsFirstPage() {
+  Widget _twoButtons() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Button(
+        Button.purpleButton(
           title: pages[currentIndex].buttonTitle,
-          onTap: widget.listenAtHome ? _nextPage : _buildRoute,
-          textColor: AppColor.whiteText,
-          backgroundColor: AppColor.purplePrimary,
-          borderColor: AppColor.purplePrimary,
+          onTap: widget.listenAtHome ? _nextPage : _launchUrl,
+          icon: ImagesSources.right,
         ),
         const SizedBox(
           height: 16,
@@ -103,6 +98,7 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
         Button(
           title: "Доберусь сам",
           onTap: curIndexLessLastindex ? _nextPage : _openPerfModeScreen,
+          icon: ImagesSources.right,
           textColor: AppColor.blackText,
           backgroundColor: AppColor.whiteBackground,
           borderColor: AppColor.yellowSecondary,
@@ -117,128 +113,17 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
     });
   }
 
-  void _buildRoute() {}
+  Future<void> _launchUrl() async {
+    final latitude = widget.startPoint.latitude;
+    final longitude = widget.startPoint.longitude;
+    final linkYandexMap =
+        "http://maps.yandex.ru/?text=${latitude},${longitude}";
+    if (!await launchUrl(Uri.parse(linkYandexMap))) {
+      return;
+    }
+  }
 
   void _openPerfModeScreen() {
     // Navigator.of(context).pushReplacementNamed(PerformanceModePage.routeName);
-  }
-}
-
-class AnimatedImage extends StatelessWidget {
-  const AnimatedImage({
-    super.key,
-    required this.currentIndex,
-    required this.pages,
-  });
-
-  final int currentIndex;
-  final List<OnboardPerformance> pages;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 500),
-      child: SafeArea(
-        key: Key(currentIndex.toString()),
-        child: Image.asset(
-          width: double.infinity,
-          pages[currentIndex].image,
-        ),
-      ),
-    );
-  }
-}
-
-class PageIndicator extends StatelessWidget {
-  const PageIndicator({
-    super.key,
-    required this.pages,
-    required this.currentIndex,
-  });
-
-  final List<OnboardPerformance> pages;
-  final int currentIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        ...List.generate(
-          pages.length,
-          (index) => DotIndicator(
-            count: pages.length,
-            isActive: index == currentIndex,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class AnimatedTitle extends StatelessWidget {
-  const AnimatedTitle({
-    super.key,
-    required this.currentIndex,
-    required this.pages,
-  });
-
-  final int currentIndex;
-  final List<OnboardPerformance> pages;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 500),
-      child: Text(
-        key: Key(currentIndex.toString()),
-        textAlign: TextAlign.center,
-        pages[currentIndex].title,
-        style: Theme.of(context)
-            .textTheme
-            .displaySmall!
-            .copyWith(fontWeight: FontWeight.w700),
-      ),
-    );
-  }
-}
-
-class AnimatedSubtitle extends StatelessWidget {
-  const AnimatedSubtitle({
-    super.key,
-    required this.currentIndex,
-    required this.pages,
-  });
-
-  final int currentIndex;
-  final List<OnboardPerformance> pages;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 500),
-      child: RichText(
-        key: Key(currentIndex.toString()),
-        textAlign: TextAlign.center,
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: pages[currentIndex].subtitle,
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: AppColor.greyText,
-                  ),
-            ),
-            TextSpan(
-              text: pages[currentIndex].subtitleAccent,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(color: AppColor.purpleLightPrimary),
-            )
-          ],
-        ),
-      ),
-    );
   }
 }

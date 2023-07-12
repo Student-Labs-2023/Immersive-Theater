@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shebalin/src/features/onboarding_performance/models/onboard_performance.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/page_indicator.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
-import 'package:shebalin/src/theme/theme.dart';
 
 class Button extends StatelessWidget {
   final String title;
@@ -10,6 +8,7 @@ class Button extends StatelessWidget {
   final Color textColor;
   final Color backgroundColor;
   final Color borderColor;
+  final String icon;
 
   const Button({
     super.key,
@@ -18,7 +17,16 @@ class Button extends StatelessWidget {
     required this.textColor,
     required this.backgroundColor,
     required this.borderColor,
+    required this.icon,
   });
+  const Button.purpleButton({
+    super.key,
+    required this.title,
+    required this.onTap,
+    required this.icon,
+  })  : textColor = AppColor.whiteText,
+        backgroundColor = AppColor.purplePrimary,
+        borderColor = AppColor.purplePrimary;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -53,7 +61,7 @@ class Button extends StatelessWidget {
             width: 9,
           ),
           ImageIcon(
-            const AssetImage(ImagesSources.right),
+            AssetImage(icon),
             color: textColor,
             size: 24,
           )
