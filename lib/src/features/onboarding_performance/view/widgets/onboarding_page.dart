@@ -25,7 +25,7 @@ class Button extends StatelessWidget {
       onPressed: onTap,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(backgroundColor),
-        elevation: MaterialStateProperty.all(5),
+        elevation: MaterialStateProperty.all(0),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
             side: BorderSide(color: borderColor, width: 2),
