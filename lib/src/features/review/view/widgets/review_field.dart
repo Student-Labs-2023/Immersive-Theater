@@ -12,19 +12,32 @@ class ReviewTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      maxLines: 8,
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        filled: true,
-        fillColor: AppColor.accentBackground,
-        label: Text(
-          label,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium!
-              .copyWith(color: AppColor.lightGray),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.transparent),
+        color: AppColor.accentBackground,
+      ),
+      height: MediaQuery.of(context).size.height * 0.2,
+      child: TextField(
+        style: Theme.of(context).textTheme.bodyMedium,
+        maxLines: double.maxFinite.floor(),
+        controller: controller,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          alignLabelWithHint: true,
+          filled: true,
+          fillColor: Colors.transparent,
+          label: Text(
+            label,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: AppColor.lightGray),
+          ),
         ),
       ),
     );

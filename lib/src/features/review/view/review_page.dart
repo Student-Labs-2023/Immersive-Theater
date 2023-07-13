@@ -58,11 +58,12 @@ class _ReviewPageState extends State<ReviewPage> {
               subtitle: 'Как у вас прошёл спектакль .',
               subtitleAccent: '«$performanceTitle».',
             ),
-            Expanded(
-              child: ReviewTextField(
-                controller: _controller,
-                label: "Что пошло не так?",
-              ),
+            ReviewTextField(
+              controller: _controller,
+              label: "Что пошло не так?",
+            ),
+            const SizedBox(
+              height: 16,
             ),
             AppButton.purpleButton(title: "Пропустить", onTap: _onTap)
           ],
