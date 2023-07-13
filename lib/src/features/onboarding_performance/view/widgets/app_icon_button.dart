@@ -19,7 +19,7 @@ class AppIconButton extends StatelessWidget {
     required this.borderColor,
     required this.icon,
   });
-  const AppIconButton.purpleButton({
+  const AppIconButton.primaryButton({
     super.key,
     required this.title,
     required this.onTap,
@@ -72,16 +72,16 @@ class AppIconButton extends StatelessWidget {
 }
 
 class OnboardControllButton extends StatelessWidget {
-  final String titlePurple;
-  final void Function() onTapPurple;
-  final String titleWhite;
-  final void Function() onTapWhite;
+  final String titlePrimary;
+  final void Function() onTapPrimary;
+  final String titleSecondary;
+  final void Function() onTapSecondary;
   const OnboardControllButton({
     super.key,
-    required this.titlePurple,
-    required this.onTapPurple,
-    required this.titleWhite,
-    required this.onTapWhite,
+    required this.titlePrimary,
+    required this.onTapPrimary,
+    required this.titleSecondary,
+    required this.onTapSecondary,
   });
 
   @override
@@ -89,17 +89,17 @@ class OnboardControllButton extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        AppIconButton.purpleButton(
-          title: titlePurple,
-          onTap: onTapPurple,
+        AppIconButton.primaryButton(
+          title: titlePrimary,
+          onTap: onTapPrimary,
           icon: ImagesSources.right,
         ),
         const SizedBox(
           height: 16,
         ),
         AppIconButton(
-          title: titleWhite,
-          onTap: onTapWhite,
+          title: titleSecondary,
+          onTap: onTapSecondary,
           icon: ImagesSources.right,
           textColor: AppColor.blackText,
           backgroundColor: AppColor.whiteBackground,

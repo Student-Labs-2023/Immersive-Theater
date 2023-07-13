@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance_args.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_image.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
@@ -41,15 +42,19 @@ class OnboardWelcome extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 34),
         child: OnboardControllButton(
-          titlePurple: 'Прослушивание в городе',
-          titleWhite: 'Свободное прослушивание',
-          onTapPurple: () => Navigator.of(context).pushReplacementNamed(
-            OnboardingPerfRules.routeName,
-            arguments: false,
+          titlePrimary: 'Прослушивание в городе',
+          titleSecondary: 'Свободное прослушивание',
+          onTapPrimary: () => Navigator.of(context).pushReplacementNamed(
+            OnboardingPerformance.routeName,
+            arguments: OnboardingPerformanceArgs(
+              listenAtHome: false,
+            ),
           ),
-          onTapWhite: () => Navigator.of(context).pushReplacementNamed(
-            OnboardingPerfRules.routeName,
-            arguments: true,
+          onTapSecondary: () => Navigator.of(context).pushReplacementNamed(
+            OnboardingPerformance.routeName,
+            arguments: OnboardingPerformanceArgs(
+              listenAtHome: true,
+            ),
           ),
         ),
       ),
