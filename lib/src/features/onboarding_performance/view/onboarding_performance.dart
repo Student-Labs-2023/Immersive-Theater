@@ -4,7 +4,7 @@ import 'package:shebalin/src/features/onboarding_performance/view/widgets/animat
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_image.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_title.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/button.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -48,7 +48,7 @@ class _OnboardingPerfRulesState extends State<OnboardingPerfRules> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 34),
         child: showOneButtonAtHome
-            ? Button.purpleButton(
+            ? AppIconButton.purpleButton(
                 title: pages[currentIndex].buttonTitle,
                 onTap: curIndexLessLastindex ? _nextPage : _openPerfModeScreen,
                 icon: ImagesSources.right,

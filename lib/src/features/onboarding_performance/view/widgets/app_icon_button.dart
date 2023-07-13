@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 
-class Button extends StatelessWidget {
+class AppIconButton extends StatelessWidget {
   final String title;
   final void Function() onTap;
   final Color textColor;
@@ -10,7 +10,7 @@ class Button extends StatelessWidget {
   final Color borderColor;
   final String icon;
 
-  const Button({
+  const AppIconButton({
     super.key,
     required this.title,
     required this.onTap,
@@ -19,7 +19,7 @@ class Button extends StatelessWidget {
     required this.borderColor,
     required this.icon,
   });
-  const Button.purpleButton({
+  const AppIconButton.purpleButton({
     super.key,
     required this.title,
     required this.onTap,
@@ -89,7 +89,7 @@ class OnboardControllButton extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Button.purpleButton(
+        AppIconButton.purpleButton(
           title: titlePurple,
           onTap: onTapPurple,
           icon: ImagesSources.right,
@@ -97,7 +97,7 @@ class OnboardControllButton extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
-        Button(
+        AppIconButton(
           title: titleWhite,
           onTap: onTapWhite,
           icon: ImagesSources.right,

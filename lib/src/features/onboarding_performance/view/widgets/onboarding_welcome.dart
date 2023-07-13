@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_image.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/button.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/theme/images.dart';
 
 class OnboardWelcome extends StatelessWidget {

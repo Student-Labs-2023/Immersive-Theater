@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shebalin/src/features/onboarding_performance/models/onboard_performance.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 
 class AnimatedBottomSheet extends StatelessWidget {

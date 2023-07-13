@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/onboarding_performance/models/onboard_performance.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 
 class PageIndicator extends StatelessWidget {
   const PageIndicator({
@@ -45,7 +46,7 @@ class DotIndicator extends StatelessWidget {
         width: 8,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(40),
-          color: isActive ? Colors.amber : Colors.grey,
+          color: isActive ? AppColor.yellowSecondary : AppColor.grey,
         ),
       ),
     );
