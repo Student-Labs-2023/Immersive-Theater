@@ -42,7 +42,10 @@ class _ReviewPageState extends State<ReviewPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Image.asset(ImagesSources.backIcon),
+          icon: Image.asset(
+            ImagesSources.closePerformance,
+            color: AppColor.blackText,
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
