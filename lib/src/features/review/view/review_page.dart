@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_title.dart';
+import 'package:shebalin/src/features/review/view/widgets/emoji.dart';
 import 'package:shebalin/src/features/review/view/widgets/review_field.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
@@ -32,7 +34,6 @@ class _ReviewPageState extends State<ReviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -46,10 +47,6 @@ class _ReviewPageState extends State<ReviewPage> {
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 34),
         child: Column(
           children: [
-            Image.asset(
-              width: double.infinity,
-              ImagesSources.opinion,
-            ),
             const AppTitle(title: 'Оцените спектакль'),
             const SizedBox(
               height: 16,
@@ -57,6 +54,40 @@ class _ReviewPageState extends State<ReviewPage> {
             AppSubtitle(
               subtitle: 'Как у вас прошёл спектакль .',
               subtitleAccent: '«$performanceTitle».',
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            SizedBox(
+              height: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Emoji(
+                    icon: ImagesSources.angrySmile,
+                    isActive: true,
+                  ),
+                  Emoji(
+                    icon: ImagesSources.angrySmile,
+                    isActive: false,
+                  ),
+                  Emoji(
+                    icon: ImagesSources.angrySmile,
+                    isActive: false,
+                  ),
+                  Emoji(
+                    icon: ImagesSources.angrySmile,
+                    isActive: false,
+                  ),
+                  Emoji(
+                    icon: ImagesSources.angrySmile,
+                    isActive: false,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 16,
             ),
             ReviewTextField(
               controller: _controller,
