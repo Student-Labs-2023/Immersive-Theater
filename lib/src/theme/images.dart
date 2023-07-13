@@ -56,4 +56,5 @@ class ImagesSources {
   static const String purplePlacemark = "assets/images/purple_placemark.png";
   static const String grayPlacemark = "assets/images/gray_placemark.png";
   static const String userPlacemark = "assets/images/user_placemark.png";
+  static const String opinion = "assets/images/opinion.png";
 }

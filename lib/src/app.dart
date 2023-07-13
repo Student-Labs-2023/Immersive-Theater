@@ -14,6 +14,7 @@ import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/photo_slider/view/vertical_sliding_screen.dart';
 import 'package:shebalin/src/features/promocodes/view/own_promocodes_screen.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
+import 'package:shebalin/src/features/review/view/review_page.dart';
 import 'package:shebalin/src/features/ticket/view/ticket_page.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/theme/theme.dart';
@@ -44,7 +45,7 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Shebalin",
         theme: defaultTheme(),
-        initialRoute: '/onboarding-performance',
+        initialRoute: '/review-page',
         routes: {
           '/loading-screen': (context) => const LoadingScreen(),
           '/onbording-screen': (context) => const OnbordingScreen(),
@@ -58,7 +59,8 @@ class App extends StatelessWidget {
           '/ticket-page': (context) => const TicketPage(),
           '/images-view-page': (context) => const ImagesViewPage(),
           '/onboarding-performance': (context) => const OnboardWelcome(),
-          '/onboarding-rules': (context) => const OnboardingPerfRules()
+          '/onboarding-rules': (context) => const OnboardingPerfRules(),
+          '/review-page': (context) => const ReviewPage()
         },
       ),
     );
