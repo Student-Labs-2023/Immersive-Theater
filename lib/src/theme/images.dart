@@ -58,4 +58,8 @@ class ImagesSources {
   static const String userPlacemark = "assets/images/user_placemark.png";
   static const String opinion = "assets/images/opinion.png";
   static const String angrySmile = "assets/images/angry_smile.svg";
+  static const String sarcasmSmile = "assets/images/sarcasm_smile.svg";
+  static const String okSmile = "assets/images/ok_smile.svg";
+  static const String goodSmile = "assets/images/happy_smile.svg";
+  static const String perfectSmile = "assets/images/perfect_smile.svg";
 }

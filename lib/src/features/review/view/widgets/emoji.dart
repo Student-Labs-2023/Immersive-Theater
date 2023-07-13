@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shebalin/src/theme/images.dart';
 
-class Emoji extends StatelessWidget {
+class EmojiWidget extends StatelessWidget {
   final bool isActive;
   final String icon;
-  const Emoji({
+  const EmojiWidget({
     super.key,
     required this.isActive,
     required this.icon,

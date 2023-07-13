@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_title.dart';
 import 'package:shebalin/src/features/review/view/widgets/emoji.dart';
+import 'package:shebalin/src/features/review/view/widgets/models/emoji.dart';
 import 'package:shebalin/src/features/review/view/widgets/review_field.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
@@ -17,9 +18,12 @@ class ReviewPage extends StatefulWidget {
 class _ReviewPageState extends State<ReviewPage> {
   final String performanceTitle = 'Шебалин в Омске';
   late TextEditingController _controller;
+  late final List<Emoji> emotions;
+  int? _currentIndex;
 
   @override
   void initState() {
+    emotions = Emoji.emotions;
     _controller = TextEditingController();
     super.initState();
   }
@@ -63,26 +67,15 @@ class _ReviewPageState extends State<ReviewPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Emoji(
-                    icon: ImagesSources.angrySmile,
-                    isActive: true,
-                  ),
-                  Emoji(
-                    icon: ImagesSources.angrySmile,
-                    isActive: false,
-                  ),
-                  Emoji(
-                    icon: ImagesSources.angrySmile,
-                    isActive: false,
-                  ),
-                  Emoji(
-                    icon: ImagesSources.angrySmile,
-                    isActive: false,
-                  ),
-                  Emoji(
-                    icon: ImagesSources.angrySmile,
-                    isActive: false,
-                  ),
+                  ...List.generate(
+                      emotions.length,
+                      ((index) => GestureDetector(
+                            onTap: () => _onEmojiTap(index),
+                            child: EmojiWidget(
+                              isActive: emotions[index].isActive,
+                              icon: emotions[index].icon,
+                            ),
+                          ))),
                 ],
               ),
             ),
@@ -104,6 +97,21 @@ class _ReviewPageState extends State<ReviewPage> {
   }
 
   void _onTap() {}
+
+  void _onEmojiTap(int index) {
+    if (_currentIndex != null) {
+      emotions[_currentIndex!] = emotions[_currentIndex!]
+          .copyWith(isActive: !emotions[_currentIndex!].isActive);
+    }
+    setState(() {});
+    if (index != _currentIndex) {
+      emotions[index] =
+          emotions[index].copyWith(isActive: !emotions[index].isActive);
+      _currentIndex = index;
+    } else {
+      _currentIndex = null;
+    }
+  }
 }
 
 class AppButton extends StatelessWidget {
