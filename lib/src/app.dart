@@ -49,7 +49,7 @@ class App extends StatelessWidget {
           '/main-screen': (context) => const MainScreen(),
           '/perfomance-description-screen': (context) =>
               const PerformanceDoubleScreen(),
-          '/promocode-screen': (context) => const PromocodeScreen(),
+          '/promocode-screen': (context) =>  PromocodeScreen(),
           '/promocode-screen/own': (context) => const OwnPromocodesScreen(),
           '/vertical-sliding-screen': (context) =>
               const VerticalSlidningScreen(),

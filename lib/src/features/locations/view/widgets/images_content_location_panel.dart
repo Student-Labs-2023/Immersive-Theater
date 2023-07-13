@@ -33,7 +33,7 @@ class ImagesContentLocationPanel extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(4)),
               ),
               child: CachedNetworkImage(
-                imageUrl: ApiClient.baseUrl + imageLinks[index],
+                imageUrl:ApiClient.baseUrl + imageLinks[index],
               ),
             );
           }
