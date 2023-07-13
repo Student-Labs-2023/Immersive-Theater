@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 
@@ -18,7 +19,8 @@ class ReviewTextField extends StatelessWidget {
         border: Border.all(color: Colors.transparent),
         color: AppColor.accentBackground,
       ),
-      height: MediaQuery.of(context).size.height * 0.2,
+      constraints:
+          BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.19),
       child: TextField(
         style: Theme.of(context).textTheme.bodyMedium,
         maxLines: double.maxFinite.floor(),

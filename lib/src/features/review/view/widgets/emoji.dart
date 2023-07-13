@@ -12,11 +12,16 @@ class EmojiWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: isActive ? 1 : 0.4,
-      child: SvgPicture.asset(
-        icon,
-        width: isActive ? 60 : 52,
+    return AnimatedScale(
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.decelerate,
+      scale: isActive ? 1 : 0.85,
+      child: Opacity(
+        opacity: isActive ? 1 : 0.4,
+        child: SvgPicture.asset(
+          icon,
+          width: isActive ? 60 : 52,
+        ),
       ),
     );
   }

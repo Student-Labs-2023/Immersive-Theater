@@ -48,7 +48,7 @@ class _ReviewPageState extends State<ReviewPage> {
       ),
       backgroundColor: AppColor.whiteBackground,
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 34),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
         child: Column(
           children: [
             const AppTitle(title: 'Оцените спектакль'),
@@ -59,7 +59,7 @@ class _ReviewPageState extends State<ReviewPage> {
               subtitle: 'Как у вас прошёл спектакль .',
               subtitleAccent: '«$performanceTitle».',
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             SizedBox(
@@ -68,14 +68,16 @@ class _ReviewPageState extends State<ReviewPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ...List.generate(
-                      emotions.length,
-                      ((index) => GestureDetector(
-                            onTap: () => _onEmojiTap(index),
-                            child: EmojiWidget(
-                              isActive: emotions[index].isActive,
-                              icon: emotions[index].icon,
-                            ),
-                          ))),
+                    emotions.length,
+                    ((index) => GestureDetector(
+                          onTap: () => _onEmojiTap(index),
+                          child: EmojiWidget(
+                            key: Key(index.toString()),
+                            isActive: emotions[index].isActive,
+                            icon: emotions[index].icon,
+                          ),
+                        )),
+                  ),
                 ],
               ),
             ),
@@ -84,12 +86,12 @@ class _ReviewPageState extends State<ReviewPage> {
             ),
             ReviewTextField(
               controller: _controller,
-              label: "Что пошло не так?",
+              label: 'Что пошло не так?',
             ),
             const SizedBox(
-              height: 16,
+              height: 24,
             ),
-            AppButton.purpleButton(title: "Пропустить", onTap: _onTap)
+            AppButton.purpleButton(title: 'Отправить отзыв', onTap: _onTap)
           ],
         ),
       ),
