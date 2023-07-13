@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_title.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/features/review/view/widgets/emoji.dart';
 import 'package:shebalin/src/features/review/view/widgets/models/emoji.dart';
 import 'package:shebalin/src/features/review/view/widgets/review_field.dart';
@@ -94,7 +95,15 @@ class _ReviewPageState extends State<ReviewPage> {
             const SizedBox(
               height: 24,
             ),
-            AppButton.purpleButton(title: 'Отправить отзыв', onTap: _onTap)
+            AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity: _currentIndex != null || _controller.text.isNotEmpty
+                    ? 1
+                    : 0.4,
+                child: AppButton.purpleButton(
+                  title: 'Отправить отзыв',
+                  onTap: _onTap,
+                ))
           ],
         ),
       ),
@@ -116,63 +125,5 @@ class _ReviewPageState extends State<ReviewPage> {
     } else {
       _currentIndex = null;
     }
-  }
-}
-
-class AppButton extends StatelessWidget {
-  final String title;
-  final void Function() onTap;
-  final Color textColor;
-  final Color backgroundColor;
-  final Color borderColor;
-
-  const AppButton({
-    super.key,
-    required this.title,
-    required this.onTap,
-    required this.textColor,
-    required this.backgroundColor,
-    required this.borderColor,
-  });
-  const AppButton.purpleButton({
-    super.key,
-    required this.title,
-    required this.onTap,
-  })  : textColor = AppColor.whiteText,
-        backgroundColor = AppColor.purplePrimary,
-        borderColor = AppColor.purplePrimary;
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onTap,
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(backgroundColor),
-        elevation: MaterialStateProperty.all(0),
-        shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(
-            side: BorderSide(color: borderColor, width: 2),
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        minimumSize: MaterialStateProperty.all(
-          Size(
-            MediaQuery.of(context).size.width * 0.85,
-            MediaQuery.of(context).size.height * 0.06,
-          ),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge
-                ?.copyWith(color: textColor),
-          ),
-        ],
-      ),
-    );
   }
 }
