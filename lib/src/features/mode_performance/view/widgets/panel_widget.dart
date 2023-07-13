@@ -26,6 +26,7 @@ class _PanelWidgetState extends State<PanelWidget> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(
           height: 12,
@@ -79,7 +80,7 @@ class _PanelWidgetState extends State<PanelWidget> {
                   return LocationItem(
                     locationName: widget.locations[index].title,
                     isCurrentLocation: state.indexLocation == index,
-                    isCompleted: index <= state.indexLocation,
+                    isCompleted: index < state.indexLocation,
                   );
                 },
               );

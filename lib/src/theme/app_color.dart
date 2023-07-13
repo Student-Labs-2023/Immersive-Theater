@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AppColor {
-  static Color secondaryColor = const Color.fromARGB(255, 248, 249, 250);
-  static Color barIndicatorColor = const Color.fromARGB(30, 55, 49, 49);
-  static Color primaryTextColor = const Color.fromARGB(255, 33, 37, 41);
-  static Color secondaryTextColor = const Color.fromARGB(255, 173, 181, 189);
-  static Color accentTextColor = const Color.fromARGB(255, 114, 91, 255);
+  static const purpleDarkPrimary = Color(0xFF614ED9);
+  static const purplePrimary = Color(0xFF725BFF);
+  static const purpleLightPrimary = Color(0xFFAA9DFF);
+  static const yellowSecondary = Color(0xFFFFB800);
+  static const grey = Color(0xFFA6A6A6);
+  static const lightGray = Color(0xFFA6A6A6);
+  static const whiteBackground = Color(0xFFFFFFFF);
+  static const accentBackground = Color(0xFFC5C5C5);
+  static const blackText = Color(0xFF212529);
+  static const greyText = Color(0xFFADB5BD);
+  static const whiteText = Color(0xFFFFFFFF);
 }

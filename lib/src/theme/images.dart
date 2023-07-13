@@ -5,6 +5,7 @@ class ImagesSources {
   static const String loadingEmblem = 'assets/images/loadingEmblem.png';
   static const String markGift = 'assets/images/mark_gift.png';
   static const String markStar = 'assets/images/mark_star.png';
+
   static const String mark = 'assets/images/mark.png';
   static const String onbording = 'assets/images/onbording.png';
   static const String secondOnbording = 'assets/images/secondOnbording.png';
@@ -38,6 +39,7 @@ class ImagesSources {
   static const String audioBackButton = 'assets/icons/audio_back_button.png';
 
   static const String upIcon = 'assets/icons/up_icon.png';
+  static const String right = 'assets/icons/right.png';
   static const String downIcon = 'assets/icons/down_icon.png';
   static const String closePerformance = "assets/icons/close_performance.png";
   static const String currentLocationItem =
@@ -46,4 +48,12 @@ class ImagesSources {
   static const String backIcon = "assets/icons/back_icon.png";
   static const String tipIcon = "assets/icons/tip_icon.png";
   static const String continueButton = "assets/icons/continue_button.png";
+  static const String onboardMap = 'assets/images/onboard_map.png';
+  static const String onboardHeadPhones =
+      'assets/images/onboard_headphones.png';
+  static const String onboardNext = 'assets/images/onboard_next.png';
+  static const String onboardWelcome = 'assets/images/onboard_welcome.png';
+  static const String purplePlacemark = "assets/images/purple_placemark.png";
+  static const String grayPlacemark = "assets/images/gray_placemark.png";
+  static const String userPlacemark = "assets/images/user_placemark.png";
 }

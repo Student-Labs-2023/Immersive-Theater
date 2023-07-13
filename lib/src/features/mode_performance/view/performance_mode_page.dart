@@ -2,23 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:locations_repository/locations_repository.dart';
+import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
+import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
+import 'package:shebalin/src/features/map_performance/view/map_page.dart';
 import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_player.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/map_page.dart';
+import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/panel_widget.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/progress_bar.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/tip.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class PerformanceModePage extends StatefulWidget {
   final List<Location> locations;
-
-  const PerformanceModePage({
+  final String performanceTitle;
+  final String imageLink;
+  final mapbloc = PerfModeMapBloc();
+  static const routeName = '/performance-mode-screen';
+  PerformanceModePage({
     super.key,
     required this.locations,
+    required this.performanceTitle,
+    required this.imageLink,
   });
 
   @override
@@ -42,7 +51,8 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
           create: (context) => ModePerformanceBloc(
             0,
             widget.locations.length,
-            player.processingStateStream,
+            widget.performanceTitle,
+            widget.imageLink,
           ),
         ),
         BlocProvider(
@@ -56,16 +66,22 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
               );
           },
         ),
+        BlocProvider<PerfModeMapBloc>(
+          create: (context) {
+            return widget.mapbloc;
+          },
+        ),
       ],
       child: Builder(
         builder: (context) {
           return Scaffold(
             extendBodyBehindAppBar: true,
-            appBar: appBar(),
+            appBar: _appBar(),
             body: Stack(
               alignment: AlignmentDirectional.center,
               children: [
                 SlidingUpPanel(
+                  backdropEnabled: true,
                   controller: panelController,
                   parallaxEnabled: true,
                   parallaxOffset: .5,
@@ -76,8 +92,16 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                     controller: panelController,
                     locations: widget.locations,
                   ),
-                  body: MapPage(
-                    locations: widget.locations,
+                  body: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
+                    builder: (context, state) {
+                      return MapPage(
+                        locations: widget.locations,
+                        initialCoords: const Point(
+                          latitude: 54.988707,
+                          longitude: 73.368659,
+                        ),
+                      );
+                    },
                   ),
                   onPanelSlide: (position) {
                     setState(() {
@@ -96,7 +120,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                       FloatingActionButton(
                         heroTag: "getUserLocation",
                         backgroundColor: Colors.white,
-                        onPressed: () {},
+                        onPressed: _getUserBloc,
                         child: const Image(
                           image: AssetImage(ImagesSources.locationIcon),
                         ),
@@ -149,7 +173,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
     );
   }
 
-  AppBar appBar() {
+  AppBar _appBar() {
     return AppBar(
       toolbarHeight: 100,
       backgroundColor: Colors.transparent,
@@ -168,7 +192,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
               FloatingActionButton(
                 heroTag: "closePerformance",
                 backgroundColor: Colors.white,
-                onPressed: _closePerformance,
+                onPressed: () => _closePerformance(context),
                 child: const Image(
                   image: AssetImage(ImagesSources.closePerformance),
                 ),
@@ -180,5 +204,29 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
     );
   }
 
-  void _closePerformance() {}
+  void _closePerformance(BuildContext context) {
+    onPressedCancel() => Navigator.pop(
+          context,
+        );
+    onPressedApprove() => Navigator.pushNamedAndRemoveUntil(
+          context,
+          MainScreen.routeName,
+          (route) => false,
+        );
+    showDialog(
+      context: context,
+      builder: (_) => DialogWindow(
+        title: "Завершить спектакль?",
+        subtitle: "Прогресс прохождения не будет сохранен.",
+        onPressedCancel: onPressedCancel,
+        titleApprove: "Завершить",
+        titleCancel: "Отмена",
+        onPressedApprove: onPressedApprove,
+      ),
+    );
+  }
+
+  void _getUserBloc() {
+    widget.mapbloc.add(PerfModeMapGetUserLocationEvent());
+  }
 }

@@ -6,8 +6,16 @@ import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
 class AudioInfoWidget extends StatelessWidget {
-  const AudioInfoWidget({super.key});
-
+  final String performanceTitle;
+  final String audioTitle;
+  final String imageLink;
+  const AudioInfoWidget({
+    super.key,
+    required this.performanceTitle,
+    required this.audioTitle,
+    required this.imageLink,
+  });
+// "/uploads/1650699780132_bce6f77d48.jpg?updated_at=2023-03-30T05:50:05.517Z"
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -20,8 +28,7 @@ class AudioInfoWidget extends StatelessWidget {
             placeholder: (context, url) => Center(
               child: CircularProgressIndicator(color: accentTextColor),
             ),
-            imageUrl: ApiClient.baseUrl +
-                "/uploads/1650699780132_bce6f77d48.jpg?updated_at=2023-03-30T05:50:05.517Z",
+            imageUrl: ApiClient.baseUrl + imageLink,
             fit: BoxFit.cover,
           ),
         ),
@@ -32,11 +39,11 @@ class AudioInfoWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Глава 1",
+              audioTitle,
               style: Theme.of(context).textTheme.labelLarge?.copyWith(),
             ),
             Text(
-              "Шебалин в Омске",
+              performanceTitle,
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge

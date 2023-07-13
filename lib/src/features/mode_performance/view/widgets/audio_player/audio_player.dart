@@ -46,7 +46,8 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
                     min: 0,
                     max: state.duration.inSeconds.toDouble(),
                     value: state.position.inSeconds.toDouble(),
-                    onChanged: state is AudioPlayerFinishedState
+                    onChanged: state is AudioPlayerFinishedState ||
+                            state is AudioPlayerFailureState
                         ? null
                         : (value) => context
                             .read<AudioPlayerBloc>()
@@ -62,7 +63,17 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Expanded(child: AudioInfoWidget()),
+                Expanded(
+                  child: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
+                    builder: (context, state) {
+                      return AudioInfoWidget(
+                        performanceTitle: state.performanceTitle,
+                        audioTitle: "Глава 1",
+                        imageLink: state.imagePerformanceLink,
+                      );
+                    },
+                  ),
+                ),
                 state is AudioPlayerFinishedState
                     ? ContinueButton(
                         title: "Продолжить",
