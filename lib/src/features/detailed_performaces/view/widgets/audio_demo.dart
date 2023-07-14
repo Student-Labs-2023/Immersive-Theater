@@ -44,8 +44,7 @@ class _AudioDemoState extends State<AudioDemo> {
                         child:
                             CircularProgressIndicator(color: accentTextColor),
                       ),
-                      imageUrl: ApiClient.baseUrl +
-                          widget.performance.audioCoverImageLink,
+                      imageUrl: ApiClient.baseUrl +widget.performance.audioCoverImageLink,
                       fit: BoxFit.cover,
                     ),
                   ),

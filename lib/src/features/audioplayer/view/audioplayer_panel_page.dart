@@ -134,8 +134,7 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
                 height: MediaQuery.of(context).size.height * 0.38,
                 width: MediaQuery.of(context).size.width * 0.85,
                 child: CachedNetworkImage(
-                  imageUrl:
-                      ApiClient.baseUrl + widget.performance.coverImageLink,
+                  imageUrl: ApiClient.baseUrl + widget.performance.coverImageLink,
                   fit: BoxFit.cover,
                 ),
               ),

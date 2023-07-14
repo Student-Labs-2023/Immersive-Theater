@@ -12,10 +12,7 @@ class PerformancesPanelPage extends StatefulWidget {
   State<PerformancesPanelPage> createState() => _PerformancesPanelPageState();
 }
 
-enum KindOfPerfomance { all, composers, actors, painters }
-
 class _PerformancesPanelPageState extends State<PerformancesPanelPage> {
-  Enum selectedTitle = KindOfPerfomance.all;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,85 +23,7 @@ class _PerformancesPanelPageState extends State<PerformancesPanelPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  const Padding(padding: EdgeInsets.only(left: 16)),
-                  TextButton(
-                    onPressed: () => _changeTitleNimber(
-                      currentKindOfPerfomance: KindOfPerfomance.all,
-                    ),
-                    child: Text(
-                      "Все",
-                      style: selectedTitle == KindOfPerfomance.all
-                          ? Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontSize: 20)
-                          : Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontSize: 20,
-                                color: secondaryTextColor,
-                              ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () => _changeTitleNimber(
-                      currentKindOfPerfomance: KindOfPerfomance.composers,
-                    ),
-                    child: Text(
-                      "Композиторы",
-                      style: selectedTitle == KindOfPerfomance.composers
-                          ? Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontSize: 20)
-                          : Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontSize: 20,
-                                color: secondaryTextColor,
-                              ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () => _changeTitleNimber(
-                      currentKindOfPerfomance: KindOfPerfomance.actors,
-                    ),
-                    child: Text(
-                      "Актеры",
-                      style: selectedTitle == KindOfPerfomance.actors
-                          ? Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontSize: 20)
-                          : Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontSize: 20,
-                                color: secondaryTextColor,
-                              ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () => _changeTitleNimber(
-                      currentKindOfPerfomance: KindOfPerfomance.painters,
-                    ),
-                    child: Text(
-                      "Художники",
-                      style: selectedTitle == KindOfPerfomance.painters
-                          ? Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontSize: 20)
-                          : Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontSize: 20,
-                                color: secondaryTextColor,
-                              ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            selectedTitle == KindOfPerfomance.all ||
-                    selectedTitle == KindOfPerfomance.composers
-                ? BlocBuilder<PerformanceBloc, PerformanceState>(
+             BlocBuilder<PerformanceBloc, PerformanceState>(
                     builder: (context, state) {
                       if (state is PerformanceLoadInProgress) {
                         return Center(
@@ -130,18 +49,10 @@ class _PerformancesPanelPageState extends State<PerformancesPanelPage> {
                         return const Text('Oops...Something went wrong!');
                       }
                     },
-                  )
-                : const SizedBox()
+              )
           ],
         ),
       ),
     );
-  }
-
-  _changeTitleNimber({required Enum currentKindOfPerfomance}) {
-    if (selectedTitle == currentKindOfPerfomance) return;
-    setState(() {
-      selectedTitle = currentKindOfPerfomance;
-    });
   }
 }

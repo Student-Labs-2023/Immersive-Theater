@@ -45,14 +45,14 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Shebalin",
         theme: defaultTheme(),
-        initialRoute: '/review-page',
+        initialRoute: '/main-screen',
         routes: {
           '/loading-screen': (context) => const LoadingScreen(),
           '/onbording-screen': (context) => const OnbordingScreen(),
           '/main-screen': (context) => const MainScreen(),
           '/perfomance-description-screen': (context) =>
               const PerformanceDoubleScreen(),
-          '/promocode-screen': (context) => const PromocodeScreen(),
+          '/promocode-screen': (context) =>  PromocodeScreen(),
           '/promocode-screen/own': (context) => const OwnPromocodesScreen(),
           '/vertical-sliding-screen': (context) =>
               const VerticalSlidningScreen(),
