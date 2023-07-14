@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/onboarding_performance/models/onboard_performance.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance_args.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_container.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_image.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
@@ -12,8 +13,8 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 import 'widgets/page_indicator.dart';
 
-class OnboardingPerfRules extends StatefulWidget {
-  const OnboardingPerfRules({
+class OnboardingPerformance extends StatefulWidget {
+  const OnboardingPerformance({
     super.key,
   });
   final Point startPoint = const Point(
@@ -23,19 +24,20 @@ class OnboardingPerfRules extends StatefulWidget {
   static const routeName = '/onboarding-rules';
 
   @override
-  State<OnboardingPerfRules> createState() => _OnboardingPerfRulesState();
+  State<OnboardingPerformance> createState() => _OnboardingPerformanceState();
 }
 
-class _OnboardingPerfRulesState extends State<OnboardingPerfRules> {
+class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   late final List<OnboardPerformance> pages;
   int currentIndex = 0;
   bool get curIndexLessLastindex => currentIndex < pages.length - 1;
   bool get showOneButtonAtHome => currentIndex != 0 || listenAtHome;
   late final bool listenAtHome;
   @override
-  @override
   void didChangeDependencies() {
-    listenAtHome = ModalRoute.of(context)!.settings.arguments as bool;
+    final OnboardingPerformanceArgs args =
+        ModalRoute.of(context)!.settings.arguments as OnboardingPerformanceArgs;
+    listenAtHome = args.listenAtHome;
     pages = listenAtHome ? OnboardPerformance.home : OnboardPerformance.outside;
     super.didChangeDependencies();
   }
@@ -48,16 +50,16 @@ class _OnboardingPerfRulesState extends State<OnboardingPerfRules> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 34),
         child: showOneButtonAtHome
-            ? AppIconButton.purpleButton(
+            ? AppIconButton.primaryButton(
                 title: pages[currentIndex].buttonTitle,
                 onTap: curIndexLessLastindex ? _nextPage : _openPerfModeScreen,
                 icon: ImagesSources.right,
               )
             : OnboardControllButton(
-                titlePurple: pages[currentIndex].buttonTitle,
-                onTapPurple: listenAtHome ? _nextPage : _launchUrl,
-                titleWhite: 'Доберусь сам',
-                onTapWhite:
+                titlePrimary: pages[currentIndex].buttonTitle,
+                onTapPrimary: listenAtHome ? _nextPage : _launchUrl,
+                titleSecondary: 'Доберусь сам',
+                onTapSecondary:
                     curIndexLessLastindex ? _nextPage : _openPerfModeScreen,
               ),
       ),
@@ -73,7 +75,7 @@ class _OnboardingPerfRulesState extends State<OnboardingPerfRules> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              PageIndicator(pages: pages, currentIndex: currentIndex),
+              PageIndicator(count: pages.length, currentIndex: currentIndex),
               const SizedBox(
                 height: 40,
               ),
@@ -111,7 +113,5 @@ class _OnboardingPerfRulesState extends State<OnboardingPerfRules> {
     }
   }
 
-  void _openPerfModeScreen() {
-    // Navigator.of(context).pushReplacementNamed(PerformanceModePage.routeName);
-  }
+  void _openPerfModeScreen() {}
 }

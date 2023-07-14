@@ -5,11 +5,11 @@ import 'package:shebalin/src/theme/app_color.dart';
 class PageIndicator extends StatelessWidget {
   const PageIndicator({
     super.key,
-    required this.pages,
+    required this.count,
     required this.currentIndex,
   });
 
-  final List<OnboardPerformance> pages;
+  final int count;
   final int currentIndex;
 
   @override
@@ -19,7 +19,7 @@ class PageIndicator extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ...List.generate(
-          pages.length,
+          count,
           (index) => DotIndicator(
             isActive: index == currentIndex,
           ),

@@ -59,7 +59,7 @@ class App extends StatelessWidget {
           '/ticket-page': (context) => const TicketPage(),
           '/images-view-page': (context) => const ImagesViewPage(),
           '/onboarding-performance': (context) => const OnboardWelcome(),
-          '/onboarding-rules': (context) => const OnboardingPerfRules(),
+          '/onboarding-rules': (context) => const OnboardingPerformance(),
           '/review-page': (context) => const ReviewPage()
         },
       ),
