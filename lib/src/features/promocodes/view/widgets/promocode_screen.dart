@@ -24,58 +24,59 @@ class _PromocodeScreenState extends State<PromocodeScreen> {
   @override
   Widget build(BuildContext context) {
     return SlidingUpPanel(
-        borderRadius: panelRadius,
-        backdropEnabled: true,
-        parallaxEnabled: true,
-        parallaxOffset: 0.05,
-        controller: _panelController,
-        defaultPanelState: PanelState.CLOSED,
-        minHeight: 0,
-        maxHeight: MediaQuery.of(context).size.height * 0.3,
-        header: Container(
-          margin: const EdgeInsets.fromLTRB(176, 20, 0, 0),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.12),
-            borderRadius: containerRadius,
-          ),
-          child: const SizedBox(
-            height: 3,
-            width: 50,
-          ),
+      borderRadius: panelRadius,
+      backdropEnabled: true,
+      parallaxEnabled: true,
+      parallaxOffset: 0.05,
+      controller: _panelController,
+      defaultPanelState: PanelState.CLOSED,
+      minHeight: 0,
+      maxHeight: MediaQuery.of(context).size.height * 0.3,
+      header: Container(
+        margin: const EdgeInsets.fromLTRB(176, 20, 0, 0),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.12),
+          borderRadius: containerRadius,
         ),
-        panel: InputPromocodePanelPage(),
-        body: widget.tickets == null
-            ? ZeroPromocodeScreen(
-                panelController: _panelController,
-              )
-            : BlocBuilder<PerformanceBloc, PerformanceState>(
-                builder: (context, state) {
-                  if (state is PerformanceLoadInProgress) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: accentTextColor,
-                      ),
-                    );
-                  }
-                  if (state is PerformanceLoadSuccess) {
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: ListView.builder(
-                        itemCount: state.perfomances.length,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (BuildContext context, int index) {
-                          return PerformanceCard(
-                            performance: state.perfomances[index],
-                          );
-                        },
-                      ),
-                    );
-                  } else {
-                    return const Text(
-                      'Oops...Something went wrong!',
-                    );
-                  }
-                },
-              ));
+        child: const SizedBox(
+          height: 3,
+          width: 50,
+        ),
+      ),
+      panel: InputPromocodePanelPage(),
+      body: widget.tickets == null
+          ? ZeroPromocodeScreen(
+              panelController: _panelController,
+            )
+          : BlocBuilder<PerformanceBloc, PerformanceState>(
+              builder: (context, state) {
+                if (state is PerformanceLoadInProgress) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: accentTextColor,
+                    ),
+                  );
+                }
+                if (state is PerformanceLoadSuccess) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: ListView.builder(
+                      itemCount: state.perfomances.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        return PerformanceCard(
+                          performance: state.perfomances[index],
+                        );
+                      },
+                    ),
+                  );
+                } else {
+                  return const Text(
+                    'Oops...Something went wrong!',
+                  );
+                }
+              },
+            ),
+    );
   }
 }
