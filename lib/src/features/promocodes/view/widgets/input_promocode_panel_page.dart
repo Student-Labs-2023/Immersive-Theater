@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shebalin/src/features/promocodes/view/own_promocodes_screen.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
 import 'package:shebalin/src/features/user/view/widgets/ticket.dart';
 import 'package:shebalin/src/theme/theme.dart';

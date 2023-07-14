@@ -5,7 +5,6 @@ import 'package:shebalin/src/features/locations/view/location_description_panel_
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/map/view/yandex_map_page.dart';
 import 'package:shebalin/src/features/performances/view/performances_panel_page.dart';
-import 'package:shebalin/src/features/promocodes/view/own_promocodes_screen.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
 import 'package:shebalin/src/features/user/view/personal_panel_page.dart';
 import 'package:shebalin/src/theme/images.dart';

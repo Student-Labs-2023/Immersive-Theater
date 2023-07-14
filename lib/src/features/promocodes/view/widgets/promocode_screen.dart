@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shebalin/src/features/promocodes/bloc/tickets_bloc.dart';
 import 'package:shebalin/src/features/promocodes/bloc/tickets_state.dart';
-import 'package:shebalin/src/features/promocodes/view/own_promocodes_screen.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/zero_promocode_page.dart';
 import 'package:shebalin/src/features/user/view/widgets/ticket.dart';
 import 'package:shebalin/src/theme/images.dart';
@@ -54,7 +53,7 @@ class _PromocodeScreenState extends State<PromocodeScreen> {
         builder: (context, state) {
           return state.tickets.isNotEmpty
               ? ListView.builder(
-                  itemBuilder: (_, index) => state.tickets[index])
+                  itemBuilder: (_, index) => state.tickets[index],)
               : Column(
                   children: [
                     const SizedBox(
