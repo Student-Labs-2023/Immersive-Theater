@@ -14,7 +14,9 @@ import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/photo_slider/view/vertical_sliding_screen.dart';
 import 'package:shebalin/src/features/promocodes/view/own_promocodes_screen.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
+import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
 import 'package:shebalin/src/features/review/view/review_page.dart';
+import 'package:shebalin/src/features/review/view/widgets/models/emoji.dart';
 import 'package:shebalin/src/features/ticket/view/ticket_page.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/theme/theme.dart';
@@ -39,7 +41,10 @@ class App extends StatelessWidget {
             performanceRepository:
                 RepositoryProvider.of<PerformancesRepository>(context),
           )..add(PerformancesStarted()),
-        )
+        ),
+        BlocProvider(
+          create: (_) => ReviewPageBloc(Emoji.emotions),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
