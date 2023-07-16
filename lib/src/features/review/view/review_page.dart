@@ -13,6 +13,7 @@ import 'package:shebalin/src/theme/images.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key});
+  static const routeName = '/review-page';
 
   @override
   State<ReviewPage> createState() => _ReviewPageState();
