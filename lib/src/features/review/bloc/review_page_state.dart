@@ -48,5 +48,5 @@ class ReviewPageReviewSended extends ReviewPageState {
 }
 
 class ReviewPageFailure extends ReviewPageState {
-  ReviewPageFailure(super.indexEmoji, super.text);
+  const ReviewPageFailure(super.indexEmoji, super.text);
 }

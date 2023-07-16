@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
@@ -22,6 +21,8 @@ class ReviewTextField extends StatelessWidget {
       constraints:
           BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.19),
       child: TextField(
+        enabled:
+            context.watch<ReviewPageBloc>().state is! ReviewPageReviewSended,
         onChanged: (text) {
           context.read<ReviewPageBloc>().add(ReviewPageTextAdded(text: text));
         },

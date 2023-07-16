@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_title.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
 import 'package:shebalin/src/features/review/view/widgets/emoji.dart';
-import 'package:shebalin/src/features/review/view/widgets/models/emoji.dart';
+import 'package:shebalin/src/features/review/view/widgets/review_bottom_sheet.dart';
 import 'package:shebalin/src/features/review/view/widgets/review_field.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
@@ -25,7 +25,6 @@ class _ReviewPageState extends State<ReviewPage> {
   @override
   void didChangeDependencies() {
     reviewbloc = context.read<ReviewPageBloc>();
-
     super.didChangeDependencies();
   }
 
@@ -43,13 +42,30 @@ class _ReviewPageState extends State<ReviewPage> {
                 ImagesSources.closePerformance,
                 color: AppColor.blackText,
               ),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                MainScreen.routeName,
+                (route) => false,
+              ),
             ),
           ),
           backgroundColor: AppColor.whiteBackground,
           body: Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-            child: BlocBuilder<ReviewPageBloc, ReviewPageState>(
+            child: BlocConsumer<ReviewPageBloc, ReviewPageState>(
+              listener: (context, state) => {
+                if (state is ReviewPageReviewSended)
+                  {
+                    showModalBottomSheet(
+                      enableDrag: false,
+                      backgroundColor: Colors.transparent,
+                      isDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return const ReviewBottomSheet();
+                      },
+                    )
+                  }
+              },
               builder: (context, state) {
                 return Column(
                   children: [
@@ -66,22 +82,9 @@ class _ReviewPageState extends State<ReviewPage> {
                     ),
                     SizedBox(
                       height: 60,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ...List.generate(
-                            reviewbloc.emotions.length,
-                            ((index) => GestureDetector(
-                                  onTap: () => _onEmojiTap(index),
-                                  child: EmojiWidget(
-                                    key: Key(index.toString()),
-                                    isActive:
-                                        reviewbloc.emotions[index].isActive,
-                                    icon: reviewbloc.emotions[index].icon,
-                                  ),
-                                )),
-                          ),
-                        ],
+                      child: Emojies(
+                        onTapEmoji: _onEmojiTap,
+                        emotions: reviewbloc.emotions,
                       ),
                     ),
                     const SizedBox(
@@ -96,9 +99,9 @@ class _ReviewPageState extends State<ReviewPage> {
                     AnimatedOpacity(
                       duration: const Duration(milliseconds: 300),
                       opacity: state is ReviewPageButtonActive ? 1 : 0.4,
-                      child: AppButton.purpleButton(
+                      child: AppButton.primaryButton(
                         title: 'Отправить отзыв',
-                        onTap: _onTap,
+                        onTap: state is ReviewPageButtonActive ? _onTap : null,
                       ),
                     )
                   ],
@@ -111,7 +114,9 @@ class _ReviewPageState extends State<ReviewPage> {
     );
   }
 
-  void _onTap() {}
+  void _onTap() {
+    reviewbloc.add(const ReviewPageSendReview());
+  }
 
   void _onEmojiTap(int index) {
     reviewbloc.add(ReviewPageEmojiAdded(index: index));

@@ -73,7 +73,7 @@ class AppIconButton extends StatelessWidget {
 
 class AppButton extends StatelessWidget {
   final String title;
-  final void Function() onTap;
+  final void Function()? onTap;
   final Color textColor;
   final Color backgroundColor;
   final Color borderColor;
@@ -86,7 +86,7 @@ class AppButton extends StatelessWidget {
     required this.backgroundColor,
     required this.borderColor,
   });
-  const AppButton.purpleButton({
+  const AppButton.primaryButton({
     super.key,
     required this.title,
     required this.onTap,

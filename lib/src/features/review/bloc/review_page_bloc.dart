@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:shebalin/src/features/review/view/widgets/models/emoji.dart';
+import 'package:shebalin/src/features/review/models/emoji.dart';
 
 part 'review_page_event.dart';
 part 'review_page_state.dart';
@@ -13,6 +13,7 @@ class ReviewPageBloc extends Bloc<ReviewPageEvent, ReviewPageState> {
       : super(const ReviewPageButtonDisabled(-1, '')) {
     on<ReviewPageTextAdded>(_onReviewPageTextAdded);
     on<ReviewPageEmojiAdded>(_onReviewPageEmojiAdded);
+    on<ReviewPageSendReview>(_onReviewPageSendReview);
   }
 
   void _onReviewPageTextAdded(
@@ -36,7 +37,7 @@ class ReviewPageBloc extends Bloc<ReviewPageEvent, ReviewPageState> {
       emotions[currentIndex] = emotions[currentIndex].copyWith(isActive: false);
     }
 
-    if (state.text == '' && currentIndex == index) {
+    if (state.text.isEmpty && currentIndex == index) {
       return emit(const ReviewPageButtonDisabled(-1, ''));
     }
     if (currentIndex != index) {
@@ -45,5 +46,12 @@ class ReviewPageBloc extends Bloc<ReviewPageEvent, ReviewPageState> {
     } else {
       emit(ReviewPageButtonActive(-1, state.text));
     }
+  }
+
+  FutureOr<void> _onReviewPageSendReview(
+    ReviewPageSendReview event,
+    Emitter<ReviewPageState> emit,
+  ) {
+    emit(ReviewPageReviewSended(state.indexEmoji, state.text));
   }
 }
