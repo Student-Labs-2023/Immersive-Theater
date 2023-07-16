@@ -24,13 +24,13 @@ class DialogWindow extends StatelessWidget {
     return CupertinoAlertDialog(
       title: Text(
         title,
-        style: Theme.of(context).textTheme.bodySmall!,
+        style: Theme.of(context).textTheme.headlineMedium!,
       ),
       content: Text(
         subtitle,
         style: Theme.of(context)
             .textTheme
-            .labelSmall!
+            .bodyMedium!
             .copyWith(fontWeight: FontWeight.normal, color: AppColor.blackText),
       ),
       actions: <Widget>[
@@ -40,7 +40,7 @@ class DialogWindow extends StatelessWidget {
             titleCancel,
             style: Theme.of(context)
                 .textTheme
-                .bodySmall!
+                .headlineMedium!
                 .copyWith(fontWeight: FontWeight.normal),
           ),
         ),
@@ -48,8 +48,7 @@ class DialogWindow extends StatelessWidget {
           onPressed: onPressedApprove,
           child: Text(
             titleApprove,
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  fontWeight: FontWeight.normal,
+            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                   color: const Color(0XFFFF4F4F),
                 ),
           ),

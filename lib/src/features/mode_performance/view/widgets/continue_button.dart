@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
@@ -23,7 +24,9 @@ class ContinueButton extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: Theme.of(context).textTheme.labelSmall,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: AppColor.whiteText,
+                    ),
               ),
               const SizedBox(
                 width: 3,

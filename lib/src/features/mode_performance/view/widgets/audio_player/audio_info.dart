@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
 class AudioInfoWidget extends StatelessWidget {
@@ -40,14 +41,16 @@ class AudioInfoWidget extends StatelessWidget {
           children: [
             Text(
               audioTitle,
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(),
-            ),
-            Text(
-              performanceTitle,
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge
-                  ?.copyWith(fontSize: 12, color: secondaryTextColor),
+                  ?.copyWith(color: AppColor.purplePrimary),
+            ),
+            Text(
+              performanceTitle,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: 12,
+                  ),
             ),
           ],
         ),

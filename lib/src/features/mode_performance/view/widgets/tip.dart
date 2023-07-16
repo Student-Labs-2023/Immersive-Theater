@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 
 class Tip extends StatelessWidget {
@@ -18,18 +19,24 @@ class Tip extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const ImageIcon(AssetImage(ImagesSources.tipIcon)),
+          const ImageIcon(
+            AssetImage(ImagesSources.tipIcon),
+            size: 45,
+          ),
           Flexible(
             child: RichText(
               text: TextSpan(
                 children: [
                   TextSpan(
                     text: "Если вы дошли до следующей точки нажмите ",
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   TextSpan(
                     text: "Продолжить",
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: AppColor.purplePrimary,
+                          fontWeight: FontWeight.w700,
+                        ),
                   )
                 ],
               ),

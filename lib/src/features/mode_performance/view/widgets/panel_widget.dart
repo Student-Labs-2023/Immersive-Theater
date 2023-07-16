@@ -55,7 +55,10 @@ class _PanelWidgetState extends State<PanelWidget> {
             ),
             Text(
               "Маршрут",
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context)
+                  .textTheme
+                  .displaySmall!
+                  .copyWith(fontWeight: FontWeight.w700),
             ),
             const SizedBox(
               width: 13,
@@ -70,7 +73,7 @@ class _PanelWidgetState extends State<PanelWidget> {
         const SizedBox(
           height: 12,
         ),
-        Expanded(
+        Flexible(
           child: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
             builder: (context, state) {
               return ListView.builder(

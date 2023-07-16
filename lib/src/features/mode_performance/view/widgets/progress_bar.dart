@@ -29,20 +29,22 @@ class ProgressLocationsBar extends StatelessWidget {
             return RichText(
               text: TextSpan(
                 text: state.indexLocation.toString(),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: accentTextColor),
+                style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                      color: accentTextColor,
+                      fontWeight: FontWeight.w700,
+                    ),
                 children: [
                   TextSpan(
                     text: " / ${countLocation.toString()}",
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                   ),
                   TextSpan(
                     text: "\n${durationPerformance.toString()} мин",
                     style: Theme.of(context)
                         .textTheme
-                        .labelSmall!
+                        .bodyMedium!
                         .copyWith(color: Colors.black),
                   )
                   //           ?.copyWith(color: Colors.black,)
