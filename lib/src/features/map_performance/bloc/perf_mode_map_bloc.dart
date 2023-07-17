@@ -178,7 +178,7 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
     final PlacemarkIcon userIcon = PlacemarkIcon.single(
       PlacemarkIconStyle(
         image: BitmapDescriptor.fromAssetImage(ImagesSources.userPlacemark),
-        scale: 3,
+        scale: 1.5,
         isFlat: true,
         rotationType: RotationType.rotate,
       ),

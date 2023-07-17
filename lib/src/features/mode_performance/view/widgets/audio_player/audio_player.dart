@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
+import 'package:shebalin/src/theme/ui/animated_icon.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_info.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/continue_button.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_image.dart';
 import 'package:shebalin/src/features/review/view/review_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
@@ -129,9 +131,11 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
               .read<AudioPlayerBloc>()
               .add(AudioPlayerPlayPauseButtonPressedEvent()),
           iconSize: 40.0,
-          icon: context.watch<AudioPlayerBloc>().state.isPlaying
-              ? Image.asset(ImagesSources.pauseButton)
-              : Image.asset(ImagesSources.playButton),
+          icon: TAnimatedIcon(
+            condition: () => context.watch<AudioPlayerBloc>().state.isPlaying,
+            animatedIconData: AnimatedIcons.pause_play,
+            duration: const Duration(milliseconds: 300),
+          ),
         ),
         IconButton(
           onPressed: () => context
