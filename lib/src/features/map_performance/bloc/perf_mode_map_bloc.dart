@@ -175,9 +175,6 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
   Future<UserLocationView>? onUserLocationAddedCallback(
     UserLocationView locationView,
   ) async {
-    final locationUser = await mapcontroller.getUserCameraPosition();
-    log(locationUser!.azimuth.toString());
-    log(locationUser.tilt.toString());
     final PlacemarkIcon userIcon = PlacemarkIcon.single(
       PlacemarkIconStyle(
         image: BitmapDescriptor.fromAssetImage(ImagesSources.userPlacemark),
@@ -200,7 +197,6 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
         strokeColor: Colors.transparent,
       ),
     );
-    log(userLocationView.arrow.direction.toString());
 
     return userLocationView;
   }

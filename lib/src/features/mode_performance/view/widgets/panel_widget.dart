@@ -35,17 +35,22 @@ class _PanelWidgetState extends State<PanelWidget> {
         const SizedBox(
           height: 20,
         ),
-        Visibility(
-          visible: widget.controller.isPanelClosed,
-          child: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
-            builder: (context, state) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: ImagesLocation(
-                  imageLinks: widget.locations[state.indexLocation].imageLinks,
-                ),
-              );
-            },
+        AnimatedOpacity(
+          opacity: widget.controller.isPanelClosed ? 1 : 0,
+          duration: Duration(milliseconds: 300),
+          child: Visibility(
+            visible: widget.controller.isPanelClosed,
+            child: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
+              builder: (context, state) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: ImagesLocation(
+                    imageLinks:
+                        widget.locations[state.indexLocation].imageLinks,
+                  ),
+                );
+              },
+            ),
           ),
         ),
         Row(
