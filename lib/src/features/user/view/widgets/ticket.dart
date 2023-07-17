@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
 import 'package:shebalin/src/features/ticket/view/ticket_page.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
@@ -53,6 +54,6 @@ class Ticket extends StatelessWidget {
   }
 
   void _openTicketPage(BuildContext context) {
-    Navigator.of(context).pushNamed(TicketPage.routeName);
+    Navigator.of(context).pushNamed(OnboardWelcome.routeName);
   }
 }
