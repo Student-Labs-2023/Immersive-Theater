@@ -63,11 +63,15 @@ class _PanelWidgetState extends State<PanelWidget> {
             const SizedBox(
               width: 13,
             ),
-            Image.asset(
-              widget.controller.isPanelOpen
-                  ? ImagesSources.downIcon
-                  : ImagesSources.upIcon,
-            ),
+            AnimatedRotation(
+              turns: widget.controller.isPanelOpen ? 0.5 : 0,
+              duration: const Duration(
+                milliseconds: 300,
+              ),
+              child: Image.asset(
+                ImagesSources.upIcon,
+              ),
+            )
           ],
         ),
         const SizedBox(

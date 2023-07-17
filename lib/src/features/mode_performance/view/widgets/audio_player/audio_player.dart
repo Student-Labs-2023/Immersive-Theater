@@ -7,6 +7,7 @@ import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/continue_button.dart';
 import 'package:shebalin/src/features/review/view/review_page.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
@@ -60,9 +61,9 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
                 ),
                 Expanded(
                   child: Slider(
-                    thumbColor: accentTextColor,
-                    activeColor: accentTextColor,
-                    inactiveColor: secondaryTextColor,
+                    thumbColor: AppColor.purplePrimary,
+                    activeColor: AppColor.purplePrimary,
+                    inactiveColor: AppColor.grey,
                     min: 0,
                     max: state.duration.inSeconds.toDouble(),
                     value: state.position.inSeconds.toDouble(),

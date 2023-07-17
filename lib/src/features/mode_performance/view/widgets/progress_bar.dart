@@ -30,7 +30,6 @@ class ProgressLocationsBar extends StatelessWidget {
               text: TextSpan(
                 text: state.indexLocation.toString(),
                 style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                      color: accentTextColor,
                       fontWeight: FontWeight.w700,
                     ),
                 children: [
@@ -42,10 +41,7 @@ class ProgressLocationsBar extends StatelessWidget {
                   ),
                   TextSpan(
                     text: "\n${durationPerformance.toString()} мин",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Colors.black),
+                    style: Theme.of(context).textTheme.bodyMedium!,
                   )
                   //           ?.copyWith(color: Colors.black,)
                 ],

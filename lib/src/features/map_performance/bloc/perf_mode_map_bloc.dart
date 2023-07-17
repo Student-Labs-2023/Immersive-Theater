@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
+import 'dart:developer';
 part 'perf_mode_map_event.dart';
 part 'perf_mode_map_state.dart';
 
@@ -174,19 +175,24 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
   Future<UserLocationView>? onUserLocationAddedCallback(
     UserLocationView locationView,
   ) async {
+    final locationUser = await mapcontroller.getUserCameraPosition();
+    log(locationUser!.azimuth.toString());
+    log(locationUser.tilt.toString());
     final PlacemarkIcon userIcon = PlacemarkIcon.single(
       PlacemarkIconStyle(
         image: BitmapDescriptor.fromAssetImage(ImagesSources.userPlacemark),
-        scale: 4,
+        scale: 3,
         isFlat: true,
         rotationType: RotationType.rotate,
       ),
     );
     final userLocationView = locationView.copyWith(
       arrow: locationView.arrow.copyWith(
+        opacity: 1,
         icon: userIcon,
       ),
       pin: locationView.pin.copyWith(
+        opacity: 1,
         icon: userIcon,
       ),
       accuracyCircle: locationView.accuracyCircle.copyWith(
@@ -194,6 +200,8 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
         strokeColor: Colors.transparent,
       ),
     );
+    log(userLocationView.arrow.direction.toString());
+
     return userLocationView;
   }
 }
