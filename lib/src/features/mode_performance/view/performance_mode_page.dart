@@ -22,7 +22,7 @@ class PerformanceModePage extends StatefulWidget {
   final String performanceTitle;
   final String imageLink;
   final mapbloc = PerfModeMapBloc();
-
+  static const routeName = '/performance-mode-screen';
   PerformanceModePage({
     super.key,
     required this.locations,

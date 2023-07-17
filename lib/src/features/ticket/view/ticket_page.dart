@@ -6,6 +6,7 @@ import 'package:shebalin/src/features/audioplayer/model/audio_panel_state.dart';
 import 'package:shebalin/src/features/locations/bloc/location_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/performance_mode_page.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_player.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 

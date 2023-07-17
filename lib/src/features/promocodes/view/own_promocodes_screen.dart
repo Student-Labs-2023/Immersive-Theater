@@ -35,21 +35,6 @@ class OwnPromocodesScreen extends StatelessWidget {
           panel: InputPromocodePanelPage(),
           body: Center(
             child: Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.white,
-                elevation: 0,
-                actions: [
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    iconSize: 34,
-                    icon: Image.asset(ImagesSources.close),
-                    splashRadius: 24,
-                  ),
-                  const SizedBox(
-                    width: 24,
-                  ),
-                ],
-              ),
               body: SingleChildScrollView(
                 child: SafeArea(
                   child: Center(
@@ -57,20 +42,6 @@ class OwnPromocodesScreen extends StatelessWidget {
                       children: [
                         Column(
                           children: [
-                            Row(
-                              children: [
-                                const SizedBox(
-                                  width: 24,
-                                ),
-                                Text(
-                                  'Промокоды',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(fontSize: 31),
-                                ),
-                              ],
-                            ),
                             const SizedBox(
                               height: 24,
                             ),
@@ -140,6 +111,58 @@ class OwnPromocodesScreen extends StatelessWidget {
           parallaxEnabled: true,
           parallaxOffset: 0.05,
         ),
+      ),
+    );
+  }
+
+  Widget zeroTicketsScreen(PanelController controller, BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const SizedBox(
+            height: 5,
+          ),
+          Column(
+            children: [
+              Image.asset(ImagesSources.ticketOutline),
+              const SizedBox(
+                height: 12,
+              ),
+              Text(
+                'У вас еще нет билетов',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.black.withOpacity(
+                        0.3,
+                      ),
+                    ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          ElevatedButton(
+            onPressed: (() => controller.open()),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(accentTextColor),
+              elevation: MaterialStateProperty.all(0),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              minimumSize: MaterialStateProperty.all(
+                const Size(328, 48),
+              ),
+            ),
+            child: Text(
+              'Ввести промокод',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: Colors.white),
+            ),
+          ),
+        ],
       ),
     );
   }

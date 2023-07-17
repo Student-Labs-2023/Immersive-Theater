@@ -12,6 +12,7 @@ import 'package:shebalin/src/theme/ui/app_button.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
 import '../../../models/payment_model.dart';
+import '../../detailed_performaces/view/performance_double_screen.dart';
 
 class LocationDescriptionPanelPage extends StatefulWidget {
   const LocationDescriptionPanelPage({Key? key, required this.mapObjectId})
@@ -26,7 +27,7 @@ class LocationDescriptionPanelPage extends StatefulWidget {
 class _LocationDescriptionPanelPageState
     extends State<LocationDescriptionPanelPage> {
   Payment paymentService = Payment();
-  late final Location currentLocation;
+  late Location currentLocation;
   @override
   void initState() {
     super.initState();
@@ -40,10 +41,11 @@ class _LocationDescriptionPanelPageState
       resizeToAvoidBottomInset: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: AppButton(
-        buttonTitle: "Приобрести за 299 ₽",
-        onButtonClickFunction: () {
-          _openYandexWidgetOnTap();
-        },
+        buttonTitle: "Перейти к спектаклю",
+        onButtonClickFunction: () => Navigator.of(context).pushNamed(
+            PerformanceDoubleScreen.routeName,
+            arguments: 0 //TODO: сделать прееход к экрану спектакля
+            ),
         width: mediaQuerySize.width * 0.85,
         height: mediaQuerySize.width * 0.11,
       ),

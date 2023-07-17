@@ -1,9 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/promocodes/view/own_promocodes_screen.dart';
+import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
+import 'package:shebalin/src/features/user/view/widgets/ticket.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
-class InputPromocodePanelPage extends StatelessWidget {
-  InputPromocodePanelPage({Key? key}) : super(key: key);
+
+class InputPromocodePanelPage extends StatefulWidget {
+  const InputPromocodePanelPage({super.key});
+
+  @override
+  State<InputPromocodePanelPage> createState() => _InputPromocodePanelPageState();
+
+  static _InputPromocodePanelPageState? of(BuildContext context) {
+    // Эта конструкция нужна, чтобы можно было обращаться к нашему виджету
+    // через: TopScreen.of(context)
+    assert(context != null);
+    final _InputPromocodePanelPageState? result =
+        context.findAncestorStateOfType<_InputPromocodePanelPageState>();
+    return result;
+  }
+}
+
+class _InputPromocodePanelPageState extends State<InputPromocodePanelPage> {
   final _inputTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -45,10 +64,10 @@ class InputPromocodePanelPage extends StatelessWidget {
                       border: InputBorder.none,
                       hintText: 'XXXX-XXXX-XXXX-XXXX',
                       hintStyle:
-                          Theme.of(context).textTheme.titleSmall?.copyWith(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w800,
-                              ),
+                        Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                        ),
                     ),
                   ),
                 ),
@@ -59,8 +78,9 @@ class InputPromocodePanelPage extends StatelessWidget {
             height: 20,
           ),
           ElevatedButton(
-            onPressed: () =>
-                Navigator.of(context).pushNamed(OwnPromocodesScreen.routeName),
+            onPressed: (){
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MainScreen()),);
+            },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(accentTextColor),
               elevation: MaterialStateProperty.all(0),
@@ -75,7 +95,7 @@ class InputPromocodePanelPage extends StatelessWidget {
               'Применить',
               style: Theme.of(context)
                   .textTheme
-                  .bodySmall
+                  .bodyMedium
                   ?.copyWith(color: Colors.white),
             ),
           ),
