@@ -36,10 +36,13 @@ class _PanelWidgetState extends State<PanelWidget> {
           height: 20,
         ),
         AnimatedOpacity(
-          opacity: widget.controller.isPanelClosed ? 1 : 0,
+          opacity: widget.controller.isPanelOpen &&
+                  widget.controller.isPanelAnimating
+              ? 0
+              : 1,
           duration: Duration(milliseconds: 300),
           child: Visibility(
-            visible: widget.controller.isPanelClosed,
+            visible: !widget.controller.isPanelOpen,
             child: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
               builder: (context, state) {
                 return Padding(
@@ -82,22 +85,21 @@ class _PanelWidgetState extends State<PanelWidget> {
         const SizedBox(
           height: 12,
         ),
-        Flexible(
-          child: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
-            builder: (context, state) {
-              return ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: widget.locations.length,
-                itemBuilder: (context, index) {
-                  return LocationItem(
-                    locationName: widget.locations[index].title,
-                    isCurrentLocation: state.indexLocation == index,
-                    isCompleted: index < state.indexLocation,
-                  );
-                },
-              );
-            },
-          ),
+        BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
+          builder: (context, state) {
+            return ListView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              itemCount: widget.locations.length,
+              itemBuilder: (context, index) {
+                return LocationItem(
+                  locationName: widget.locations[index].title,
+                  isCurrentLocation: state.indexLocation == index,
+                  isCompleted: index < state.indexLocation,
+                );
+              },
+            );
+          },
         ),
       ],
     );

@@ -64,17 +64,16 @@
 //     );
 //   }
 
-//   // Future<void> _requestRoutes() async {
-//   //   await Navigator.push(
-//   //     context,
-//   //     MaterialPageRoute(
-//   //       builder: (BuildContext context) => PerformanceModePage(
-//   //         performanceTitle: "Шебалин в Омске",
-//   //         imageLink:
-//   //             "/uploads/1650699780207_58cb89ec46.jpg?updated_at=2023-03-30T05:51:54.127Z",
-//   //         locations: locations,
-//   //       ),
-//   //     ),
-//   //   );
+//   Future<void> _requestRoutes() async {
+//     await Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (BuildContext context) => PerformanceModePage(
+//           performanceTitle: "Шебалин в Омске",
+//           imageLink:
+//               "/uploads/1650699780207_58cb89ec46.jpg?updated_at=2023-03-30T05:51:54.127Z",
+//         ),
+//       ),
+//     );
 //   // }
 // }
