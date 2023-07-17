@@ -7,7 +7,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
-import 'dart:developer';
 part 'perf_mode_map_event.dart';
 part 'perf_mode_map_state.dart';
 

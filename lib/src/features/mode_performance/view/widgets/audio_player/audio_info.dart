@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
+import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 
 class AudioInfoWidget extends StatelessWidget {
   final String performanceTitle;
@@ -16,7 +17,6 @@ class AudioInfoWidget extends StatelessWidget {
     required this.audioTitle,
     required this.imageLink,
   });
-// "/uploads/1650699780132_bce6f77d48.jpg?updated_at=2023-03-30T05:50:05.517Z"
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -26,9 +26,7 @@ class AudioInfoWidget extends StatelessWidget {
           child: CachedNetworkImage(
             height: 40,
             width: 40,
-            placeholder: (context, url) => Center(
-              child: CircularProgressIndicator(color: accentTextColor),
-            ),
+            placeholder: (context, url) => const AppProgressBar(),
             imageUrl: ApiClient.baseUrl + imageLink,
             fit: BoxFit.cover,
           ),
