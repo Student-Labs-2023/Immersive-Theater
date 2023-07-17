@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
 part 'mode_performance_event.dart';
 part 'mode_performance_state.dart';
 

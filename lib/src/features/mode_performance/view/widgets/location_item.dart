@@ -39,7 +39,7 @@ class LocationItem extends StatelessWidget {
               flex: 6,
               child: Text(
                 locationName,
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.bodyMedium,
                 maxLines: 3,
               ),
             ),

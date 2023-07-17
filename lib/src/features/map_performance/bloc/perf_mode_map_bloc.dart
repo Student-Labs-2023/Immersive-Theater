@@ -177,16 +177,18 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
     final PlacemarkIcon userIcon = PlacemarkIcon.single(
       PlacemarkIconStyle(
         image: BitmapDescriptor.fromAssetImage(ImagesSources.userPlacemark),
-        scale: 4,
+        scale: 1.5,
         isFlat: true,
         rotationType: RotationType.rotate,
       ),
     );
     final userLocationView = locationView.copyWith(
       arrow: locationView.arrow.copyWith(
+        opacity: 1,
         icon: userIcon,
       ),
       pin: locationView.pin.copyWith(
+        opacity: 1,
         icon: userIcon,
       ),
       accuracyCircle: locationView.accuracyCircle.copyWith(
@@ -194,6 +196,7 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
         strokeColor: Colors.transparent,
       ),
     );
+
     return userLocationView;
   }
 }
