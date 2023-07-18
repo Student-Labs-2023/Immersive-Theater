@@ -17,6 +17,7 @@ import 'package:shebalin/src/features/mode_performance/view/widgets/tip.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/animated_visibility.dart';
+import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
@@ -243,7 +244,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
       context: context,
       builder: (_) => DialogWindow(
         title: "Завершить спектакль?",
-        subtitle: "Прогресс прохождения не будет сохранен.",
+        subtitle: "Прогресс прохождения не будет\nсохранен.",
         onTapPrimary: onPressedApprove,
         titlePrimary: "Завершить",
         titleSecondary: "Отмена",

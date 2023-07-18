@@ -18,6 +18,7 @@ Color accentTextColor = const Color.fromARGB(255, 114, 91, 255);
 
 Color defaultTextColor = Colors.black;
 ThemeData defaultTheme() => ThemeData(
+      focusColor: AppColor.accentBackground,
       fontFamily: defaultFont,
       textTheme: TextTheme(
         displayLarge: TextStyle(
@@ -133,4 +134,4 @@ const double heading3FontSize = 20;
 const double heading4FontSize = 18;
 const double paragraph1FontSize = 16;
 const double paragraph2FontSize = 14;
-const double paragraph3FontSize = 11;
+const double paragraph3FontSize = 12;

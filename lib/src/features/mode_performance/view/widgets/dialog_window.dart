@@ -22,93 +22,61 @@ class DialogWindow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Platform.isAndroid
-        ? CupertinoAlertDialog(
-            title: Text(
-              title,
-              style: Theme.of(context).textTheme.headlineMedium!,
-            ),
-            content: Text(
-              subtitle,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontWeight: FontWeight.normal, color: AppColor.blackText),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: onTapPrimary,
-                child: Text(
-                  titlePrimary,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium!
-                      .copyWith(fontWeight: FontWeight.normal),
+    return AlertDialog(
+      contentPadding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(14)),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            textAlign: TextAlign.center,
+            title,
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: AppColor.greyText,
+                ),
+            maxLines: 2,
+          ),
+          const SizedBox(
+            height: 22,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: AlertDialogButton(
+                  isPrimary: true,
+                  onTap: onTapPrimary,
+                  title: titlePrimary,
                 ),
               ),
-              TextButton(
-                onPressed: onTapSecondary,
-                child: Text(
-                  titleSecondary,
-                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                        color: const Color(0XFFFF4F4F),
-                      ),
+              const SizedBox(
+                width: 12,
+              ),
+              Expanded(
+                child: AlertDialogButton(
+                  isPrimary: false,
+                  onTap: onTapSecondary,
+                  title: titleSecondary,
                 ),
               )
             ],
           )
-        : AlertDialog(
-            contentPadding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(14)),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  textAlign: TextAlign.center,
-                  title,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  subtitle,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: AppColor.greyText,
-                      ),
-                ),
-                const SizedBox(
-                  height: 22,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: AlertDialogButton(
-                        isPrimary: true,
-                        onTap: onTapPrimary,
-                        title: titlePrimary,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Expanded(
-                      child: AlertDialogButton(
-                        isPrimary: false,
-                        onTap: onTapSecondary,
-                        title: titleSecondary,
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
-          );
+        ],
+      ),
+    );
   }
 }
 
@@ -126,20 +94,17 @@ class AlertDialogButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return TextButton(
       style: ButtonStyle(
         elevation: const MaterialStatePropertyAll(0),
-        overlayColor: const MaterialStatePropertyAll(
-          AppColor.purpleLightPrimary,
-        ),
+        overlayColor: MaterialStatePropertyAll(Theme.of(context).focusColor),
         shape: MaterialStatePropertyAll(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        backgroundColor: MaterialStatePropertyAll(
-          isPrimary ? AppColor.whiteBackground : AppColor.purplePrimary,
-        ),
+        backgroundColor:
+            const MaterialStatePropertyAll(AppColor.whiteBackground),
       ),
       onPressed: onTap,
       child: Text(
@@ -148,7 +113,7 @@ class AlertDialogButton extends StatelessWidget {
             ? Theme.of(context).textTheme.bodyLarge
             : Theme.of(context).textTheme.bodyLarge!.copyWith(
                   fontWeight: FontWeight.w700,
-                  color: AppColor.whiteText,
+                  color: AppColor.purplePrimary,
                 ),
       ),
     );
