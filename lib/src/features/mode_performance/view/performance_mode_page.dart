@@ -244,10 +244,10 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
       builder: (_) => DialogWindow(
         title: "Завершить спектакль?",
         subtitle: "Прогресс прохождения не будет сохранен.",
-        onPressedCancel: onPressedCancel,
-        titleApprove: "Завершить",
-        titleCancel: "Отмена",
-        onPressedApprove: onPressedApprove,
+        onTapPrimary: onPressedApprove,
+        titlePrimary: "Завершить",
+        titleSecondary: "Отмена",
+        onTapSecondary: onPressedCancel,
       ),
     );
   }

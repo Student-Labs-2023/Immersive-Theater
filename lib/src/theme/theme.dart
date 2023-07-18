@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 
 BorderRadiusGeometry panelRadius = const BorderRadius.only(
   topLeft: Radius.circular(24.0),
