@@ -16,6 +16,7 @@ import 'package:shebalin/src/features/mode_performance/view/widgets/progress_bar
 import 'package:shebalin/src/features/mode_performance/view/widgets/tip.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
+import 'package:shebalin/src/theme/ui/animated_visibility.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
@@ -141,8 +142,10 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                             ),
                             BlocBuilder<AudioPlayerBloc, AudioPlayerState>(
                               builder: (context, state) {
-                                return Visibility(
-                                  visible: state is AudioPlayerFinishedState,
+                                return AnimatedVisibility(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn,
+                                  isVisible: state is AudioPlayerFinishedState,
                                   child: ContinueButton(
                                     title:
                                         'Я уже добрался до следующей локации',
