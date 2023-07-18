@@ -9,6 +9,7 @@ import 'package:shebalin/src/features/map_performance/view/map_page.dart';
 import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_player.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
+import 'package:shebalin/src/features/mode_performance/view/widgets/continue_button.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/panel_widget.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/progress_bar.dart';
@@ -122,6 +123,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                       ),
                       Positioned(
                         right: 15,
+                        left: 15,
                         bottom: heightButton + 160,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -141,7 +143,15 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                               builder: (context, state) {
                                 return Visibility(
                                   visible: state is AudioPlayerFinishedState,
-                                  child: const Tip(),
+                                  child: ContinueButton(
+                                    title:
+                                        'Я уже добрался до следующей локации',
+                                    onTap: () => {
+                                      context.read<ModePerformanceBloc>().add(
+                                            ModePerformanceCurrentLocationUpdate(),
+                                          )
+                                    },
+                                  ),
                                 );
                               },
                             ),

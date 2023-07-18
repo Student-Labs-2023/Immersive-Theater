@@ -97,16 +97,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
                     },
                   ),
                 ),
-                state is AudioPlayerFinishedState
-                    ? ContinueButton(
-                        title: "Продолжить",
-                        onTap: () {
-                          context.read<ModePerformanceBloc>().add(
-                                ModePerformanceCurrentLocationUpdate(),
-                              );
-                        },
-                      )
-                    : buttons(),
+                buttons(),
               ],
             ),
           ],
