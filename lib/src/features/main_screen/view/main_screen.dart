@@ -12,9 +12,12 @@ import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+<<<<<<< HEAD
 import '../../promocodes/view/widgets/promocode_panel_page.dart';
 
 
+=======
+>>>>>>> 1925eaa (fixing promocode-screen issues)
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
   static const routeName = '/main-screen';
@@ -141,7 +144,7 @@ class _MainScreenState extends State<MainScreen> {
             if (state is MapPinInitialState) {
               return isPerfomnceButtonPressed
                   ? const PerformancesPanelPage()
-                  : const PromocodePanelPage();
+                  :  PromocodeScreen();
             } else if (state is MapPinLoadingState) {
               return Center(
                 child: CircularProgressIndicator(color: accentTextColor),
@@ -162,7 +165,7 @@ class _MainScreenState extends State<MainScreen> {
               });
               return isPerfomnceButtonPressed
                   ? const PerformancesPanelPage()
-                  : PromocodeScreen();
+                  :  PromocodeScreen();
             }
             return const Text('Упс...Что-то пошло не так');
           },

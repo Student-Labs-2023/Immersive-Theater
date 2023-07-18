@@ -38,8 +38,7 @@ class _BadAudioDemoState extends State<BadAudioDemo> {
                     placeholder: (context, url) => Center(
                       child: CircularProgressIndicator(color: accentTextColor),
                     ),
-                    imageUrl: ApiClient.baseUrl +
-                        widget.performance.audioCoverImageLink,
+                    imageUrl: ApiClient.baseUrl +widget.performance.audioCoverImageLink,
                     fit: BoxFit.cover,
                   ),
                 ),
