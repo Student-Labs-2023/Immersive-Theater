@@ -97,7 +97,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
                     },
                   ),
                 ),
-                buttons(),
+                buttons(state is AudioPlayerFinishedState),
               ],
             ),
           ],
@@ -106,21 +106,25 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
     );
   }
 
-  Widget buttons() {
+  Widget buttons(bool isNotActive) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         IconButton(
-          onPressed: () => context
-              .read<AudioPlayerBloc>()
-              .add(AudioPlayerWindBackButtonPressedEvent()),
+          onPressed: isNotActive
+              ? null
+              : () => context
+                  .read<AudioPlayerBloc>()
+                  .add(AudioPlayerWindBackButtonPressedEvent()),
           iconSize: 40.0,
           icon: Image.asset(ImagesSources.audioBackButton),
         ),
         IconButton(
-          onPressed: () => context
-              .read<AudioPlayerBloc>()
-              .add(AudioPlayerPlayPauseButtonPressedEvent()),
+          onPressed: isNotActive
+              ? null
+              : () => context
+                  .read<AudioPlayerBloc>()
+                  .add(AudioPlayerPlayPauseButtonPressedEvent()),
           iconSize: 40.0,
           icon: TAnimatedIcon(
             condition: () => context.watch<AudioPlayerBloc>().state.isPlaying,
@@ -129,9 +133,11 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
           ),
         ),
         IconButton(
-          onPressed: () => context
-              .read<AudioPlayerBloc>()
-              .add(AudioPlayerWindForwardButtonPressedEvent()),
+          onPressed: isNotActive
+              ? null
+              : () => context
+                  .read<AudioPlayerBloc>()
+                  .add(AudioPlayerWindForwardButtonPressedEvent()),
           iconSize: 40.0,
           icon: Image.asset(ImagesSources.audioForwardButton),
         )
