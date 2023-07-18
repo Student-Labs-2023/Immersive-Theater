@@ -6,12 +6,9 @@ import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_blo
 import 'package:shebalin/src/theme/ui/animated_icon.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_info.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/continue_button.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_image.dart';
 import 'package:shebalin/src/features/review/view/review_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
-import 'package:shebalin/src/theme/theme.dart';
 
 class AudioPlayerPanel extends StatefulWidget {
   const AudioPlayerPanel({
@@ -128,7 +125,8 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
           iconSize: 40.0,
           icon: TAnimatedIcon(
             condition: () => context.watch<AudioPlayerBloc>().state.isPlaying,
-            animatedIconData: AnimatedIcons.pause_play,
+            animatedIconData: AnimatedIcons.play_pause,
+            color: AppColor.blackText,
             duration: const Duration(milliseconds: 300),
           ),
         ),
