@@ -81,17 +81,41 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     }
     const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.best,
-      distanceFilter: 100,
+      distanceFilter: 20,
     );
     positionStream =
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen((Position? position) {
-      final dist = Geolocator.distanceBetween(
-          position!.latitude, position.longitude, 54.985031, 73.369487);
-      if (dist < 100) {
-        log('second location');
+      if (state.indexLocation < state.countLocations - 1) {
+        log('${state.indexLocation}${countLocations - 1}');
+        final dist = Geolocator.distanceBetween(
+          position!.latitude,
+          position.longitude,
+          double.parse(event.locations[state.indexLocation + 1].latitude),
+          double.parse(event.locations[state.indexLocation + 1].longitude),
+        );
+        if (dist < 20) {
+          log(position == null ? 'Unknown' : 'update');
+          add(PerfModeCurrentLocationUpdate());
+        }
+
+        log(position == null ? 'Unknown' : '${dist}}');
+      } else {
+        add(
+          PerfModePinsLoadEvent(
+            state.indexLocation,
+            state.countLocations,
+            event.locations,
+          ),
+        );
+        add(
+          PerfModeRoutesLoadEvent(
+            state.indexLocation,
+            state.countLocations,
+            event.locations,
+          ),
+        );
       }
-      log(position == null ? 'Unknown' : '${dist.toString()}');
     });
     mapcontroller.toggleUserLayer(
       visible: true,

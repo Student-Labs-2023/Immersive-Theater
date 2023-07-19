@@ -14,7 +14,11 @@ class PerfModeInitialEvent extends PerfModeEvent {
   List<Object> get props => [controller];
 }
 
-class PerfModeGetUserLocationEvent extends PerfModeEvent {}
+class PerfModeGetUserLocationEvent extends PerfModeEvent {
+  final List<Location> locations;
+
+  PerfModeGetUserLocationEvent(this.locations);
+}
 
 class PerfModeCurrentLocationUpdate extends PerfModeEvent {}
 

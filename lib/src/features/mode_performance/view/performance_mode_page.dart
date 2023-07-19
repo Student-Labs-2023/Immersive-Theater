@@ -122,7 +122,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                               backgroundColor: Colors.white,
                               onPressed: () => context
                                   .read<PerfModeBloc>()
-                                  .add(PerfModeGetUserLocationEvent()),
+                                  .add(PerfModeGetUserLocationEvent(locations)),
                               child: const Image(
                                 image: AssetImage(ImagesSources.locationIcon),
                               ),
