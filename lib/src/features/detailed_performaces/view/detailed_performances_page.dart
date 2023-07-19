@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/models/payment_model.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/audio_demo.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/author_card.dart';
@@ -11,12 +13,13 @@ import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../photo_slider/view/widgets/tiktok_photo.dart';
 import 'widgets/photo_card.dart';
 
 class PerfomanceDescriptionScreen extends StatefulWidget {
-  const PerfomanceDescriptionScreen({Key? key, this.performance})
+  const PerfomanceDescriptionScreen({Key? key, required this.performance})
       : super(key: key);
-  final dynamic performance;
+  final Performance performance;
   static const routeName = '/perfomance-description-screen';
   @override
   State<PerfomanceDescriptionScreen> createState() =>
@@ -29,269 +32,277 @@ class _PerfomanceDescriptionScreenState
   bool isFavoriteLocation = false;
   final paymentService = Payment();
 
+  bool get _isExpanded =>
+      _controller.hasClients && _controller.offset < (kToolbarHeight);
+  late final ScrollController _controller = ScrollController()
+    ..addListener(() {
+      setState(() {
+        _textColor = _isExpanded ? Colors.white : Colors.black;
+      });
+    });
+  Color _textColor = Colors.white;
+
   @override
   Widget build(BuildContext context) {
     var mediaQuerySize = MediaQuery.of(context).size;
+    final List<Widget> imageSliders = widget.performance.imagesList
+        .map((e) => TikTokPhoto(
+              entry: e,
+            ))
+        .toList();
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: PreferredSize(
-        preferredSize: Size(
-          MediaQuery.of(context).size.width,
-          MediaQuery.of(context).size.height * 0.27,
-        ),
-        child: AppBar(
-          backgroundColor: accentTextColor,
-          elevation: 0,
-          flexibleSpace: CachedNetworkImage(
-            imageUrl: ApiClient.baseUrl + widget.performance.coverImageLink,
-            fit: BoxFit.fill,
-            placeholder: (context, url) => const Center(
-              child: CircularProgressIndicator(
-                color: Colors.white,
-              ),
-            ),
-          ),
-          leading: Row(
-            children: [
-              const SizedBox(
-                width: 20,
-              ),
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.5),
-                ),
-                child: Center(
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Image.asset(ImagesSources.annotationIcon),
+      body: CustomScrollView(
+        controller: _controller,
+        scrollDirection: Axis.vertical,
+        slivers: [
+          SliverAppBar(
+            backgroundColor: secondaryColor,
+            expandedHeight: 260,
+            floating: false,
+            centerTitle: false,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: false,
+              background: CachedNetworkImage(
+                imageUrl:
+                    "https://sun9-75.userapi.com/impg/chHgeUUfz0nDw-kaO1Qox1frCAxTrJXvgGqidQ/ujRT_p0QAms.jpg?size=375x260&quality=96&sign=21982d2b7354644d80981116c2a4e273&type=album", //ApiClient.baseUrl + widget.performance.coverImageLink,
+                fit: BoxFit.fill,
+                placeholder: (contxt, string) => const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
                   ),
                 ),
               ),
-            ],
-          ),
-          actions: [
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.5),
+              title: Text(
+                widget.performance.title,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(color: _textColor),
               ),
-              child: Center(
-                child: IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Image(
-                    image: AssetImage(ImagesSources.closeIcon),
-                  ),
+            ),
+            leading: Row(
+              children: [
+                const SizedBox(
+                  width: 20,
                 ),
-              ),
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: Size(MediaQuery.of(context).size.width, 0),
-            child: Container(
-              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    widget.performance.title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(color: Colors.white),
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withOpacity(0.5),
                   ),
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white.withOpacity(0.5),
-                    ),
-                    child: Center(
-                      child: IconButton(
-                        onPressed: () => _changeStatus(),
-                        icon: isFavoriteLocation
-                            ? Image.asset(ImagesSources.favoriteIconOutlined)
-                            : Image.asset(ImagesSources.favoriteIcon),
+                  child: Center(
+                    child: IconButton(
+                      color: _textColor,
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: Image.asset(
+                        ImagesSources.closeIcon,
+                        color: _textColor,
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(bottom: 16),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: secondaryTextColor, width: 0.2),
-                ),
-              ),
-              child: Row(
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16, left: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.performance.duration,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          'Длительность',
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: secondaryTextColor,
-                                    fontSize: 12,
-                                  ),
-                        )
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.timer,
+                        size: 20,
+                        color: secondaryTextColor,
+                      ),
+                      Text(
+                        widget.performance.duration,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: secondaryTextColor, fontSize: 12),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-              child: Text(
-                widget.performance.description,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(fontSize: 14),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-              child: Text(
-                isBought ? 'Аудио' : 'Аудио отрывок',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(fontSize: 24, fontWeight: FontWeight.w800),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
-              child: isBought
-                  ? Column(
-                      children: [
-                        const Divider(height: 1, thickness: 1),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.2,
-                          child: ListView.builder(
-                            itemCount: widget.performance.audioLinks.length,
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (BuildContext context, int index) {
-                              return AudioDemo(
-                                isBought: isBought,
-                                performance: widget.performance,
-                                index: index,
-                              );
-                            },
-                          ),
-                        ),
-                        const Divider(height: 1, thickness: 1)
-                      ],
-                    )
-                  : AudioDemo(
-                      isBought: isBought,
-                      performance: widget.performance,
-                      index: 0,
-                    ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-              child: Text(
-                'Авторы',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(fontSize: 24, fontWeight: FontWeight.w800),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.1,
-                child: ListView.builder(
-                  itemCount: widget.performance.authorsName.length,
-                  scrollDirection: Axis.horizontal,
-                  cacheExtent: 1000,
-                  itemBuilder: (BuildContext context, int index) {
-                    return AuthorCard(
-                      performance: widget.performance,
-                      index: index,
-                    );
-                  },
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.location_pin,
+                        size: 20,
+                        color: secondaryTextColor,
+                      ),
+                      Text(
+                        widget.performance.tag,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: secondaryTextColor, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
                   Text(
-                    'Фотографии',
+                    widget.performance.description,
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge
-                        ?.copyWith(fontSize: 24, fontWeight: FontWeight.w800),
+                        ?.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
                   ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pushNamed(
-                      VerticalSlidningScreen.routeName,
-                      arguments: widget.performance,
+                  const SizedBox(
+                    height: 6,
+                  ),
+                  CachedNetworkImage(
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.fill)),
                     ),
-                    child: Text(
-                      'Все',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(color: accentTextColor),
+                    height: 200,
+                    width: 434,
+                    imageUrl:
+                        "https://sun9-75.userapi.com/impg/chHgeUUfz0nDw-kaO1Qox1frCAxTrJXvgGqidQ/ujRT_p0QAms.jpg?size=375x260&quality=96&sign=21982d2b7354644d80981116c2a4e273&type=album", //ApiClient.baseUrl + widget.performance.coverImageLink,
+                    fit: BoxFit.cover,
+                    placeholder: (contxt, string) => const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
                     ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Аудио отрывки",
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontSize: 24, fontWeight: FontWeight.w800),
+                      ),
+                      isBought
+                          ? Column(
+                              children: [
+                                const Divider(height: 1, thickness: 1),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.2,
+                                  child: ListView.builder(
+                                    itemCount:
+                                        widget.performance.audioLinks.length,
+                                    scrollDirection: Axis.vertical,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return AudioDemo(
+                                        isBought: isBought,
+                                        performance: widget.performance,
+                                        index: index,
+                                      );
+                                    },
+                                  ),
+                                ),
+                                const Divider(height: 1, thickness: 1)
+                              ],
+                            )
+                          : AudioDemo(
+                              isBought: isBought,
+                              performance: widget.performance,
+                              index: 0,
+                            ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 20, bottom: 12),
+                        child: Text(
+                          'Фотографии',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                  fontSize: 24, fontWeight: FontWeight.w800),
+                        ),
+                      ),
+                      CarouselSlider(
+                        items: List.generate(
+                          widget.performance.imagesList.length,
+                          (index) => CachedNetworkImage(
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            height: 88,
+                            width: 88,
+                            imageUrl:
+                                "https://sun9-75.userapi.com/impg/chHgeUUfz0nDw-kaO1Qox1frCAxTrJXvgGqidQ/ujRT_p0QAms.jpg?size=375x260&quality=96&sign=21982d2b7354644d80981116c2a4e273&type=album", //ApiClient.baseUrl + widget.performance.coverImageLink,
+                            fit: BoxFit.fill,
+                            placeholder: (contxt, string) => const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        options: CarouselOptions(
+                          enableInfiniteScroll: true,
+                          height: 88,
+                          aspectRatio: 3.0,
+                          viewportFraction: 0.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 32, bottom: 20),
+                        child: Text(
+                          'Авторы',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                  fontSize: 24, fontWeight: FontWeight.w800),
+                        ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        child: ListView.builder(
+                          itemCount: widget.performance.authorsName.length,
+                          scrollDirection: Axis.horizontal,
+                          cacheExtent: 1000,
+                          itemBuilder: (BuildContext context, int index) {
+                            return AuthorCard(
+                              performance: widget.performance,
+                              index: index,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.2,
-                child: ListView.builder(
-                  itemCount: widget.performance.imagesList.length,
-                  scrollDirection: Axis.horizontal,
-                  cacheExtent: 1000,
-                  itemBuilder: (BuildContext context, int index) {
-                    return PhotoCard(
-                      performance: widget.performance,
-                      index: index,
-                    );
-                  },
-                ),
-              ),
+          ),
+         SliverToBoxAdapter(
+            child:  SizedBox(
+              height: mediaQuerySize.width * 0.13 + 20,
             ),
-          ],
-        ),
+          )
+        ],
       ),
       floatingActionButton: isBought
           ? null
@@ -318,7 +329,7 @@ class _PerfomanceDescriptionScreenState
                 'Приобрести за 299 ₽',
                 style: Theme.of(context)
                     .textTheme
-                    .bodySmall
+                    .bodyLarge
                     ?.copyWith(color: Colors.white),
               ),
             ),

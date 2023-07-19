@@ -24,7 +24,7 @@ class _TikTokPhotoState extends State<TikTokPhoto> {
       fit: StackFit.expand,
       children: [
         CachedNetworkImage(
-          imageUrl: ApiClient.baseUrl + widget.entry.value,
+          imageUrl: "https://sun9-75.userapi.com/impg/chHgeUUfz0nDw-kaO1Qox1frCAxTrJXvgGqidQ/ujRT_p0QAms.jpg?size=375x260&quality=96&sign=21982d2b7354644d80981116c2a4e273&type=album",//ApiClient.baseUrl + widget.entry.value,
           fit: BoxFit.cover,
           placeholder: (context, url) => Center(
             child: CircularProgressIndicator(
@@ -88,7 +88,7 @@ class _TikTokPhotoState extends State<TikTokPhoto> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Заголовок ${widget.entry.key}',
+                    'Заголовок ${widget.entry}',
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge

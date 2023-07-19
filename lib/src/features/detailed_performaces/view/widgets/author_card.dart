@@ -32,8 +32,7 @@ class AuthorCard extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(50)),
                   child: CachedNetworkImage(
-                    imageUrl:
-                        ApiClient.baseUrl + performance.authorsImage[index],
+                    imageUrl: "https://sun9-80.userapi.com/impg/0SkG5Uqx-sIhfgeKq_TxPMvBBkcsaJB-hrha0w/QrPfk-MLkk4.jpg?size=269x257&quality=95&sign=038872e654d930817650a57daf3411d8&type=album",//ApiClient.baseUrl + performance.authorsImage[index],
                     fit: BoxFit.cover,
                   ),
                 ),

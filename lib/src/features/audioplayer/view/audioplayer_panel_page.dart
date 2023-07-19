@@ -81,6 +81,7 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
     await audioPlayer.setAudioSource(
       playlist,
       initialIndex: 0,
+      preload: false,
       initialPosition: Duration.zero,
     );
   }
@@ -134,8 +135,7 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
                 height: MediaQuery.of(context).size.height * 0.38,
                 width: MediaQuery.of(context).size.width * 0.85,
                 child: CachedNetworkImage(
-                  imageUrl:
-                      ApiClient.baseUrl + widget.performance.coverImageLink,
+                  imageUrl:"https://sun9-80.userapi.com/impg/0SkG5Uqx-sIhfgeKq_TxPMvBBkcsaJB-hrha0w/QrPfk-MLkk4.jpg?size=269x257&quality=95&sign=038872e654d930817650a57daf3411d8&type=album",//ApiClient.baseUrl + widget.performance.coverImageLink,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -148,7 +148,7 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
                       children: [
                         Text(
                           widget.performance
-                              .audioTitles[audioPlayer.currentIndex],
+                              .audioTitles[0],
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(
