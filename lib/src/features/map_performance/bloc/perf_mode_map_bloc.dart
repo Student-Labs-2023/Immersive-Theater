@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:locations_repository/locations_repository.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'dart:developer';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -12,9 +13,8 @@ part 'perf_mode_map_state.dart';
 
 class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
   late YandexMapController mapcontroller;
+  late StreamSubscription<Position> positionStream;
   UserLocationView? userLocationView;
-  Future<bool> get locationPermissionNotGranted async =>
-      !(await Permission.location.request().isGranted);
   PerfModeMapBloc() : super(PerfModeMapInProgress([])) {
     on<PerfModeMapGetUserLocationEvent>(_onGetUserLocationEvent);
     on<PerfModeMapMoveCameraEvent>(_onMoveCameraEvent);
@@ -23,18 +23,57 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
     on<PerfModeMapRoutesLoadEvent>(_onPerfModeMapRoutesLoad);
   }
 
+  @override
+  Future<void> close() async {
+    positionStream.cancel();
+    super.close();
+  }
+
+  Future<bool> _checkServiceEnabled() async {
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return false;
+    }
+    return true;
+  }
+
+  Future<bool> _checkPermission() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return false;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return false;
+    }
+    return true;
+  }
+
   Future<void> _onGetUserLocationEvent(
     PerfModeMapGetUserLocationEvent event,
     Emitter<PerfModeMapState> emit,
   ) async {
-    if (await locationPermissionNotGranted) {
+    if (!(await _checkServiceEnabled() && await _checkPermission())) {
       return;
-    } else {
-      mapcontroller.toggleUserLayer(
-        visible: true,
-        autoZoomEnabled: true,
-      );
     }
+    const LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.bestForNavigation,
+      distanceFilter: 100,
+    );
+    positionStream =
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position? position) {
+      log(position == null
+          ? 'Unknown'
+          : '${position.latitude.toString()}, ${position.longitude.toString()}');
+    });
+    mapcontroller.toggleUserLayer(
+      visible: true,
+      autoZoomEnabled: true,
+    );
   }
 
   Future<void> _onMoveCameraEvent(
