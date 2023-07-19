@@ -1,35 +1,37 @@
 part of 'perf_mode_map_bloc.dart';
 
-abstract class PerfModeMapEvent extends Equatable {
-  const PerfModeMapEvent();
+abstract class PerfModeEvent extends Equatable {
+  const PerfModeEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class PerfModeMapInitialEvent extends PerfModeMapEvent {
+class PerfModeInitialEvent extends PerfModeEvent {
   final YandexMapController controller;
-  const PerfModeMapInitialEvent(this.controller);
+  const PerfModeInitialEvent(this.controller);
   @override
   List<Object> get props => [controller];
 }
 
-class PerfModeMapGetUserLocationEvent extends PerfModeMapEvent {}
+class PerfModeGetUserLocationEvent extends PerfModeEvent {}
 
-class PerfModeMapUserLocationAddedEvent extends PerfModeMapEvent {
+class PerfModeCurrentLocationUpdate extends PerfModeEvent {}
+
+class PerfModeUserLocationAddedEvent extends PerfModeEvent {
   final UserLocationView userLocationView;
-  const PerfModeMapUserLocationAddedEvent(
+  const PerfModeUserLocationAddedEvent(
     this.userLocationView,
   );
   @override
   List<Object> get props => [userLocationView];
 }
 
-class PerfModeMapPinsLoadEvent extends PerfModeMapEvent {
+class PerfModePinsLoadEvent extends PerfModeEvent {
   final int index;
   final int countLocations;
   final List<Location> locations;
-  const PerfModeMapPinsLoadEvent(
+  const PerfModePinsLoadEvent(
     this.index,
     this.countLocations,
     this.locations,
@@ -38,11 +40,11 @@ class PerfModeMapPinsLoadEvent extends PerfModeMapEvent {
   List<Object> get props => [index];
 }
 
-class PerfModeMapRoutesLoadEvent extends PerfModeMapEvent {
+class PerfModeRoutesLoadEvent extends PerfModeEvent {
   final int index;
   final int countLocations;
   final List<Location> locations;
-  const PerfModeMapRoutesLoadEvent(
+  const PerfModeRoutesLoadEvent(
     this.index,
     this.countLocations,
     this.locations,
@@ -51,10 +53,10 @@ class PerfModeMapRoutesLoadEvent extends PerfModeMapEvent {
   List<Object> get props => [index];
 }
 
-class PerfModeMapMoveCameraEvent extends PerfModeMapEvent {
+class PerfModeMoveCameraEvent extends PerfModeEvent {
   final Point coords;
 
-  const PerfModeMapMoveCameraEvent(
+  const PerfModeMoveCameraEvent(
     this.coords,
   );
   @override

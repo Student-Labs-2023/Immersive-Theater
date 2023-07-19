@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
+import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/theme/ui/animated_icon.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_info.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
@@ -29,7 +29,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
 
   @override
   void didChangeDependencies() {
-    currentIndex = context.watch<ModePerformanceBloc>().state.indexLocation;
+    currentIndex = context.watch<PerfModeBloc>().state.indexLocation;
     super.didChangeDependencies();
   }
 
@@ -41,7 +41,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
       },
       listener: (context, state) {
         final int indexLastLocation =
-            context.read<ModePerformanceBloc>().state.countLocations - 1;
+            context.read<PerfModeBloc>().state.countLocations - 1;
 
         if (state is AudioPlayerFinishedState &&
             currentIndex == indexLastLocation) {
@@ -84,7 +84,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
+                  child: BlocBuilder<PerfModeBloc, PerfModeState>(
                     builder: (context, state) {
                       return AudioInfoWidget(
                         performanceTitle: state.performanceTitle,

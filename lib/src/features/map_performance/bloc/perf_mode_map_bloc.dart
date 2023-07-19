@@ -11,16 +11,36 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 part 'perf_mode_map_event.dart';
 part 'perf_mode_map_state.dart';
 
-class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
+class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
   late YandexMapController mapcontroller;
   late StreamSubscription<Position> positionStream;
+  final List<MapObject> mapObjects;
+  final int indexLocation;
+  final int countLocations;
+  final String performanceTitle;
+  final String imagePerformanceLink;
   UserLocationView? userLocationView;
-  PerfModeMapBloc() : super(PerfModeMapInProgress([])) {
-    on<PerfModeMapGetUserLocationEvent>(_onGetUserLocationEvent);
-    on<PerfModeMapMoveCameraEvent>(_onMoveCameraEvent);
-    on<PerfModeMapInitialEvent>(_onInitialEvent);
-    on<PerfModeMapPinsLoadEvent>(_onPerfModeMapPinsLoad);
-    on<PerfModeMapRoutesLoadEvent>(_onPerfModeMapRoutesLoad);
+  PerfModeBloc(
+    this.mapObjects,
+    this.indexLocation,
+    this.countLocations,
+    this.performanceTitle,
+    this.imagePerformanceLink,
+  ) : super(
+          PerfModeInProgress(
+            mapObjects,
+            indexLocation,
+            countLocations,
+            performanceTitle,
+            imagePerformanceLink,
+          ),
+        ) {
+    on<PerfModeGetUserLocationEvent>(_onGetUserLocationEvent);
+    on<PerfModeMoveCameraEvent>(_onMoveCameraEvent);
+    on<PerfModeInitialEvent>(_onInitialEvent);
+    on<PerfModePinsLoadEvent>(_onPerfModeMapPinsLoad);
+    on<PerfModeRoutesLoadEvent>(_onPerfModeMapRoutesLoad);
+    on<PerfModeCurrentLocationUpdate>(_onModePerformanceCurrentLocationUpdate);
   }
 
   @override
@@ -53,22 +73,25 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
   }
 
   Future<void> _onGetUserLocationEvent(
-    PerfModeMapGetUserLocationEvent event,
-    Emitter<PerfModeMapState> emit,
+    PerfModeGetUserLocationEvent event,
+    Emitter<PerfModeState> emit,
   ) async {
     if (!(await _checkServiceEnabled() && await _checkPermission())) {
       return;
     }
     const LocationSettings locationSettings = LocationSettings(
-      accuracy: LocationAccuracy.bestForNavigation,
+      accuracy: LocationAccuracy.best,
       distanceFilter: 100,
     );
     positionStream =
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen((Position? position) {
-      log(position == null
-          ? 'Unknown'
-          : '${position.latitude.toString()}, ${position.longitude.toString()}');
+      final dist = Geolocator.distanceBetween(
+          position!.latitude, position.longitude, 54.985031, 73.369487);
+      if (dist < 100) {
+        log('second location');
+      }
+      log(position == null ? 'Unknown' : '${dist.toString()}');
     });
     mapcontroller.toggleUserLayer(
       visible: true,
@@ -76,9 +99,27 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
     );
   }
 
+  void _onModePerformanceCurrentLocationUpdate(
+    PerfModeCurrentLocationUpdate event,
+    Emitter<PerfModeState> emit,
+  ) {
+    if (state.indexLocation >= state.countLocations - 1) {
+      return;
+    }
+    emit(
+      PerfModeInProgress(
+        state.mapObjects,
+        state.indexLocation + 1,
+        state.countLocations,
+        state.performanceTitle,
+        state.imagePerformanceLink,
+      ),
+    );
+  }
+
   Future<void> _onMoveCameraEvent(
-    PerfModeMapMoveCameraEvent event,
-    Emitter<PerfModeMapState> emit,
+    PerfModeMoveCameraEvent event,
+    Emitter<PerfModeState> emit,
   ) async {
     mapcontroller.moveCamera(
       CameraUpdate.newCameraPosition(
@@ -88,17 +129,25 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
   }
 
   void _onInitialEvent(
-    PerfModeMapInitialEvent event,
-    Emitter<PerfModeMapState> emit,
+    PerfModeInitialEvent event,
+    Emitter<PerfModeState> emit,
   ) {
     mapcontroller = event.controller;
   }
 
   Future<FutureOr<void>> _onPerfModeMapPinsLoad(
-    PerfModeMapPinsLoadEvent event,
-    Emitter<PerfModeMapState> emit,
+    PerfModePinsLoadEvent event,
+    Emitter<PerfModeState> emit,
   ) async {
-    emit(PerfModeMapInProgress(state.mapObjects));
+    emit(
+      PerfModeInProgress(
+        state.mapObjects,
+        state.indexLocation,
+        state.countLocations,
+        state.performanceTitle,
+        state.imagePerformanceLink,
+      ),
+    );
     final int indexLocation = event.index;
     final countLocations = event.countLocations;
     final locations = event.locations;
@@ -127,14 +176,28 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
       );
     }
     state.mapObjects.addAll(placemarks);
-    emit(PerfModeMapLoadSuccess(state.mapObjects));
+    emit(PerfModeLoadSuccess(
+      state.mapObjects,
+      state.indexLocation,
+      state.countLocations,
+      state.performanceTitle,
+      state.imagePerformanceLink,
+    ));
   }
 
   Future<FutureOr<void>> _onPerfModeMapRoutesLoad(
-    PerfModeMapRoutesLoadEvent event,
-    Emitter<PerfModeMapState> emit,
+    PerfModeRoutesLoadEvent event,
+    Emitter<PerfModeState> emit,
   ) async {
-    emit(PerfModeMapInProgress(state.mapObjects));
+    emit(
+      PerfModeInProgress(
+        state.mapObjects,
+        state.indexLocation,
+        state.countLocations,
+        state.performanceTitle,
+        state.imagePerformanceLink,
+      ),
+    );
     final int indexLocation = event.index;
     final countLocations = event.countLocations;
     final locations = event.locations;
@@ -161,7 +224,15 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
       var result = await resultWithSessionDone.result;
 
       if (result.error != null) {
-        emit(PerfModeMapFailure(state.mapObjects));
+        emit(
+          PerfModeFailure(
+            state.mapObjects,
+            state.indexLocation,
+            state.countLocations,
+            state.performanceTitle,
+            state.imagePerformanceLink,
+          ),
+        );
       }
       result.routes!.asMap().forEach((i, route) {
         state.mapObjects.add(
@@ -193,7 +264,15 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
       var resultNotDone = await resultWithSession.result;
 
       if (resultNotDone.error != null) {
-        emit(PerfModeMapFailure(state.mapObjects));
+        emit(
+          PerfModeFailure(
+            state.mapObjects,
+            state.indexLocation,
+            state.countLocations,
+            state.performanceTitle,
+            state.imagePerformanceLink,
+          ),
+        );
       }
 
       resultNotDone.routes!.asMap().forEach((i, route) {
@@ -207,7 +286,15 @@ class PerfModeMapBloc extends Bloc<PerfModeMapEvent, PerfModeMapState> {
         );
       });
     }
-    emit(PerfModeMapLoadSuccess(state.mapObjects));
+    emit(
+      PerfModeLoadSuccess(
+        state.mapObjects,
+        state.indexLocation,
+        state.countLocations,
+        state.performanceTitle,
+        state.imagePerformanceLink,
+      ),
+    );
   }
 
   Future<UserLocationView>? onUserLocationAddedCallback(
