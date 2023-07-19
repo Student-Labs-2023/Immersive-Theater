@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
-import 'package:shebalin/src/features/user/view/widgets/ticket.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
-import '../../../performances/bloc/performance_bloc.dart';
-import '../../../performances/view/widgets/performance_card.dart';
-import '../../../user/view/widgets/ticket.dart';
-import '../../bloc/tickets_bloc.dart';
-import '../../bloc/tickets_event.dart';
+import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
+import 'package:shebalin/src/features/performances/view/widgets/performance_card.dart';
+import 'package:shebalin/src/features/promocodes/bloc/tickets_bloc.dart';
+import 'package:shebalin/src/features/promocodes/bloc/tickets_event.dart';
 
 class InputPromocodePanelPage extends StatefulWidget {
   InputPromocodePanelPage({Key? key, required this.bloc}) : super(key: key);
