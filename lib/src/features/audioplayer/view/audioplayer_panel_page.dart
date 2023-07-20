@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -81,6 +82,7 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
     await audioPlayer.setAudioSource(
       playlist,
       initialIndex: 0,
+      preload: false,
       initialPosition: Duration.zero,
     );
   }
@@ -134,6 +136,10 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
                 height: MediaQuery.of(context).size.height * 0.38,
                 width: MediaQuery.of(context).size.width * 0.85,
                 child: CachedNetworkImage(
+                  placeholder: (context, string) =>
+                      const CircularProgressIndicator(
+                    color: AppColor.grey,
+                  ),
                   imageUrl:
                       ApiClient.baseUrl + widget.performance.coverImageLink,
                   fit: BoxFit.cover,

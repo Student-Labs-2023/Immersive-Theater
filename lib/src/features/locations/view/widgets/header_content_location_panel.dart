@@ -17,16 +17,22 @@ class HeaderContentLocationPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppTextHeader(title: locationTitle),
-          const SizedBox(
-            height: 4,
-          ),
           Text(
+            locationTitle,
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge
+                ?.copyWith(fontSize: 20, fontWeight: FontWeight.w800),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 8, bottom: 20,),
+            child: Text(
             locationTag,
             style: Theme.of(context)
                 .textTheme
                 .labelSmall
                 ?.copyWith(color: secondaryTextColor),
+          ),
           ),
         ],
       ),

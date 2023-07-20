@@ -8,11 +8,10 @@ class AppTextHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: primaryTextColor,
-            fontWeight: FontWeight.w700,
-          ),
-      maxLines: 2,
+      style: Theme.of(context)
+          .textTheme
+          .bodyLarge
+          ?.copyWith(fontSize: 20, fontWeight: FontWeight.w700),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:shebalin/src/features/locations/view/widgets/header_content_loca
 import 'package:shebalin/src/features/locations/view/widgets/historical_content_location_panel.dart';
 import 'package:shebalin/src/features/locations/view/widgets/images_content_location_panel.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/ui/app_button.dart';
 import 'package:shebalin/src/theme/theme.dart';
@@ -26,7 +27,7 @@ class LocationDescriptionPanelPage extends StatefulWidget {
 class _LocationDescriptionPanelPageState
     extends State<LocationDescriptionPanelPage> {
   Payment paymentService = Payment();
-  late final Location currentLocation;
+  late Location currentLocation;
   @override
   void initState() {
     super.initState();
@@ -36,17 +37,10 @@ class _LocationDescriptionPanelPageState
   Widget build(BuildContext context) {
     var mediaQuerySize = MediaQuery.of(context).size;
     return Scaffold(
+      extendBody: true,
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: AppButton(
-        buttonTitle: "Приобрести за 299 ₽",
-        onButtonClickFunction: () {
-          _openYandexWidgetOnTap();
-        },
-        width: mediaQuerySize.width * 0.85,
-        height: mediaQuerySize.width * 0.11,
-      ),
       body: Padding(
         padding: const EdgeInsets.only(top: 12),
         child: SingleChildScrollView(
@@ -65,37 +59,46 @@ class _LocationDescriptionPanelPageState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          HeaderContentLocationPanel(
-                            locationTitle: currentLocation.title,
-                            locationTag: currentLocation.tag,
+                          AppTextHeader(title: currentLocation.title),
+                          const SizedBox(
+                            width: 10,
                           ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 24,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  _closePanel();
-                                },
-                                child: const Image(
-                                  image: AssetImage(ImagesSources.cancelLoc),
-                                ),
-                              )
-                            ],
-                          )
+                          InkWell(
+                            onTap: () {
+                              _closePanel();
+                            },
+                            child: const Image(
+                              color: AppColor.blackText,
+                              image: AssetImage(ImagesSources.cancelLoc),
+                            ),
+                          ),
                         ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        top: 8,
+                        bottom: 20,
+                      ),
+                      child: Text(
+                        currentLocation.tag,
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelSmall
+                            ?.copyWith(color: AppColor.greyText),
                       ),
                     ),
                     ImagesContentLocationPanel(
                       imageLinks: currentLocation.imageLinks,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      padding:
+                          const EdgeInsets.only(left: 16, right: 16, top: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -103,19 +106,49 @@ class _LocationDescriptionPanelPageState
                           HistoricalContentLocationPanel(
                             locationDescription: currentLocation.description,
                           ),
-                          const SizedBox(
-                            height: 8,
-                          ),
                           const AppTextHeader(
                             title: 'Аудио отрывок',
                           ),
                           const SizedBox(
-                            height: 8,
+                            height: 12,
                           ),
                           const AudioContentLocationPanel(),
+                          // SizedBox(
+                          //   height: mediaQuerySize.width * 0.13 + 25,
+                          // )
                         ],
                       ),
                     ),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          _openYandexWidgetOnTap();
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(accentTextColor),
+                          elevation: MaterialStateProperty.all(5),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          minimumSize: MaterialStateProperty.all(
+                            Size(
+                              mediaQuerySize.width * 0.85,
+                              mediaQuerySize.width * 0.13,
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          'Перейти к спектаклю',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(color: AppColor.whiteText),
+                        ),
+                      ),
+                    )
                   ],
                 );
               }
