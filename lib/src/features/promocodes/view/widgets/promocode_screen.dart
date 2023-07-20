@@ -9,8 +9,6 @@ import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import '../../../performances/bloc/performance_bloc.dart';
-import '../../../performances/view/widgets/performance_card.dart';
 import 'input_promocode_panel_page.dart';
 
 class PromocodeScreen extends StatefulWidget {
@@ -53,7 +51,8 @@ class _PromocodeScreenState extends State<PromocodeScreen> {
         builder: (context, state) {
           return state.tickets.isNotEmpty
               ? ListView.builder(
-                  itemBuilder: (_, index) => state.tickets[index],)
+                  itemBuilder: (_, index) => state.tickets[index],
+                )
               : Column(
                   children: [
                     const SizedBox(

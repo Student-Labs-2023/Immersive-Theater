@@ -29,7 +29,6 @@ class _LocationDescriptionPanelPageState
     extends State<LocationDescriptionPanelPage> {
   Payment paymentService = Payment();
   late Location currentLocation;
-  late Location currentLocation;
   @override
   void initState() {
     super.initState();
