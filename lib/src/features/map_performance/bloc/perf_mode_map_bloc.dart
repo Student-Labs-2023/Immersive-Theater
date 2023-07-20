@@ -100,7 +100,6 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
             double.parse(event.locations[state.indexLocation + 1].latitude),
             double.parse(event.locations[state.indexLocation + 1].longitude),
           );
-          log('${dist}');
           if (dist < 20) {
             add(PerfModeUserOnPlaceNow());
             if (audioPlayerState is AudioPlayerFinishedState) {
