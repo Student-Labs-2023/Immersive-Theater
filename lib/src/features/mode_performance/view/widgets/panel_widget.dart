@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:locations_repository/locations_repository.dart';
-import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
+import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/images_location.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/location_item.dart';
 import 'package:shebalin/src/theme/images.dart';
+import 'package:shebalin/src/theme/ui/animated_visibility.dart';
 import 'package:shebalin/src/theme/ui/bar_indicator.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -35,25 +36,19 @@ class _PanelWidgetState extends State<PanelWidget> {
         const SizedBox(
           height: 20,
         ),
-        AnimatedOpacity(
-          opacity: widget.controller.isPanelOpen &&
-                  widget.controller.isPanelAnimating
-              ? 0
-              : 1,
-          duration: Duration(milliseconds: 300),
-          child: Visibility(
-            visible: !widget.controller.isPanelOpen,
-            child: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
-              builder: (context, state) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: ImagesLocation(
-                    imageLinks:
-                        widget.locations[state.indexLocation].imageLinks,
-                  ),
-                );
-              },
-            ),
+        AnimatedVisibility(
+          isVisible: !widget.controller.isPanelOpen,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeIn,
+          child: BlocBuilder<PerfModeBloc, PerfModeState>(
+            builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: ImagesLocation(
+                  imageLinks: widget.locations[state.indexLocation].imageLinks,
+                ),
+              );
+            },
           ),
         ),
         Row(
@@ -85,7 +80,7 @@ class _PanelWidgetState extends State<PanelWidget> {
         const SizedBox(
           height: 12,
         ),
-        BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
+        BlocBuilder<PerfModeBloc, PerfModeState>(
           builder: (context, state) {
             return ListView.builder(
               shrinkWrap: true,

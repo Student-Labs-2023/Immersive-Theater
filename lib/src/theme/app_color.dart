@@ -10,6 +10,6 @@ class AppColor {
   static const whiteBackground = Color(0xFFFFFFFF);
   static const accentBackground = Color(0xFFF8F9FA);
   static const blackText = Color(0xFF212529);
-  static const greyText = Color(0xFFADB5BD);
+  static const greyText = Color(0xFF7A8499);
   static const whiteText = Color(0xFFFFFFFF);
 }

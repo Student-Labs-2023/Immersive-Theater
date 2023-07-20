@@ -6,9 +6,8 @@ class AppProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: DecoratedBox(
+    return DecoratedBox(
       decoration: BoxDecoration(color: AppColor.lightGray.withOpacity(0.3)),
-    ));
+    );
   }
 }

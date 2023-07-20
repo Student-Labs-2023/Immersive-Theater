@@ -6,20 +6,21 @@ import 'package:shebalin/src/features/locations/bloc/location_bloc.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/map_performance/view/map_page.dart';
-import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_player.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
+import 'package:shebalin/src/features/mode_performance/view/widgets/continue_button.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/panel_widget.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/progress_bar.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/tip.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
+import 'package:shebalin/src/theme/ui/animated_visibility.dart';
+import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class PerformanceModePage extends StatefulWidget {
-  final mapbloc = PerfModeMapBloc();
   static const routeName = '/performance-mode-screen';
   PerformanceModePage({
     super.key,
@@ -30,7 +31,6 @@ class PerformanceModePage extends StatefulWidget {
 }
 
 class _PerformanceModePageState extends State<PerformanceModePage> {
-  final AudioPlayer player = AudioPlayer();
   late double heightButton = 10.0;
   final panelController = PanelController();
   late List<Location> locations;
@@ -38,11 +38,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
   final String imageLink =
       '/uploads/1650699780207_58cb89ec46.jpg?updated_at=2023-03-30T05:51:54.127Z';
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
+  final AudioPlayerBloc audioPlayerBloc = AudioPlayerBloc(AudioPlayer());
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -56,27 +52,24 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
           return MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => ModePerformanceBloc(
+                create: (context) => PerfModeBloc(
+                  [],
                   0,
                   locations.length,
                   performanceTitle,
                   imageLink,
+                  audioPlayerBloc,
                 ),
               ),
               BlocProvider(
                 create: (context) {
-                  return AudioPlayerBloc(player)
+                  return audioPlayerBloc
                     ..add(AudioPlayerInitialEvent())
                     ..add(
                       AudioPlayerAddPlaylistEvent(
                         listAudio: locations[0].paidAudioLink,
                       ),
                     );
-                },
-              ),
-              BlocProvider<PerfModeMapBloc>(
-                create: (context) {
-                  return widget.mapbloc;
                 },
               ),
             ],
@@ -100,17 +93,11 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                           controller: panelController,
                           locations: locations,
                         ),
-                        body: BlocBuilder<ModePerformanceBloc,
-                            ModePerformanceState>(
-                          builder: (context, state) {
-                            return MapPage(
-                              locations: locations,
-                              initialCoords: const Point(
-                                latitude: 54.988707,
-                                longitude: 73.368659,
-                              ),
-                            );
-                          },
+                        body: MapPage(
+                          locations: locations,
+                          initialCoords: Point(
+                              latitude: double.parse(locations[0].latitude),
+                              longitude: double.parse(locations[0].longitude)),
                         ),
                         onPanelSlide: (position) {
                           setState(() {
@@ -122,6 +109,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                       ),
                       Positioned(
                         right: 15,
+                        left: 15,
                         bottom: heightButton + 160,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -129,7 +117,9 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                             FloatingActionButton(
                               heroTag: "getUserLocation",
                               backgroundColor: Colors.white,
-                              onPressed: _getUserBloc,
+                              onPressed: () => context
+                                  .read<PerfModeBloc>()
+                                  .add(PerfModeGetUserLocationEvent(locations)),
                               child: const Image(
                                 image: AssetImage(ImagesSources.locationIcon),
                               ),
@@ -137,24 +127,45 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                             const SizedBox(
                               height: 10,
                             ),
-                            BlocBuilder<AudioPlayerBloc, AudioPlayerState>(
-                              builder: (context, state) {
-                                return Visibility(
-                                  visible: state is AudioPlayerFinishedState,
-                                  child: const Tip(),
+                            BlocBuilder<PerfModeBloc, PerfModeState>(
+                              builder: (context, perfModeState) {
+                                return BlocBuilder<AudioPlayerBloc,
+                                    AudioPlayerState>(
+                                  builder: (context, audioPlayerState) {
+                                    return AnimatedVisibility(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.easeIn,
+                                      isVisible: ((audioPlayerState
+                                              is AudioPlayerFinishedState) ^
+                                          (perfModeState
+                                              is PerfModeUserOnPlace)),
+                                      child: Tip(
+                                        title: audioPlayerState
+                                                    is AudioPlayerFinishedState &&
+                                                perfModeState
+                                                    is! PerfModeUserOnPlace
+                                            ? 'Глава спектакля уже завершилась, дойдите до контрольной точки'
+                                            : 'Глава спектакля ещё не завершилась, подождите на контрольной точке',
+                                        icon: audioPlayerState
+                                                    is AudioPlayerFinishedState &&
+                                                perfModeState
+                                                    is! PerfModeUserOnPlace
+                                            ? ImagesSources.tipIcon
+                                            : ImagesSources.time,
+                                      ),
+                                    );
+                                  },
                                 );
                               },
                             ),
-                            const SizedBox(
-                              height: 10,
-                            )
                           ],
                         ),
                       ),
                     ],
                   ),
                   bottomNavigationBar:
-                      BlocConsumer<ModePerformanceBloc, ModePerformanceState>(
+                      BlocConsumer<PerfModeBloc, PerfModeState>(
                     listenWhen: (previous, current) {
                       return previous.indexLocation < current.indexLocation;
                     },
@@ -181,7 +192,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
             ),
           );
         }
-        return CircularProgressIndicator();
+        return AppProgressBar();
       },
     );
   }
@@ -230,16 +241,12 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
       context: context,
       builder: (_) => DialogWindow(
         title: "Завершить спектакль?",
-        subtitle: "Прогресс прохождения не будет сохранен.",
-        onPressedCancel: onPressedCancel,
-        titleApprove: "Завершить",
-        titleCancel: "Отмена",
-        onPressedApprove: onPressedApprove,
+        subtitle: "Прогресс прохождения не будет\nсохранен.",
+        onTapPrimary: onPressedApprove,
+        titlePrimary: "Завершить",
+        titleSecondary: "Отмена",
+        onTapSecondary: onPressedCancel,
       ),
     );
-  }
-
-  void _getUserBloc() {
-    widget.mapbloc.add(PerfModeMapGetUserLocationEvent());
   }
 }

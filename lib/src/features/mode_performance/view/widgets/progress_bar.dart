@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
-import 'package:shebalin/src/theme/theme.dart';
+import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 
 class ProgressLocationsBar extends StatelessWidget {
   final int countLocation;
@@ -24,7 +21,7 @@ class ProgressLocationsBar extends StatelessWidget {
       height: 63,
       width: 86,
       child: Center(
-        child: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
+        child: BlocBuilder<PerfModeBloc, PerfModeState>(
           builder: (context, state) {
             return RichText(
               text: TextSpan(

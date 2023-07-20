@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
+import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/theme/ui/animated_icon.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_info.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/continue_button.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_image.dart';
 import 'package:shebalin/src/features/review/view/review_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
-import 'package:shebalin/src/theme/theme.dart';
 
 class AudioPlayerPanel extends StatefulWidget {
   const AudioPlayerPanel({
@@ -32,7 +29,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
 
   @override
   void didChangeDependencies() {
-    currentIndex = context.watch<ModePerformanceBloc>().state.indexLocation;
+    currentIndex = context.watch<PerfModeBloc>().state.indexLocation;
     super.didChangeDependencies();
   }
 
@@ -44,7 +41,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
       },
       listener: (context, state) {
         final int indexLastLocation =
-            context.read<ModePerformanceBloc>().state.countLocations - 1;
+            context.read<PerfModeBloc>().state.countLocations - 1;
 
         if (state is AudioPlayerFinishedState &&
             currentIndex == indexLastLocation) {
@@ -87,7 +84,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
+                  child: BlocBuilder<PerfModeBloc, PerfModeState>(
                     builder: (context, state) {
                       return AudioInfoWidget(
                         performanceTitle: state.performanceTitle,
@@ -97,16 +94,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
                     },
                   ),
                 ),
-                state is AudioPlayerFinishedState
-                    ? ContinueButton(
-                        title: "Продолжить",
-                        onTap: () {
-                          context.read<ModePerformanceBloc>().add(
-                                ModePerformanceCurrentLocationUpdate(),
-                              );
-                        },
-                      )
-                    : buttons(),
+                buttons(state is AudioPlayerFinishedState),
               ],
             ),
           ],
@@ -115,32 +103,39 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
     );
   }
 
-  Widget buttons() {
+  Widget buttons(bool isNotActive) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         IconButton(
-          onPressed: () => context
-              .read<AudioPlayerBloc>()
-              .add(AudioPlayerWindBackButtonPressedEvent()),
+          onPressed: isNotActive
+              ? null
+              : () => context
+                  .read<AudioPlayerBloc>()
+                  .add(AudioPlayerWindBackButtonPressedEvent()),
           iconSize: 40.0,
           icon: Image.asset(ImagesSources.audioBackButton),
         ),
         IconButton(
-          onPressed: () => context
-              .read<AudioPlayerBloc>()
-              .add(AudioPlayerPlayPauseButtonPressedEvent()),
+          onPressed: isNotActive
+              ? null
+              : () => context
+                  .read<AudioPlayerBloc>()
+                  .add(AudioPlayerPlayPauseButtonPressedEvent()),
           iconSize: 40.0,
           icon: TAnimatedIcon(
             condition: () => context.watch<AudioPlayerBloc>().state.isPlaying,
-            animatedIconData: AnimatedIcons.pause_play,
+            animatedIconData: AnimatedIcons.play_pause,
+            color: AppColor.blackText,
             duration: const Duration(milliseconds: 300),
           ),
         ),
         IconButton(
-          onPressed: () => context
-              .read<AudioPlayerBloc>()
-              .add(AudioPlayerWindForwardButtonPressedEvent()),
+          onPressed: isNotActive
+              ? null
+              : () => context
+                  .read<AudioPlayerBloc>()
+                  .add(AudioPlayerWindForwardButtonPressedEvent()),
           iconSize: 40.0,
           icon: Image.asset(ImagesSources.audioForwardButton),
         )

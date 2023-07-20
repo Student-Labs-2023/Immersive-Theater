@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:locations_repository/locations_repository.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
-import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MapPage extends StatefulWidget {
@@ -22,19 +21,19 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   late final int countLocations;
-  late PerfModeMapBloc perfModeMapBloc;
+  late PerfModeBloc perfModeMapBloc;
   final int startIndex = 0;
 
   @override
   void initState() {
-    countLocations = context.read<ModePerformanceBloc>().state.countLocations;
-    perfModeMapBloc = context.read<PerfModeMapBloc>();
+    perfModeMapBloc = context.read<PerfModeBloc>();
+    countLocations = perfModeMapBloc.countLocations;
     super.initState();
   }
 
   void _loadMapPins(int index) {
     perfModeMapBloc.add(
-      PerfModeMapPinsLoadEvent(
+      PerfModePinsLoadEvent(
         index,
         countLocations,
         widget.locations,
@@ -44,7 +43,7 @@ class _MapPageState extends State<MapPage> {
 
   void _loadRoutes(int index) {
     perfModeMapBloc.add(
-      PerfModeMapRoutesLoadEvent(
+      PerfModeRoutesLoadEvent(
         index,
         countLocations,
         widget.locations,
@@ -54,7 +53,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ModePerformanceBloc, ModePerformanceState>(
+    return BlocListener<PerfModeBloc, PerfModeState>(
       listenWhen: (previous, current) {
         return previous.indexLocation < current.indexLocation;
       },
@@ -63,15 +62,15 @@ class _MapPageState extends State<MapPage> {
         _loadRoutes(state.indexLocation);
       },
       child: Scaffold(
-        body: BlocBuilder<PerfModeMapBloc, PerfModeMapState>(
+        body: BlocBuilder<PerfModeBloc, PerfModeState>(
           builder: (context, state) {
             return YandexMap(
               mapType: MapType.vector,
               mapObjects: state.mapObjects,
               onMapCreated: (controller) {
                 perfModeMapBloc
-                  ..add(PerfModeMapInitialEvent(controller))
-                  ..add(PerfModeMapMoveCameraEvent(widget.initialCoords));
+                  ..add(PerfModeInitialEvent(controller))
+                  ..add(PerfModeMoveCameraEvent(widget.initialCoords));
                 _loadMapPins(startIndex);
                 _loadRoutes(startIndex);
               },
