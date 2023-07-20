@@ -25,7 +25,7 @@ class PhotoCard extends StatelessWidget {
           ),
           margin: const EdgeInsets.only(right: 16),
           child: CachedNetworkImage(
-            imageUrl:"https://sun9-80.userapi.com/impg/0SkG5Uqx-sIhfgeKq_TxPMvBBkcsaJB-hrha0w/QrPfk-MLkk4.jpg?size=269x257&quality=95&sign=038872e654d930817650a57daf3411d8&type=album",// ApiClient.baseUrl+ performance.imagesList[index],
+            imageUrl: ApiClient.baseUrl + performance.imagesList[index],
             fit: BoxFit.cover,
             placeholder: (context, url) => Center(
               child: CircularProgressIndicator(

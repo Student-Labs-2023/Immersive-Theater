@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:api_client/api_client.dart';
 
@@ -54,13 +55,11 @@ class ImagesContentLocationPanel extends StatelessWidget {
                     ),
                     height: 88,
                     width: 88,
-                    imageUrl:
-                        "https://sun9-75.userapi.com/impg/chHgeUUfz0nDw-kaO1Qox1frCAxTrJXvgGqidQ/ujRT_p0QAms.jpg?size=375x260&quality=96&sign=21982d2b7354644d80981116c2a4e273&type=album", // ApiClient.baseUrl + imageLinks[index],
-
+                    imageUrl: ApiClient.baseUrl + imageLinks[index],
                     fit: BoxFit.fill,
                     placeholder: (contxt, string) => const Center(
                       child: CircularProgressIndicator(
-                        color: Colors.white,
+                        color: AppColor.whiteText,
                       ),
                     ),
                   ),

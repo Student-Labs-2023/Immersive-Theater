@@ -14,7 +14,7 @@ class ImageCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: CachedNetworkImage(
-        imageUrl: "https://sun9-80.userapi.com/impg/0SkG5Uqx-sIhfgeKq_TxPMvBBkcsaJB-hrha0w/QrPfk-MLkk4.jpg?size=269x257&quality=95&sign=038872e654d930817650a57daf3411d8&type=album",//ApiClient.baseUrl + imageUrl,
+        imageUrl: ApiClient.baseUrl + imageUrl,
         height: 90,
         width: 90,
         fit: BoxFit.cover,

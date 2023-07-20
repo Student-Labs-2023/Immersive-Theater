@@ -8,13 +8,11 @@ import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/models/payment_model.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/audio_demo.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/author_card.dart';
-import 'package:shebalin/src/features/photo_slider/view/vertical_sliding_screen.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../photo_slider/view/widgets/tiktok_photo.dart';
-import 'widgets/photo_card.dart';
+import 'package:shebalin/src/features/photo_slider/view/widgets/tiktok_photo.dart';
 
 class PerfomanceDescriptionScreen extends StatefulWidget {
   const PerfomanceDescriptionScreen({Key? key, required this.performance})
@@ -37,10 +35,10 @@ class _PerfomanceDescriptionScreenState
   late final ScrollController _controller = ScrollController()
     ..addListener(() {
       setState(() {
-        _textColor = _isExpanded ? Colors.white : Colors.black;
+        _textColor = _isExpanded ? AppColor.whiteText : AppColor.blackText;
       });
     });
-  Color _textColor = Colors.white;
+  Color _textColor = AppColor.whiteText;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +54,7 @@ class _PerfomanceDescriptionScreenState
         scrollDirection: Axis.vertical,
         slivers: [
           SliverAppBar(
-            backgroundColor: secondaryColor,
+            backgroundColor: AppColor.whiteBackground,
             expandedHeight: 260,
             floating: false,
             centerTitle: false,
@@ -64,12 +62,11 @@ class _PerfomanceDescriptionScreenState
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: false,
               background: CachedNetworkImage(
-                imageUrl:
-                    "https://sun9-75.userapi.com/impg/chHgeUUfz0nDw-kaO1Qox1frCAxTrJXvgGqidQ/ujRT_p0QAms.jpg?size=375x260&quality=96&sign=21982d2b7354644d80981116c2a4e273&type=album", //ApiClient.baseUrl + widget.performance.coverImageLink,
+                imageUrl: ApiClient.baseUrl + widget.performance.coverImageLink,
                 fit: BoxFit.fill,
                 placeholder: (contxt, string) => const Center(
                   child: CircularProgressIndicator(
-                    color: Colors.white,
+                    color: AppColor.grey,
                   ),
                 ),
               ),
@@ -89,9 +86,9 @@ class _PerfomanceDescriptionScreenState
                 Container(
                   width: 36,
                   height: 36,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.5),
+                    color: AppColor.lightGray,
                   ),
                   child: Center(
                     child: IconButton(
@@ -118,14 +115,14 @@ class _PerfomanceDescriptionScreenState
                       Icon(
                         Icons.timer,
                         size: 20,
-                        color: secondaryTextColor,
+                        color: AppColor.greyText,
                       ),
                       Text(
                         widget.performance.duration,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
-                            ?.copyWith(color: secondaryTextColor, fontSize: 12),
+                            ?.copyWith(color: AppColor.greyText, fontSize: 12),
                       ),
                     ],
                   ),
@@ -134,14 +131,14 @@ class _PerfomanceDescriptionScreenState
                       Icon(
                         Icons.location_pin,
                         size: 20,
-                        color: secondaryTextColor,
+                        color: AppColor.greyText,
                       ),
                       Text(
                         widget.performance.tag,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
-                            ?.copyWith(color: secondaryTextColor, fontSize: 12),
+                            ?.copyWith(color: AppColor.greyText, fontSize: 12),
                       ),
                     ],
                   ),
@@ -168,11 +165,11 @@ class _PerfomanceDescriptionScreenState
                     height: 200,
                     width: 434,
                     imageUrl:
-                        "https://sun9-75.userapi.com/impg/chHgeUUfz0nDw-kaO1Qox1frCAxTrJXvgGqidQ/ujRT_p0QAms.jpg?size=375x260&quality=96&sign=21982d2b7354644d80981116c2a4e273&type=album", //ApiClient.baseUrl + widget.performance.coverImageLink,
+                        "https://sun9-39.userapi.com/impg/wvR1_YIXqeP3hgZUUELQ5U3bvq1kEvKgvRbycA/f8n1n84CfzQ.jpg?size=343x200&quality=95&sign=99b10e66c024f3b0f08b823e49b1e412&type=album",
                     fit: BoxFit.cover,
                     placeholder: (contxt, string) => const Center(
                       child: CircularProgressIndicator(
-                        color: Colors.white,
+                        color: AppColor.lightGray,
                       ),
                     ),
                   ),
@@ -244,12 +241,12 @@ class _PerfomanceDescriptionScreenState
                             ),
                             height: 88,
                             width: 88,
-                            imageUrl:
-                                "https://sun9-75.userapi.com/impg/chHgeUUfz0nDw-kaO1Qox1frCAxTrJXvgGqidQ/ujRT_p0QAms.jpg?size=375x260&quality=96&sign=21982d2b7354644d80981116c2a4e273&type=album", //ApiClient.baseUrl + widget.performance.coverImageLink,
+                            imageUrl: ApiClient.baseUrl +
+                                widget.performance.coverImageLink,
                             fit: BoxFit.fill,
                             placeholder: (contxt, string) => const Center(
                               child: CircularProgressIndicator(
-                                color: Colors.white,
+                                color: AppColor.lightGray,
                               ),
                             ),
                           ),
@@ -297,8 +294,8 @@ class _PerfomanceDescriptionScreenState
               ),
             ),
           ),
-         SliverToBoxAdapter(
-            child:  SizedBox(
+          SliverToBoxAdapter(
+            child: SizedBox(
               height: mediaQuerySize.width * 0.13 + 20,
             ),
           )
@@ -311,7 +308,8 @@ class _PerfomanceDescriptionScreenState
                 showInformationDialog(context);
               },
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(accentTextColor),
+                backgroundColor:
+                    MaterialStateProperty.all(AppColor.purpleDarkPrimary),
                 elevation: MaterialStateProperty.all(5),
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
@@ -330,7 +328,7 @@ class _PerfomanceDescriptionScreenState
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge
-                    ?.copyWith(color: Colors.white),
+                    ?.copyWith(color: AppColor.whiteText),
               ),
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -354,13 +352,13 @@ class _PerfomanceDescriptionScreenState
         return Center(
           child: Container(
             decoration: const BoxDecoration(
-              color: Colors.white,
+              color: AppColor.whiteBackground,
               borderRadius: BorderRadius.all(Radius.circular(18)),
             ),
             height: MediaQuery.of(context).size.height * 0.2,
             width: MediaQuery.of(context).size.width * 0.75,
             child: Card(
-              color: Colors.white,
+              color: AppColor.whiteBackground,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -371,18 +369,19 @@ class _PerfomanceDescriptionScreenState
                     ),
                     child: TextField(
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: primaryTextColor,
+                            color: AppColor.blackText,
                             fontSize: 20,
                             decoration: TextDecoration.none,
                           ),
-                      cursorColor: accentTextColor,
+                      cursorColor: AppColor.purpleDarkPrimary,
                       controller: textEditingController,
                       decoration: InputDecoration(
                         enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
+                          borderSide: BorderSide(color: AppColor.grey),
                         ),
                         focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: accentTextColor),
+                          borderSide:
+                              BorderSide(color: AppColor.purpleDarkPrimary),
                         ),
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 12),
@@ -391,14 +390,14 @@ class _PerfomanceDescriptionScreenState
                         hintStyle: Theme.of(context)
                             .textTheme
                             .titleLarge
-                            ?.copyWith(color: Colors.grey, fontSize: 20),
+                            ?.copyWith(color: AppColor.grey, fontSize: 20),
                       ),
                     ),
                   ),
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all(accentTextColor),
+                          MaterialStateProperty.all(AppColor.purpleDarkPrimary),
                       elevation: MaterialStateProperty.all(5),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
@@ -417,7 +416,7 @@ class _PerfomanceDescriptionScreenState
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall
-                          ?.copyWith(color: Colors.white, fontSize: 18),
+                          ?.copyWith(color: AppColor.whiteText, fontSize: 18),
                     ),
                   )
                 ],

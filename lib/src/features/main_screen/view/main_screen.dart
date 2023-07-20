@@ -32,8 +32,8 @@ class _MainScreenState extends State<MainScreen> {
         defaultPanelState: PanelState.OPEN,
         minHeight: MediaQuery.of(context).size.height * 0.12,
         maxHeight: context.watch<MapPinBloc>().state is MapPinLoaded
-            ? MediaQuery.of(context).size.height * 0.65
-            : MediaQuery.of(context).size.height * 0.9,
+            ? MediaQuery.of(context).size.height * 0.63
+            : MediaQuery.of(context).size.height * 0.85,
         header: BlocConsumer<MapPinBloc, MapPinState>(
           listener: (context, state) {},
           builder: (context, state) {

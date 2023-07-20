@@ -7,6 +7,7 @@ import 'package:shebalin/src/features/locations/view/widgets/header_content_loca
 import 'package:shebalin/src/features/locations/view/widgets/historical_content_location_panel.dart';
 import 'package:shebalin/src/features/locations/view/widgets/images_content_location_panel.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/ui/app_button.dart';
 import 'package:shebalin/src/theme/theme.dart';
@@ -71,7 +72,7 @@ class _LocationDescriptionPanelPageState
                               _closePanel();
                             },
                             child: const Image(
-                              color: Colors.black,
+                              color: AppColor.blackText,
                               image: AssetImage(ImagesSources.cancelLoc),
                             ),
                           ),
@@ -89,7 +90,7 @@ class _LocationDescriptionPanelPageState
                         style: Theme.of(context)
                             .textTheme
                             .labelSmall
-                            ?.copyWith(color: secondaryTextColor),
+                            ?.copyWith(color: AppColor.greyText),
                       ),
                     ),
                     ImagesContentLocationPanel(
@@ -144,7 +145,7 @@ class _LocationDescriptionPanelPageState
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge
-                              ?.copyWith(color: Colors.white),
+                              ?.copyWith(color: AppColor.whiteText),
                         ),
                       ),
                     )

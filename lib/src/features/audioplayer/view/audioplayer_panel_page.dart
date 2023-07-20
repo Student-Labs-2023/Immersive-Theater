@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -135,7 +136,12 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
                 height: MediaQuery.of(context).size.height * 0.38,
                 width: MediaQuery.of(context).size.width * 0.85,
                 child: CachedNetworkImage(
-                  imageUrl:"https://sun9-80.userapi.com/impg/0SkG5Uqx-sIhfgeKq_TxPMvBBkcsaJB-hrha0w/QrPfk-MLkk4.jpg?size=269x257&quality=95&sign=038872e654d930817650a57daf3411d8&type=album",//ApiClient.baseUrl + widget.performance.coverImageLink,
+                  placeholder: (context, string) =>
+                      const CircularProgressIndicator(
+                    color: AppColor.grey,
+                  ),
+                  imageUrl:
+                      ApiClient.baseUrl + widget.performance.coverImageLink,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -148,7 +154,7 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
                       children: [
                         Text(
                           widget.performance
-                              .audioTitles[0],
+                              .audioTitles[audioPlayer.currentIndex],
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(
