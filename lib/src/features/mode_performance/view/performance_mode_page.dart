@@ -29,7 +29,6 @@ class PerformanceModePage extends StatefulWidget {
 }
 
 class _PerformanceModePageState extends State<PerformanceModePage> {
-  final AudioPlayer player = AudioPlayer();
   late double heightButton = 10.0;
   final panelController = PanelController();
   late List<Location> locations;
@@ -37,11 +36,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
   final String imageLink =
       '/uploads/1650699780207_58cb89ec46.jpg?updated_at=2023-03-30T05:51:54.127Z';
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
+  final AudioPlayerBloc audioPlayerBloc = AudioPlayerBloc(AudioPlayer());
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -61,11 +56,12 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                   locations.length,
                   performanceTitle,
                   imageLink,
+                  audioPlayerBloc,
                 ),
               ),
               BlocProvider(
                 create: (context) {
-                  return AudioPlayerBloc(player)
+                  return audioPlayerBloc
                     ..add(AudioPlayerInitialEvent())
                     ..add(
                       AudioPlayerAddPlaylistEvent(

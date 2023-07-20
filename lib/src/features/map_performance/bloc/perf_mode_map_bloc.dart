@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:locations_repository/locations_repository.dart';
+import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
 import 'dart:developer';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
@@ -19,6 +20,8 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
   final int countLocations;
   final String performanceTitle;
   final String imagePerformanceLink;
+  final AudioPlayerBloc audioPlayerBloc;
+  late StreamSubscription audioPlayerBlocSub;
   UserLocationView? userLocationView;
   PerfModeBloc(
     this.mapObjects,
@@ -26,6 +29,7 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     this.countLocations,
     this.performanceTitle,
     this.imagePerformanceLink,
+    this.audioPlayerBloc,
   ) : super(
           PerfModeInProgress(
             mapObjects,
@@ -83,39 +87,24 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
       accuracy: LocationAccuracy.best,
       distanceFilter: 20,
     );
-    positionStream =
-        Geolocator.getPositionStream(locationSettings: locationSettings)
-            .listen((Position? position) {
-      if (state.indexLocation < state.countLocations - 1) {
-        log('${state.indexLocation}${countLocations - 1}');
-        final dist = Geolocator.distanceBetween(
-          position!.latitude,
-          position.longitude,
-          double.parse(event.locations[state.indexLocation + 1].latitude),
-          double.parse(event.locations[state.indexLocation + 1].longitude),
-        );
-        if (dist < 20) {
-          log(position == null ? 'Unknown' : 'update');
-          add(PerfModeCurrentLocationUpdate());
+    audioPlayerBlocSub = audioPlayerBloc.stream.listen((audioPlayerState) {
+      positionStream =
+          Geolocator.getPositionStream(locationSettings: locationSettings)
+              .listen((Position? position) {
+        if (audioPlayerState is AudioPlayerFinishedState) {
+          if (state.indexLocation < state.countLocations - 1) {
+            final dist = Geolocator.distanceBetween(
+              position!.latitude,
+              position.longitude,
+              double.parse(event.locations[state.indexLocation + 1].latitude),
+              double.parse(event.locations[state.indexLocation + 1].longitude),
+            );
+            if (dist < 20) {
+              add(PerfModeCurrentLocationUpdate());
+            }
+          }
         }
-
-        log(position == null ? 'Unknown' : '${dist}}');
-      } else {
-        add(
-          PerfModePinsLoadEvent(
-            state.indexLocation,
-            state.countLocations,
-            event.locations,
-          ),
-        );
-        add(
-          PerfModeRoutesLoadEvent(
-            state.indexLocation,
-            state.countLocations,
-            event.locations,
-          ),
-        );
-      }
+      });
     });
     mapcontroller.toggleUserLayer(
       visible: true,
