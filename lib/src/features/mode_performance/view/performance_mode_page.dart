@@ -12,9 +12,11 @@ import 'package:shebalin/src/features/mode_performance/view/widgets/continue_but
 import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/panel_widget.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/progress_bar.dart';
+import 'package:shebalin/src/features/mode_performance/view/widgets/tip.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/animated_visibility.dart';
+import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
@@ -29,7 +31,6 @@ class PerformanceModePage extends StatefulWidget {
 }
 
 class _PerformanceModePageState extends State<PerformanceModePage> {
-  final AudioPlayer player = AudioPlayer();
   late double heightButton = 10.0;
   final panelController = PanelController();
   late List<Location> locations;
@@ -37,11 +38,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
   final String imageLink =
       '/uploads/1650699780207_58cb89ec46.jpg?updated_at=2023-03-30T05:51:54.127Z';
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
+  final AudioPlayerBloc audioPlayerBloc = AudioPlayerBloc(AudioPlayer());
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -61,11 +58,12 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                   locations.length,
                   performanceTitle,
                   imageLink,
+                  audioPlayerBloc,
                 ),
               ),
               BlocProvider(
                 create: (context) {
-                  return AudioPlayerBloc(player)
+                  return audioPlayerBloc
                     ..add(AudioPlayerInitialEvent())
                     ..add(
                       AudioPlayerAddPlaylistEvent(
@@ -97,10 +95,9 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                         ),
                         body: MapPage(
                           locations: locations,
-                          initialCoords: const Point(
-                            latitude: 54.988707,
-                            longitude: 73.368659,
-                          ),
+                          initialCoords: Point(
+                              latitude: double.parse(locations[0].latitude),
+                              longitude: double.parse(locations[0].longitude)),
                         ),
                         onPanelSlide: (position) {
                           setState(() {
@@ -130,27 +127,38 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                             const SizedBox(
                               height: 10,
                             ),
-                            BlocBuilder<AudioPlayerBloc, AudioPlayerState>(
-                              builder: (context, state) {
-                                return AnimatedVisibility(
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeIn,
-                                  isVisible: state is AudioPlayerFinishedState,
-                                  child: ContinueButton(
-                                    title:
-                                        'Я уже добрался до следующей локации',
-                                    onTap: () => {
-                                      context.read<PerfModeBloc>().add(
-                                            PerfModeCurrentLocationUpdate(),
-                                          )
-                                    },
-                                  ),
+                            BlocBuilder<PerfModeBloc, PerfModeState>(
+                              builder: (context, perfModeState) {
+                                return BlocBuilder<AudioPlayerBloc,
+                                    AudioPlayerState>(
+                                  builder: (context, audioPlayerState) {
+                                    return AnimatedVisibility(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.easeIn,
+                                      isVisible: ((audioPlayerState
+                                              is AudioPlayerFinishedState) ^
+                                          (perfModeState
+                                              is PerfModeUserOnPlace)),
+                                      child: Tip(
+                                        title: audioPlayerState
+                                                    is AudioPlayerFinishedState &&
+                                                perfModeState
+                                                    is! PerfModeUserOnPlace
+                                            ? 'Глава спектакля уже завершилась, дойдите до контрольной точки'
+                                            : 'Глава спектакля ещё не завершилась, подождите на контрольной точке',
+                                        icon: audioPlayerState
+                                                    is AudioPlayerFinishedState &&
+                                                perfModeState
+                                                    is! PerfModeUserOnPlace
+                                            ? ImagesSources.tipIcon
+                                            : ImagesSources.time,
+                                      ),
+                                    );
+                                  },
                                 );
                               },
                             ),
-                            const SizedBox(
-                              height: 10,
-                            )
                           ],
                         ),
                       ),
@@ -184,7 +192,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
             ),
           );
         }
-        return CircularProgressIndicator();
+        return AppProgressBar();
       },
     );
   }

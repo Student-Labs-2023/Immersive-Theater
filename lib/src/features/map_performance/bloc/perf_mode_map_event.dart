@@ -22,6 +22,8 @@ class PerfModeGetUserLocationEvent extends PerfModeEvent {
 
 class PerfModeCurrentLocationUpdate extends PerfModeEvent {}
 
+class PerfModeUserOnPlaceNow extends PerfModeEvent {}
+
 class PerfModeUserLocationAddedEvent extends PerfModeEvent {
   final UserLocationView userLocationView;
   const PerfModeUserLocationAddedEvent(

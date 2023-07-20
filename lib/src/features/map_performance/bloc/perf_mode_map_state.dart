@@ -99,6 +99,40 @@ class PerfModeLoadSuccess extends PerfModeState {
   }
 }
 
+class PerfModeUserOnPlace extends PerfModeState {
+  const PerfModeUserOnPlace(
+    super.mapObjects,
+    super.indexLocation,
+    super.countLocations,
+    super.performanceTitle,
+    super.imagePerformanceLink,
+  );
+  @override
+  List<Object> get props => [
+        mapObjects,
+        indexLocation,
+        countLocations,
+        performanceTitle,
+        imagePerformanceLink
+      ];
+  @override
+  PerfModeUserOnPlace copyWith({
+    List<MapObject>? mapObjects,
+    int? indexLocation,
+    int? countLocations,
+    String? performanceTitle,
+    String? imagePerformanceLink,
+  }) {
+    return PerfModeUserOnPlace(
+      mapObjects ?? this.mapObjects,
+      indexLocation ?? this.indexLocation,
+      countLocations ?? this.countLocations,
+      performanceTitle ?? this.performanceTitle,
+      imagePerformanceLink ?? this.imagePerformanceLink,
+    );
+  }
+}
+
 class PerfModeFailure extends PerfModeState {
   const PerfModeFailure(
     super.mapObjects,
