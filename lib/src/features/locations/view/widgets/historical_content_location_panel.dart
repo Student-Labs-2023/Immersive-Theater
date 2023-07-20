@@ -9,12 +9,16 @@ class HistoricalContentLocationPanel extends StatelessWidget {
   final String locationDescription;
   @override
   Widget build(BuildContext context) {
-    return Text(
-      locationDescription,
-      style: Theme.of(context)
-          .textTheme
-          .labelSmall
-          ?.copyWith(color: primaryTextColor),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 20),
+      child: Text(
+        locationDescription,
+        style: Theme.of(context)
+            .textTheme
+            .labelSmall
+            ?.copyWith(color: primaryTextColor, fontSize: 14),
+            
+      ),
     );
   }
 }
