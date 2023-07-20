@@ -4,11 +4,13 @@ class TAnimatedIcon extends StatefulWidget {
   final AnimatedIconData animatedIconData;
   final Duration duration;
   final bool Function() condition;
+  final Color color;
   const TAnimatedIcon({
     super.key,
     required this.animatedIconData,
     required this.duration,
     required this.condition,
+    required this.color,
   });
 
   @override
@@ -36,7 +38,7 @@ class _TAnimatedIconState extends State<TAnimatedIcon>
 
   @override
   void didUpdateWidget(covariant TAnimatedIcon oldWidget) {
-    if (!condition()) {
+    if (condition()) {
       controller.forward();
     } else {
       controller.reverse();
@@ -53,6 +55,7 @@ class _TAnimatedIconState extends State<TAnimatedIcon>
   @override
   Widget build(BuildContext context) {
     return AnimatedIcon(
+      color: widget.color,
       icon: widget.animatedIconData,
       progress: animation,
     );

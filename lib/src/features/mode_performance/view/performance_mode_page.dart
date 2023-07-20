@@ -6,20 +6,19 @@ import 'package:shebalin/src/features/locations/bloc/location_bloc.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/map_performance/view/map_page.dart';
-import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_player.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
+import 'package:shebalin/src/features/mode_performance/view/widgets/continue_button.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/panel_widget.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/progress_bar.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/tip.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
+import 'package:shebalin/src/theme/ui/animated_visibility.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class PerformanceModePage extends StatefulWidget {
-  final mapbloc = PerfModeMapBloc();
   static const routeName = '/performance-mode-screen';
   PerformanceModePage({
     super.key,
@@ -56,7 +55,8 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
           return MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => ModePerformanceBloc(
+                create: (context) => PerfModeBloc(
+                  [],
                   0,
                   locations.length,
                   performanceTitle,
@@ -72,11 +72,6 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                         listAudio: locations[0].paidAudioLink,
                       ),
                     );
-                },
-              ),
-              BlocProvider<PerfModeMapBloc>(
-                create: (context) {
-                  return widget.mapbloc;
                 },
               ),
             ],
@@ -100,17 +95,12 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                           controller: panelController,
                           locations: locations,
                         ),
-                        body: BlocBuilder<ModePerformanceBloc,
-                            ModePerformanceState>(
-                          builder: (context, state) {
-                            return MapPage(
-                              locations: locations,
-                              initialCoords: const Point(
-                                latitude: 54.988707,
-                                longitude: 73.368659,
-                              ),
-                            );
-                          },
+                        body: MapPage(
+                          locations: locations,
+                          initialCoords: const Point(
+                            latitude: 54.988707,
+                            longitude: 73.368659,
+                          ),
                         ),
                         onPanelSlide: (position) {
                           setState(() {
@@ -122,6 +112,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                       ),
                       Positioned(
                         right: 15,
+                        left: 15,
                         bottom: heightButton + 160,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -129,7 +120,9 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                             FloatingActionButton(
                               heroTag: "getUserLocation",
                               backgroundColor: Colors.white,
-                              onPressed: _getUserBloc,
+                              onPressed: () => context
+                                  .read<PerfModeBloc>()
+                                  .add(PerfModeGetUserLocationEvent(locations)),
                               child: const Image(
                                 image: AssetImage(ImagesSources.locationIcon),
                               ),
@@ -139,9 +132,19 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                             ),
                             BlocBuilder<AudioPlayerBloc, AudioPlayerState>(
                               builder: (context, state) {
-                                return Visibility(
-                                  visible: state is AudioPlayerFinishedState,
-                                  child: const Tip(),
+                                return AnimatedVisibility(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn,
+                                  isVisible: state is AudioPlayerFinishedState,
+                                  child: ContinueButton(
+                                    title:
+                                        'Я уже добрался до следующей локации',
+                                    onTap: () => {
+                                      context.read<PerfModeBloc>().add(
+                                            PerfModeCurrentLocationUpdate(),
+                                          )
+                                    },
+                                  ),
                                 );
                               },
                             ),
@@ -154,7 +157,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                     ],
                   ),
                   bottomNavigationBar:
-                      BlocConsumer<ModePerformanceBloc, ModePerformanceState>(
+                      BlocConsumer<PerfModeBloc, PerfModeState>(
                     listenWhen: (previous, current) {
                       return previous.indexLocation < current.indexLocation;
                     },
@@ -230,16 +233,12 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
       context: context,
       builder: (_) => DialogWindow(
         title: "Завершить спектакль?",
-        subtitle: "Прогресс прохождения не будет сохранен.",
-        onPressedCancel: onPressedCancel,
-        titleApprove: "Завершить",
-        titleCancel: "Отмена",
-        onPressedApprove: onPressedApprove,
+        subtitle: "Прогресс прохождения не будет\nсохранен.",
+        onTapPrimary: onPressedApprove,
+        titlePrimary: "Завершить",
+        titleSecondary: "Отмена",
+        onTapSecondary: onPressedCancel,
       ),
     );
-  }
-
-  void _getUserBloc() {
-    widget.mapbloc.add(PerfModeMapGetUserLocationEvent());
   }
 }

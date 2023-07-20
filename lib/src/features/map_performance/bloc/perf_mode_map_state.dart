@@ -1,42 +1,134 @@
 part of 'perf_mode_map_bloc.dart';
 
-abstract class PerfModeMapState extends Equatable {
+abstract class PerfModeState extends Equatable {
   final List<MapObject> mapObjects;
+  final int indexLocation;
+  final int countLocations;
+  final String performanceTitle;
+  final String imagePerformanceLink;
 
-  const PerfModeMapState(this.mapObjects);
+  const PerfModeState(
+    this.mapObjects,
+    this.indexLocation,
+    this.countLocations,
+    this.performanceTitle,
+    this.imagePerformanceLink,
+  );
 
   @override
-  List<Object> get props => [mapObjects];
+  List<Object> get props => [
+        mapObjects,
+        indexLocation,
+        countLocations,
+        performanceTitle,
+        imagePerformanceLink
+      ];
 
-  PerfModeMapState copyWith({List<MapObject>? mapObjects});
+  PerfModeState copyWith({
+    List<MapObject>? mapObjects,
+    int? indexLocation,
+    int? countLocations,
+  });
 }
 
-class PerfModeMapInProgress extends PerfModeMapState {
-  const PerfModeMapInProgress(super.mapObjects);
+class PerfModeInProgress extends PerfModeState {
+  const PerfModeInProgress(
+    super.mapObjects,
+    super.indexLocation,
+    super.countLocations,
+    super.performanceTitle,
+    super.imagePerformanceLink,
+  );
   @override
-  List<Object> get props => [mapObjects];
+  List<Object> get props => [
+        mapObjects,
+        indexLocation,
+        countLocations,
+        performanceTitle,
+        imagePerformanceLink
+      ];
   @override
-  PerfModeMapInProgress copyWith({List<MapObject>? mapObjects}) {
-    return PerfModeMapInProgress(mapObjects ?? this.mapObjects);
+  PerfModeInProgress copyWith({
+    List<MapObject>? mapObjects,
+    int? indexLocation,
+    int? countLocations,
+    String? performanceTitle,
+    String? imagePerformanceLink,
+  }) {
+    return PerfModeInProgress(
+      mapObjects ?? this.mapObjects,
+      indexLocation ?? this.indexLocation,
+      countLocations ?? this.countLocations,
+      performanceTitle ?? this.performanceTitle,
+      imagePerformanceLink ?? this.imagePerformanceLink,
+    );
   }
 }
 
-class PerfModeMapLoadSuccess extends PerfModeMapState {
-  const PerfModeMapLoadSuccess(super.mapObjects);
+class PerfModeLoadSuccess extends PerfModeState {
+  const PerfModeLoadSuccess(
+    super.mapObjects,
+    super.indexLocation,
+    super.countLocations,
+    super.performanceTitle,
+    super.imagePerformanceLink,
+  );
   @override
-  List<Object> get props => [mapObjects];
+  List<Object> get props => [
+        mapObjects,
+        indexLocation,
+        countLocations,
+        performanceTitle,
+        imagePerformanceLink
+      ];
   @override
-  PerfModeMapLoadSuccess copyWith({List<MapObject>? mapObjects}) {
-    return PerfModeMapLoadSuccess(mapObjects ?? this.mapObjects);
+  PerfModeLoadSuccess copyWith({
+    List<MapObject>? mapObjects,
+    int? indexLocation,
+    int? countLocations,
+    String? performanceTitle,
+    String? imagePerformanceLink,
+  }) {
+    return PerfModeLoadSuccess(
+      mapObjects ?? this.mapObjects,
+      indexLocation ?? this.indexLocation,
+      countLocations ?? this.countLocations,
+      performanceTitle ?? this.performanceTitle,
+      imagePerformanceLink ?? this.imagePerformanceLink,
+    );
   }
 }
 
-class PerfModeMapFailure extends PerfModeMapState {
-  const PerfModeMapFailure(super.mapObjects);
+class PerfModeFailure extends PerfModeState {
+  const PerfModeFailure(
+    super.mapObjects,
+    super.indexLocation,
+    super.countLocations,
+    super.performanceTitle,
+    super.imagePerformanceLink,
+  );
   @override
-  List<Object> get props => [mapObjects];
+  List<Object> get props => [
+        mapObjects,
+        indexLocation,
+        countLocations,
+        performanceTitle,
+        imagePerformanceLink
+      ];
   @override
-  PerfModeMapFailure copyWith({List<MapObject>? mapObjects}) {
-    return PerfModeMapFailure(mapObjects ?? this.mapObjects);
+  PerfModeFailure copyWith({
+    List<MapObject>? mapObjects,
+    int? indexLocation,
+    int? countLocations,
+    String? performanceTitle,
+    String? imagePerformanceLink,
+  }) {
+    return PerfModeFailure(
+      mapObjects ?? this.mapObjects,
+      indexLocation ?? this.indexLocation,
+      countLocations ?? this.countLocations,
+      performanceTitle ?? this.performanceTitle,
+      imagePerformanceLink ?? this.imagePerformanceLink,
+    );
   }
 }
