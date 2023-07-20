@@ -45,11 +45,13 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     on<PerfModePinsLoadEvent>(_onPerfModeMapPinsLoad);
     on<PerfModeRoutesLoadEvent>(_onPerfModeMapRoutesLoad);
     on<PerfModeCurrentLocationUpdate>(_onModePerformanceCurrentLocationUpdate);
+    on<PerfModeUserOnPlaceNow>(_onPerfModeUserOnPlaceNow);
   }
 
   @override
   Future<void> close() async {
     positionStream.cancel();
+    audioPlayerBlocSub.cancel();
     super.close();
   }
 
@@ -91,21 +93,39 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
       positionStream =
           Geolocator.getPositionStream(locationSettings: locationSettings)
               .listen((Position? position) {
-        if (audioPlayerState is AudioPlayerFinishedState) {
-          if (state.indexLocation < state.countLocations - 1) {
-            final dist = Geolocator.distanceBetween(
-              position!.latitude,
-              position.longitude,
-              double.parse(event.locations[state.indexLocation + 1].latitude),
-              double.parse(event.locations[state.indexLocation + 1].longitude),
-            );
-            if (dist < 20) {
+        if (state.indexLocation < state.countLocations - 1) {
+          final dist = Geolocator.distanceBetween(
+            position!.latitude,
+            position.longitude,
+            double.parse(event.locations[state.indexLocation + 1].latitude),
+            double.parse(event.locations[state.indexLocation + 1].longitude),
+          );
+          log('${dist}');
+          if (dist < 20) {
+            add(PerfModeUserOnPlaceNow());
+            if (audioPlayerState is AudioPlayerFinishedState) {
               add(PerfModeCurrentLocationUpdate());
             }
           }
+        } else {
+          add(
+            PerfModePinsLoadEvent(
+              state.indexLocation,
+              state.countLocations,
+              event.locations,
+            ),
+          );
+          add(
+            PerfModeRoutesLoadEvent(
+              state.indexLocation,
+              state.countLocations,
+              event.locations,
+            ),
+          );
         }
       });
     });
+
     mapcontroller.toggleUserLayer(
       visible: true,
       autoZoomEnabled: true,
@@ -189,13 +209,15 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
       );
     }
     state.mapObjects.addAll(placemarks);
-    emit(PerfModeLoadSuccess(
-      state.mapObjects,
-      state.indexLocation,
-      state.countLocations,
-      state.performanceTitle,
-      state.imagePerformanceLink,
-    ));
+    emit(
+      PerfModeLoadSuccess(
+        state.mapObjects,
+        state.indexLocation,
+        state.countLocations,
+        state.performanceTitle,
+        state.imagePerformanceLink,
+      ),
+    );
   }
 
   Future<FutureOr<void>> _onPerfModeMapRoutesLoad(
@@ -337,5 +359,20 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     );
 
     return userLocationView;
+  }
+
+  FutureOr<void> _onPerfModeUserOnPlaceNow(
+    PerfModeUserOnPlaceNow event,
+    Emitter<PerfModeState> emit,
+  ) {
+    emit(
+      PerfModeUserOnPlace(
+        state.mapObjects,
+        state.indexLocation,
+        state.countLocations,
+        state.performanceTitle,
+        state.imagePerformanceLink,
+      ),
+    );
   }
 }
