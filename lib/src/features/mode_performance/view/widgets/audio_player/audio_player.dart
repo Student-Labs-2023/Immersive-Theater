@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
+import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
+import 'package:shebalin/src/theme/ui/animated_icon.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_info.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/continue_button.dart';
+import 'package:shebalin/src/features/review/view/review_page.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
-import 'package:shebalin/src/theme/theme.dart';
 
 class AudioPlayerPanel extends StatefulWidget {
   const AudioPlayerPanel({
@@ -19,6 +20,7 @@ class AudioPlayerPanel extends StatefulWidget {
 }
 
 class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
+  late int currentIndex;
   @override
   void initState() {
     initializeDateFormatting();
@@ -26,8 +28,26 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
   }
 
   @override
+  void didChangeDependencies() {
+    currentIndex = context.watch<PerfModeBloc>().state.indexLocation;
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AudioPlayerBloc, AudioPlayerState>(
+    return BlocConsumer<AudioPlayerBloc, AudioPlayerState>(
+      listenWhen: (previous, current) {
+        return current is AudioPlayerFinishedState;
+      },
+      listener: (context, state) {
+        final int indexLastLocation =
+            context.read<PerfModeBloc>().state.countLocations - 1;
+
+        if (state is AudioPlayerFinishedState &&
+            currentIndex == indexLastLocation) {
+          Navigator.pushNamed(context, ReviewPage.routeName);
+        }
+      },
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,9 +60,9 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
                 ),
                 Expanded(
                   child: Slider(
-                    thumbColor: accentTextColor,
-                    activeColor: accentTextColor,
-                    inactiveColor: secondaryTextColor,
+                    thumbColor: AppColor.purplePrimary,
+                    activeColor: AppColor.purplePrimary,
+                    inactiveColor: AppColor.grey,
                     min: 0,
                     max: state.duration.inSeconds.toDouble(),
                     value: state.position.inSeconds.toDouble(),
@@ -64,7 +84,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
+                  child: BlocBuilder<PerfModeBloc, PerfModeState>(
                     builder: (context, state) {
                       return AudioInfoWidget(
                         performanceTitle: state.performanceTitle,
@@ -74,16 +94,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
                     },
                   ),
                 ),
-                state is AudioPlayerFinishedState
-                    ? ContinueButton(
-                        title: "Продолжить",
-                        onTap: () {
-                          context.read<ModePerformanceBloc>().add(
-                                ModePerformanceCurrentLocationUpdate(),
-                              );
-                        },
-                      )
-                    : buttons(),
+                buttons(state is AudioPlayerFinishedState),
               ],
             ),
           ],
@@ -92,30 +103,39 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
     );
   }
 
-  Widget buttons() {
+  Widget buttons(bool isNotActive) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         IconButton(
-          onPressed: () => context
-              .read<AudioPlayerBloc>()
-              .add(AudioPlayerWindBackButtonPressedEvent()),
+          onPressed: isNotActive
+              ? null
+              : () => context
+                  .read<AudioPlayerBloc>()
+                  .add(AudioPlayerWindBackButtonPressedEvent()),
           iconSize: 40.0,
           icon: Image.asset(ImagesSources.audioBackButton),
         ),
         IconButton(
-          onPressed: () => context
-              .read<AudioPlayerBloc>()
-              .add(AudioPlayerPlayPauseButtonPressedEvent()),
+          onPressed: isNotActive
+              ? null
+              : () => context
+                  .read<AudioPlayerBloc>()
+                  .add(AudioPlayerPlayPauseButtonPressedEvent()),
           iconSize: 40.0,
-          icon: context.watch<AudioPlayerBloc>().state.isPlaying
-              ? Image.asset(ImagesSources.pauseButton)
-              : Image.asset(ImagesSources.playButton),
+          icon: TAnimatedIcon(
+            condition: () => context.watch<AudioPlayerBloc>().state.isPlaying,
+            animatedIconData: AnimatedIcons.play_pause,
+            color: AppColor.blackText,
+            duration: const Duration(milliseconds: 300),
+          ),
         ),
         IconButton(
-          onPressed: () => context
-              .read<AudioPlayerBloc>()
-              .add(AudioPlayerWindForwardButtonPressedEvent()),
+          onPressed: isNotActive
+              ? null
+              : () => context
+                  .read<AudioPlayerBloc>()
+                  .add(AudioPlayerWindForwardButtonPressedEvent()),
           iconSize: 40.0,
           icon: Image.asset(ImagesSources.audioForwardButton),
         )

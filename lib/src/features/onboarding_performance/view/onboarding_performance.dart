@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/features/mode_performance/view/performance_mode_page.dart';
 import 'package:shebalin/src/features/onboarding_performance/models/onboard_performance.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance_args.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_container.dart';
@@ -28,11 +29,11 @@ class OnboardingPerformance extends StatefulWidget {
 }
 
 class _OnboardingPerformanceState extends State<OnboardingPerformance> {
-  late final List<OnboardPerformance> pages;
+  late List<OnboardPerformance> pages;
   int currentIndex = 0;
   bool get curIndexLessLastindex => currentIndex < pages.length - 1;
   bool get showOneButtonAtHome => currentIndex != 0 || listenAtHome;
-  late final bool listenAtHome;
+  late bool listenAtHome;
   @override
   void didChangeDependencies() {
     final OnboardingPerformanceArgs args =
@@ -113,5 +114,10 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
     }
   }
 
-  void _openPerfModeScreen() {}
+  void _openPerfModeScreen() {
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      PerformanceModePage.routeName,
+      (route) => false,
+    );
+  }
 }

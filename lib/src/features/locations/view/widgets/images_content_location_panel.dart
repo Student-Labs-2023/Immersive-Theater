@@ -1,7 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:api_client/api_client.dart';
+
+import '../../../view_images/models/image_view_args.dart';
+import '../../../view_images/view/images_view_page.dart';
 
 class ImagesContentLocationPanel extends StatelessWidget {
   const ImagesContentLocationPanel({super.key, required this.imageLinks});
@@ -25,17 +29,41 @@ class ImagesContentLocationPanel extends StatelessWidget {
             );
           } else {
             return Container(
-              margin: const EdgeInsets.only(right: 8, left: 8),
-              height: MediaQuery.of(context).size.height * 0.17,
-              width: MediaQuery.of(context).size.height * 0.17,
-              clipBehavior: Clip.hardEdge,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(4)),
-              ),
-              child: CachedNetworkImage(
-                imageUrl:ApiClient.baseUrl + imageLinks[index],
-              ),
-            );
+                margin: const EdgeInsets.only(
+                  right: 8,
+                ),
+                height: MediaQuery.of(context).size.height * 0.17,
+                width: MediaQuery.of(context).size.height * 0.17,
+                clipBehavior: Clip.hardEdge,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                ),
+                child: InkWell(
+                  onTap: () => Navigator.of(context).pushNamed(
+                    ImagesViewPage.routeName,
+                    arguments: ImageViewArgs(imageLinks, index),
+                  ),
+                  child: CachedNetworkImage(
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                    height: 88,
+                    width: 88,
+                    imageUrl: ApiClient.baseUrl + imageLinks[index],
+                    fit: BoxFit.fill,
+                    placeholder: (contxt, string) => const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.whiteText,
+                      ),
+                    ),
+                  ),
+                ));
           }
         },
       ),

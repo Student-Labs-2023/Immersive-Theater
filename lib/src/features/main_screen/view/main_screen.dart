@@ -5,9 +5,11 @@ import 'package:shebalin/src/features/locations/view/location_description_panel_
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/map/view/yandex_map_page.dart';
 import 'package:shebalin/src/features/performances/view/performances_panel_page.dart';
-import 'package:shebalin/src/features/promocodes/view/own_promocodes_screen.dart';
+import 'package:shebalin/src/features/promocodes/view/widgets/input_promocode_panel_page.dart';
+import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
 import 'package:shebalin/src/features/user/view/personal_panel_page.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 
 import 'package:shebalin/src/theme/theme.dart';
@@ -66,40 +68,28 @@ class _MainScreenState extends State<MainScreen> {
                       const Padding(padding: EdgeInsets.only(left: 20)),
                       TextButton(
                         onPressed: () => _isPerformancePanelShowed(true),
-                        child: Text(
-                          "Спектакли",
-                          style: isPerfomnceButtonPressed
-                              ? TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                                color: primaryTextColor,
-                              )
-                              : TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                                color: primaryTextColor,
-                              ).copyWith(color: secondaryTextColor),
-                        ),
+                        child: Text("Спектакли",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                              color: isPerfomnceButtonPressed
+                                  ? AppColor.blackText
+                                  : AppColor.greyText,
+                            )),
                       ),
                       const SizedBox(
                         width: 40,
                       ),
                       TextButton(
                         onPressed: () => _isPerformancePanelShowed(false),
-                        child: Text(
-                          "Мои билеты",
-                          style: isPerfomnceButtonPressed
-                              ? TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                                color: primaryTextColor,
-                              ).copyWith(color: secondaryTextColor)
-                              :TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                                color: primaryTextColor,
-                              ) ,
-                        ),
+                        child: Text("Мои билеты",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                              color: isPerfomnceButtonPressed
+                                  ? AppColor.greyText
+                                  : AppColor.blackText,
+                            )),
                       ),
                     ],
                   ),
@@ -139,7 +129,7 @@ class _MainScreenState extends State<MainScreen> {
             if (state is MapPinInitialState) {
               return isPerfomnceButtonPressed
                   ? const PerformancesPanelPage()
-                  :  PromocodeScreen();
+                  : const PromocodePanelPage();
             } else if (state is MapPinLoadingState) {
               return Center(
                 child: CircularProgressIndicator(color: accentTextColor),
@@ -160,7 +150,7 @@ class _MainScreenState extends State<MainScreen> {
               });
               return isPerfomnceButtonPressed
                   ? const PerformancesPanelPage()
-                  :  PromocodeScreen();
+                  : const PromocodePanelPage();
             }
             return const Text('Упс...Что-то пошло не так');
           },
