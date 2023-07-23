@@ -47,10 +47,15 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     on<PerfModeRoutesLoadEvent>(
       _onPerfModeMapRoutesLoad,
     );
-    on<PerfModeCurrentLocationUpdate>(_onModePerformanceCurrentLocationUpdate);
+    on<PerfModeCurrentLocationUpdate>(
+      _onModePerformanceCurrentLocationUpdate,
+    );
     on<PerfModeUserOnPlaceNow>(
       _onPerfModeUserOnPlaceNow,
-      transformer: (events, mapper) => events.distinct().switchMap(mapper),
+      transformer: (events, mapper) => events
+          .debounceTime(const Duration(seconds: 1))
+          .distinct()
+          .switchMap(mapper),
     );
   }
 
@@ -109,11 +114,6 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
         double.parse(event.locations[state.indexLocation + 1].latitude),
         double.parse(event.locations[state.indexLocation + 1].longitude),
       );
-      log(
-        state.toString().substring(0, 20) + state.indexLocation.toString(),
-        name: "state",
-      );
-
       if (dist < 10) {
         add(PerfModeUserOnPlaceNow(state.indexLocation));
       }
@@ -124,13 +124,22 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
         stream.where(
           (perfModeState) => perfModeState is PerfModeUserOnPlace,
         ),
-        audioPlayerBloc.stream.where(
-          (audioPlayerState) => audioPlayerState is AudioPlayerFinishedState,
-        )
+        audioPlayerBloc.stream
+            .where(
+              (audioPlayerState) =>
+                  audioPlayerState is AudioPlayerFinishedState,
+            )
+            .throttleTime(const Duration(seconds: 10))
       ],
-      (values) => {},
+      (values) => {
+        log(
+          (values[0] as PerfModeUserOnPlace).indexLocation.toString() +
+              state.indexLocation.toString(),
+          name: "state",
+        )
+      },
     ).listen((value) {
-      add(PerfModeCurrentLocationUpdate());
+      add(PerfModeCurrentLocationUpdate(state.indexLocation));
     });
 
     mapcontroller.toggleUserLayer(
