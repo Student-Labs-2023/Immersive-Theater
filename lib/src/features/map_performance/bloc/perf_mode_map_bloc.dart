@@ -94,7 +94,7 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
       return;
     }
     const LocationSettings locationSettings = LocationSettings(
-      accuracy: LocationAccuracy.best,
+      accuracy: LocationAccuracy.bestForNavigation,
       distanceFilter: 10,
     );
     positionStream =
@@ -109,8 +109,10 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
         double.parse(event.locations[state.indexLocation + 1].latitude),
         double.parse(event.locations[state.indexLocation + 1].longitude),
       );
-      log(state.toString().substring(0, 20) + state.indexLocation.toString(),
-          name: "state");
+      log(
+        state.toString().substring(0, 20) + state.indexLocation.toString(),
+        name: "state",
+      );
 
       if (dist < 10) {
         add(PerfModeUserOnPlaceNow(state.indexLocation));
@@ -126,7 +128,7 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
           (audioPlayerState) => audioPlayerState is AudioPlayerFinishedState,
         )
       ],
-      (values) => values,
+      (values) => {},
     ).listen((value) {
       add(PerfModeCurrentLocationUpdate());
     });
