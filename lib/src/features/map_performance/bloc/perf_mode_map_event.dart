@@ -22,7 +22,13 @@ class PerfModeGetUserLocationEvent extends PerfModeEvent {
 
 class PerfModeCurrentLocationUpdate extends PerfModeEvent {}
 
-class PerfModeUserOnPlaceNow extends PerfModeEvent {}
+class PerfModeUserOnPlaceNow extends PerfModeEvent {
+  final int index;
+
+  PerfModeUserOnPlaceNow(this.index);
+  @override
+  List<Object> get props => [index];
+}
 
 class PerfModeUserLocationAddedEvent extends PerfModeEvent {
   final UserLocationView userLocationView;
