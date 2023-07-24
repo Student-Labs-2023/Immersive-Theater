@@ -53,32 +53,21 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<PerfModeBloc, PerfModeState>(
-      listenWhen: (previous, current) {
-        return previous.indexLocation < current.indexLocation;
-      },
-      listener: (context, state) async {
-        _loadMapPins(state.indexLocation);
-        _loadRoutes(state.indexLocation);
-      },
-      child: Scaffold(
-        body: BlocBuilder<PerfModeBloc, PerfModeState>(
-          builder: (context, state) {
-            return YandexMap(
-              mapType: MapType.vector,
-              mapObjects: state.mapObjects,
-              onMapCreated: (controller) {
-                perfModeMapBloc
-                  ..add(PerfModeInitialEvent(controller))
-                  ..add(PerfModeMoveCameraEvent(widget.initialCoords));
-                _loadMapPins(startIndex);
-                _loadRoutes(startIndex);
-              },
-              onUserLocationAdded: _onUserLocationAddedCallback,
-            );
+    return BlocBuilder<PerfModeBloc, PerfModeState>(
+      builder: (context, state) {
+        return YandexMap(
+          mapType: MapType.vector,
+          mapObjects: state.mapObjects,
+          onMapCreated: (controller) {
+            perfModeMapBloc
+              ..add(PerfModeInitialEvent(controller))
+              ..add(PerfModeMoveCameraEvent(widget.initialCoords));
+            _loadMapPins(startIndex);
+            _loadRoutes(startIndex);
           },
-        ),
-      ),
+          onUserLocationAdded: _onUserLocationAddedCallback,
+        );
+      },
     );
   }
 

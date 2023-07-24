@@ -139,6 +139,20 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
         )
       },
     ).listen((value) {
+      add(
+        PerfModeRoutesLoadEvent(
+          state.indexLocation + 1,
+          countLocations,
+          event.locations,
+        ),
+      );
+      add(
+        PerfModePinsLoadEvent(
+          state.indexLocation + 1,
+          countLocations,
+          event.locations,
+        ),
+      );
       add(PerfModeCurrentLocationUpdate(state.indexLocation));
     });
 
