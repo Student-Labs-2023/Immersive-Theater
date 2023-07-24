@@ -58,8 +58,8 @@ class _MapPageState extends State<MapPage> {
         return previous.indexLocation < current.indexLocation;
       },
       listener: (context, state) async {
-        // _loadMapPins(state.indexLocation);
-        // _loadRoutes(state.indexLocation);
+        _loadMapPins(state.indexLocation);
+        _loadRoutes(state.indexLocation);
       },
       child: Scaffold(
         body: BlocBuilder<PerfModeBloc, PerfModeState>(
