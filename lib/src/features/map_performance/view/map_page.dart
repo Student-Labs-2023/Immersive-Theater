@@ -36,7 +36,6 @@ class _MapPageState extends State<MapPage> {
       PerfModePinsLoadEvent(
         index,
         countLocations,
-        widget.locations,
       ),
     );
   }
@@ -46,7 +45,6 @@ class _MapPageState extends State<MapPage> {
       PerfModeRoutesLoadEvent(
         index,
         countLocations,
-        widget.locations,
       ),
     );
   }

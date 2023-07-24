@@ -58,6 +58,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                   performanceTitle,
                   imageLink,
                   audioPlayerBloc,
+                  locations,
                 ),
               ),
               BlocProvider(

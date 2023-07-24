@@ -23,6 +23,7 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
   final String imagePerformanceLink;
   final AudioPlayerBloc audioPlayerBloc;
   late StreamSubscription subscriptionStateBothBlocs;
+  final List<Location> locations;
   UserLocationView? userLocationView;
   PerfModeBloc(
     this.mapObjects,
@@ -31,6 +32,7 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     this.performanceTitle,
     this.imagePerformanceLink,
     this.audioPlayerBloc,
+    this.locations,
   ) : super(
           PerfModeInProgress(
             mapObjects,
@@ -119,43 +121,6 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
       }
     });
 
-    subscriptionStateBothBlocs = ZipStream(
-      [
-        stream.where(
-          (perfModeState) => perfModeState is PerfModeUserOnPlace,
-        ),
-        audioPlayerBloc.stream
-            .where(
-              (audioPlayerState) =>
-                  audioPlayerState is AudioPlayerFinishedState,
-            )
-            .throttleTime(const Duration(seconds: 10))
-      ],
-      (values) => {
-        log(
-          (values[0] as PerfModeUserOnPlace).indexLocation.toString() +
-              state.indexLocation.toString(),
-          name: "state",
-        )
-      },
-    ).listen((value) {
-      add(
-        PerfModeRoutesLoadEvent(
-          state.indexLocation + 1,
-          countLocations,
-          event.locations,
-        ),
-      );
-      add(
-        PerfModePinsLoadEvent(
-          state.indexLocation + 1,
-          countLocations,
-          event.locations,
-        ),
-      );
-      add(PerfModeCurrentLocationUpdate(state.indexLocation));
-    });
-
     mapcontroller.toggleUserLayer(
       visible: true,
       autoZoomEnabled: true,
@@ -207,6 +172,40 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
   ) {
     log('_onInitialEvent', name: 'Theater');
     mapcontroller = event.controller;
+    subscriptionStateBothBlocs = ZipStream(
+      [
+        stream.where(
+          (perfModeState) => perfModeState is PerfModeUserOnPlace,
+        ),
+        audioPlayerBloc.stream
+            .where(
+              (audioPlayerState) =>
+                  audioPlayerState is AudioPlayerFinishedState,
+            )
+            .throttleTime(const Duration(seconds: 10))
+      ],
+      (values) => {
+        log(
+          (values[0] as PerfModeUserOnPlace).indexLocation.toString() +
+              state.indexLocation.toString(),
+          name: "state",
+        )
+      },
+    ).listen((value) {
+      add(
+        PerfModeRoutesLoadEvent(
+          state.indexLocation + 1,
+          countLocations,
+        ),
+      );
+      add(
+        PerfModePinsLoadEvent(
+          state.indexLocation + 1,
+          countLocations,
+        ),
+      );
+      add(PerfModeCurrentLocationUpdate(state.indexLocation));
+    });
   }
 
   Future<FutureOr<void>> _onPerfModeMapPinsLoad(
@@ -225,7 +224,6 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     );
     final int indexLocation = event.index;
     final countLocations = event.countLocations;
-    final locations = event.locations;
     final List<MapObject> placemarks = [];
 
     for (var i = 0; i < countLocations; i++) {
@@ -278,7 +276,6 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     );
     final int indexLocation = event.index;
     final countLocations = event.countLocations;
-    final locations = event.locations;
 
     final locationsNotDone = locations.sublist(indexLocation);
 

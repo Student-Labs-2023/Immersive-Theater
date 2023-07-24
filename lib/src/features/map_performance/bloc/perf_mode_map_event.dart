@@ -48,27 +48,23 @@ class PerfModeUserLocationAddedEvent extends PerfModeEvent {
 class PerfModePinsLoadEvent extends PerfModeEvent {
   final int index;
   final int countLocations;
-  final List<Location> locations;
   const PerfModePinsLoadEvent(
     this.index,
     this.countLocations,
-    this.locations,
   );
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [index, countLocations];
 }
 
 class PerfModeRoutesLoadEvent extends PerfModeEvent {
   final int index;
   final int countLocations;
-  final List<Location> locations;
   const PerfModeRoutesLoadEvent(
     this.index,
     this.countLocations,
-    this.locations,
   );
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [index, countLocations];
 }
 
 class PerfModeMoveCameraEvent extends PerfModeEvent {
