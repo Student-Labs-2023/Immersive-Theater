@@ -57,7 +57,11 @@ class _AnimatedBottomSheetState extends State<AnimatedBottomSheet>
       ),
       child: SizeTransition(
         sizeFactor: _animation,
-        child: widget.child,
+        child: AnimatedSize(
+          curve: Curves.ease,
+          duration: const Duration(milliseconds: 500),
+          child: widget.child,
+        ),
       ),
     );
   }
