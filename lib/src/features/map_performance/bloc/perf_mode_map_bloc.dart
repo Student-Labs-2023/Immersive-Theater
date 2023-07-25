@@ -3,10 +3,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:location_service/location_service.dart';
 import 'package:locations_repository/locations_repository.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
-import 'dart:developer';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -14,8 +14,6 @@ part 'perf_mode_map_event.dart';
 part 'perf_mode_map_state.dart';
 
 class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
-  late YandexMapController mapcontroller;
-  late StreamSubscription<Position> positionStream;
   final List<MapObject> mapObjects;
   final int indexLocation;
   final int countLocations;
@@ -23,8 +21,11 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
   final String imagePerformanceLink;
   final AudioPlayerBloc audioPlayerBloc;
   late StreamSubscription subscriptionStateBothBlocs;
+  late YandexMapController mapcontroller;
   final List<Location> locations;
+  late StreamSubscription<Position> positionStream;
   UserLocationView? userLocationView;
+  final LocationServiceImpl locationService = LocationServiceImpl();
   PerfModeBloc(
     this.mapObjects,
     this.indexLocation,
@@ -68,49 +69,25 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     super.close();
   }
 
-  Future<bool> _checkServiceEnabled() async {
-    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return false;
-    }
-    return true;
-  }
-
-  Future<bool> _checkPermission() async {
-    log('_checkPermission', name: 'Theater');
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return false;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return false;
-    }
-    return true;
-  }
-
   Future<void> _onGetUserLocationEvent(
     PerfModeGetUserLocationEvent event,
     Emitter<PerfModeState> emit,
   ) async {
-    log('_onGetUserLocationEvent', name: 'Theater');
-    if (!(await _checkServiceEnabled() && await _checkPermission())) {
+    if (!(await locationService.checkLocationPermissionOnDevice() &&
+        await locationService.checkLocationServiceOnDevice())) {
       return;
     }
     const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.bestForNavigation,
       distanceFilter: 10,
     );
-    positionStream =
-        Geolocator.getPositionStream(locationSettings: locationSettings)
-            .listen((Position? position) {
+    positionStream = locationService
+        .getPositionStream(locationSettings)
+        .listen((Position? position) {
       if (state.indexLocation == state.countLocations - 1) {
         return;
       }
-      final dist = Geolocator.distanceBetween(
+      final dist = locationService.getDistanceBetweenTwoLocations(
         position!.latitude,
         position.longitude,
         double.parse(event.locations[state.indexLocation + 1].latitude),
@@ -131,7 +108,6 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     PerfModeCurrentLocationUpdate event,
     Emitter<PerfModeState> emit,
   ) {
-    log('_onModePerformanceCurrentLocationUpdate', name: 'Theater');
     if (state.indexLocation >= state.countLocations - 1) {
       return emit(
         PerfModeInProgress(
@@ -158,7 +134,6 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     PerfModeMoveCameraEvent event,
     Emitter<PerfModeState> emit,
   ) async {
-    log('_onMoveCameraEvent', name: 'Theater');
     mapcontroller.moveCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(zoom: 15, target: event.coords),
@@ -170,7 +145,6 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     PerfModeInitialEvent event,
     Emitter<PerfModeState> emit,
   ) {
-    log('_onInitialEvent', name: 'Theater');
     mapcontroller = event.controller;
     subscriptionStateBothBlocs = ZipStream(
       [
@@ -184,13 +158,7 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
             )
             .throttleTime(const Duration(seconds: 10))
       ],
-      (values) => {
-        log(
-          (values[0] as PerfModeUserOnPlace).indexLocation.toString() +
-              state.indexLocation.toString(),
-          name: "state",
-        )
-      },
+      (values) => {},
     ).listen((value) {
       add(
         PerfModeRoutesLoadEvent(
@@ -212,7 +180,6 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     PerfModePinsLoadEvent event,
     Emitter<PerfModeState> emit,
   ) async {
-    log('_onPerfModeMapPinsLoad', name: 'Theater');
     emit(
       PerfModeInProgress(
         state.mapObjects,
@@ -264,7 +231,6 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     PerfModeRoutesLoadEvent event,
     Emitter<PerfModeState> emit,
   ) async {
-    log('_onPerfModeMapRoutesLoad', name: 'Theater');
     emit(
       PerfModeInProgress(
         state.mapObjects,
@@ -375,7 +341,6 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
   Future<UserLocationView>? onUserLocationAddedCallback(
     UserLocationView locationView,
   ) async {
-    log('onUserLocationAddedCallback', name: 'Theater');
     final PlacemarkIcon userIcon = PlacemarkIcon.single(
       PlacemarkIconStyle(
         image: BitmapDescriptor.fromAssetImage(ImagesSources.userPlacemark),
@@ -406,7 +371,6 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     PerfModeUserOnPlaceNow event,
     Emitter<PerfModeState> emit,
   ) {
-    log('_onPerfModeUserOnPlaceNow', name: 'Theater');
     emit(
       PerfModeUserOnPlace(
         state.mapObjects,
