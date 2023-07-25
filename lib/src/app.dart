@@ -50,7 +50,7 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Shebalin",
         theme: defaultTheme(),
-        initialRoute: '/performance-mode-screen',
+        initialRoute: '/onboarding-performance',
         routes: {
           '/loading-screen': (context) => const LoadingScreen(),
           '/onbording-screen': (context) => const OnbordingScreen(),
@@ -64,7 +64,7 @@ class App extends StatelessWidget {
           '/onboarding-performance': (context) => const OnboardWelcome(),
           '/onboarding-rules': (context) => const OnboardingPerformance(),
           '/review-page': (context) => const ReviewPage(),
-          '/performance-mode-screen': (context) => PerformanceModePage(),
+          '/performance-mode-screen': (context) => const PerformanceModePage(),
         },
       ),
     );
