@@ -46,14 +46,14 @@ class _AnimatedBottomSheetState extends State<AnimatedBottomSheet>
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            blurRadius: 44,
-            spreadRadius: 0,
-            offset: const Offset(0, -12),
-            color: AppColor.blackText.withOpacity(0.12),
+            blurRadius: 4,
+            spreadRadius: 1,
+            offset: const Offset(0, 4),
+            color: AppColor.blackText.withOpacity(0.25),
           )
         ],
         color: AppColor.whiteBackground,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
       ),
       child: SizeTransition(
         sizeFactor: _animation,
