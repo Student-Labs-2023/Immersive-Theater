@@ -46,7 +46,7 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.whiteBackground,
+      backgroundColor: AppColor.accentBackground,
       body: AnimatedImage(image: pages[currentIndex].image),
       bottomSheet: AnimatedBottomSheet(
         child: Padding(

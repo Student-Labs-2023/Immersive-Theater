@@ -41,17 +41,9 @@ class _AnimatedBottomSheetState extends State<AnimatedBottomSheet>
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 4,
-            spreadRadius: 1,
-            offset: const Offset(0, 4),
-            color: AppColor.blackText.withOpacity(0.25),
-          )
-        ],
+      decoration: const BoxDecoration(
         color: AppColor.whiteBackground,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
       ),
       child: SizeTransition(
         sizeFactor: _animation,

@@ -4,6 +4,7 @@ import 'package:shebalin/src/features/onboarding_performance/view/onboarding_per
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_image.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 
 class OnboardWelcome extends StatelessWidget {
@@ -13,6 +14,7 @@ class OnboardWelcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.accentBackground,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         child: Column(
