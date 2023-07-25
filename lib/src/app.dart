@@ -17,7 +17,6 @@ import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.d
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
 import 'package:shebalin/src/features/review/view/review_page.dart';
 import 'package:shebalin/src/features/review/models/emoji.dart';
-import 'package:shebalin/src/features/ticket/view/ticket_page.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
@@ -50,7 +49,7 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Shebalin",
         theme: defaultTheme(),
-        initialRoute: '/onboarding-performance',
+        initialRoute: '/performance-mode-screen',
         routes: {
           '/loading-screen': (context) => const LoadingScreen(),
           '/onbording-screen': (context) => const OnbordingScreen(),
