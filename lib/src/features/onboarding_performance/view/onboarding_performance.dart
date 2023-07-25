@@ -49,7 +49,6 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
       backgroundColor: AppColor.whiteBackground,
       body: AnimatedImage(image: pages[currentIndex].image),
       bottomSheet: AnimatedBottomSheet(
-        needMoreSpace: !showOneButtonAtHome,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
             16,

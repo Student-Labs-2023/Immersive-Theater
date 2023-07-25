@@ -5,11 +5,9 @@ class AnimatedBottomSheet extends StatefulWidget {
   const AnimatedBottomSheet({
     super.key,
     required this.child,
-    required this.needMoreSpace,
   });
 
   final Widget child;
-  final bool needMoreSpace;
 
   @override
   State<AnimatedBottomSheet> createState() => _AnimatedBottomSheetState();
@@ -58,7 +56,7 @@ class _AnimatedBottomSheetState extends State<AnimatedBottomSheet>
       child: SizeTransition(
         sizeFactor: _animation,
         child: AnimatedSize(
-          curve: Curves.ease,
+          curve: Curves.easeOut,
           duration: const Duration(milliseconds: 500),
           child: widget.child,
         ),
