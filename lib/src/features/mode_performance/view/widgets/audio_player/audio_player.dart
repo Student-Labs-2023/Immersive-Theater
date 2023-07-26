@@ -42,7 +42,6 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
       listener: (context, state) {
         final int indexLastLocation =
             context.read<PerfModeBloc>().state.countLocations - 1;
-
         if (state is AudioPlayerFinishedState &&
             currentIndex == indexLastLocation) {
           Navigator.pushNamed(context, ReviewPage.routeName);
@@ -114,7 +113,10 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
                   .read<AudioPlayerBloc>()
                   .add(AudioPlayerWindBackButtonPressedEvent()),
           iconSize: 40.0,
-          icon: Image.asset(ImagesSources.audioBackButton),
+          icon: Image.asset(
+            ImagesSources.audioBackButton,
+            color: isNotActive ? AppColor.grey : null,
+          ),
         ),
         IconButton(
           onPressed: isNotActive
@@ -126,7 +128,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
           icon: TAnimatedIcon(
             condition: () => context.watch<AudioPlayerBloc>().state.isPlaying,
             animatedIconData: AnimatedIcons.play_pause,
-            color: AppColor.blackText,
+            color: isNotActive ? AppColor.grey : AppColor.blackText,
             duration: const Duration(milliseconds: 300),
           ),
         ),
@@ -137,7 +139,10 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
                   .read<AudioPlayerBloc>()
                   .add(AudioPlayerWindForwardButtonPressedEvent()),
           iconSize: 40.0,
-          icon: Image.asset(ImagesSources.audioForwardButton),
+          icon: Image.asset(
+            ImagesSources.audioForwardButton,
+            color: isNotActive ? AppColor.grey : null,
+          ),
         )
       ],
     );

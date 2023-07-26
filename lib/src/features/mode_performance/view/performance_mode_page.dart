@@ -8,7 +8,6 @@ import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.da
 import 'package:shebalin/src/features/map_performance/view/map_page.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_player.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/continue_button.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/panel_widget.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/progress_bar.dart';
@@ -22,7 +21,7 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class PerformanceModePage extends StatefulWidget {
   static const routeName = '/performance-mode-screen';
-  PerformanceModePage({
+  const PerformanceModePage({
     super.key,
   });
 
@@ -31,7 +30,7 @@ class PerformanceModePage extends StatefulWidget {
 }
 
 class _PerformanceModePageState extends State<PerformanceModePage> {
-  late double heightButton = 10.0;
+  late double heightButton = 3.0;
   final panelController = PanelController();
   late List<Location> locations;
   final String performanceTitle = 'Шебалин в Омске';
@@ -59,6 +58,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                   performanceTitle,
                   imageLink,
                   audioPlayerBloc,
+                  locations,
                 ),
               ),
               BlocProvider(
@@ -96,8 +96,9 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                         body: MapPage(
                           locations: locations,
                           initialCoords: Point(
-                              latitude: double.parse(locations[0].latitude),
-                              longitude: double.parse(locations[0].longitude)),
+                            latitude: double.parse(locations[0].latitude),
+                            longitude: double.parse(locations[0].longitude),
+                          ),
                         ),
                         onPanelSlide: (position) {
                           setState(() {
@@ -110,9 +111,10 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                       Positioned(
                         right: 15,
                         left: 15,
-                        bottom: heightButton + 160,
+                        bottom: heightButton + 175,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             FloatingActionButton(
                               heroTag: "getUserLocation",
@@ -192,7 +194,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
             ),
           );
         }
-        return AppProgressBar();
+        return const AppProgressBar();
       },
     );
   }
