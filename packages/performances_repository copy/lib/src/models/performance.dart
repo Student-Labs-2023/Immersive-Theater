@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:performances_repository/src/models/author.dart';
+import 'package:performances_repository/src/models/creator.dart';
 import 'package:performances_repository/src/models/chapter.dart';
 
-// part 'performance.g.dart';
+part 'performance.g.dart';
 
 @JsonSerializable()
 class Performance {
@@ -13,26 +13,28 @@ class Performance {
 
   @JsonKey(name: 'image_link')
   final String imageLink;
-
-  final List<Creator> authors;
+  @JsonKey(name: 'authors')
+  final List<Creator> creators;
   final String? description;
   final Duration? duration;
   final List<String>? images;
-  @JsonKey(name: 'authors')
+  @JsonKey(name: 'audio')
+  // TODO: replace key
   final List<Chapter>? chapters;
 
   Performance({
     required this.id,
     required this.title,
     required this.imageLink,
-    required this.authors,
+    required this.creators,
     required this.description,
     required this.duration,
     required this.images,
     required this.chapters,
   });
 
-  // factory Performance.fromJson(Map<String, dynamic> json) => _$PerformanceFromJson(json);
+  factory Performance.fromJson(Map<String, dynamic> json) =>
+      _$PerformanceFromJson(json);
 
-  // Map<String, dynamic> toJson() => {_$PerformanceToJson(this)};
+  Map<String, dynamic> toJson() => _$PerformanceToJson(this);
 }

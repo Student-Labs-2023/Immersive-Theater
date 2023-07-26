@@ -31,27 +31,21 @@ class PerformancesRepositoryImpl implements PerformancesRepository {
     final result = ResponseMapper.fromJson(response.data);
     final List<Performance> performances = [];
     for (final rawPerformance in result.data) {
-      // performances.add(Performance.fromJson(rawPerformance));
+      performances.add(Performance.fromJson(rawPerformance));
     }
 
     return performances;
   }
 
   @override
-  Future<Performance> fetchPerformanceById() {
-    // TODO: implement fetchPerformanceById
-    throw UnimplementedError();
+  Future<Performance> fetchPerformanceById(String id) async {
+    final response = await _apiClient.dio.get(
+        _PerformancesEndpoint.byId.endpoint + id,
+        options: Options(headers: {"Authorization": "Bearer $apiKey"}),
+        queryParameters: {'apiKey': apiKey});
+// TODO: replace params auth
+    final result = ResponseMapper.fromJson(response.data);
+    final Performance performance = Performance.fromJson(result.data.first);
+    return performance;
   }
-
-  // @override
-  // Future<Performance> fetchPerformanceById(String id) async {
-  //   final response = await _apiClient.dio.get(
-  //       _PerformancesEndpoint.byId.endpoint + id,
-  //       options: Options(headers: {"Authorization": "Bearer $apiKey"}),
-  //       queryParameters: {'apiKey': apiKey});
-
-  //   final result = ResponseMapper.fromJson(response.data);
-  //   final Performance performance = Performance.fromJson(result.data);
-  //   return performance;
-  // }
 }

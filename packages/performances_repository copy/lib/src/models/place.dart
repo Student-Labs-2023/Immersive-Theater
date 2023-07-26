@@ -1,8 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
+part 'place.g.dart';
 
 @JsonSerializable()
 class Place {
-  @JsonKey(name: 'authors')
+  @JsonKey(name: 'name')
   final String title;
   final String address;
   final double longitude;
@@ -14,4 +15,8 @@ class Place {
     required this.longitude,
     required this.latitude,
   });
+
+  factory Place.fromJson(Map<String, dynamic> json) => _$PlaceFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PlaceToJson(this);
 }
