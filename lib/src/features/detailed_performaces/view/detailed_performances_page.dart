@@ -10,7 +10,6 @@ import 'package:shebalin/src/features/detailed_performaces/view/widgets/audio_de
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/author_card.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
-import 'package:shebalin/src/theme/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shebalin/src/features/photo_slider/view/widgets/tiktok_photo.dart';
 
@@ -43,10 +42,12 @@ class _PerfomanceDescriptionScreenState
   @override
   Widget build(BuildContext context) {
     var mediaQuerySize = MediaQuery.of(context).size;
-    final List<Widget> imageSliders = widget.performance.imagesList
-        .map((e) => TikTokPhoto(
-              entry: e,
-            ))
+    final List<Widget> imageSliders = widget.performance.images!
+        .map(
+          (e) => TikTokPhoto(
+            entry: e,
+          ),
+        )
         .toList();
     return Scaffold(
       body: CustomScrollView(
@@ -62,7 +63,7 @@ class _PerfomanceDescriptionScreenState
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: false,
               background: CachedNetworkImage(
-                imageUrl: ApiClient.baseUrl + widget.performance.coverImageLink,
+                imageUrl: ApiClient.baseUrl + widget.performance.imageLink,
                 fit: BoxFit.fill,
                 placeholder: (contxt, string) => const Center(
                   child: CircularProgressIndicator(
@@ -112,13 +113,13 @@ class _PerfomanceDescriptionScreenState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.timer,
                         size: 20,
                         color: AppColor.greyText,
                       ),
                       Text(
-                        widget.performance.duration,
+                        widget.performance.duration.toString(),
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -128,13 +129,13 @@ class _PerfomanceDescriptionScreenState
                   ),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.location_pin,
                         size: 20,
                         color: AppColor.greyText,
                       ),
                       Text(
-                        widget.performance.tag,
+                        widget.performance.chapters![0].place.address,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -146,7 +147,7 @@ class _PerfomanceDescriptionScreenState
                     height: 12,
                   ),
                   Text(
-                    widget.performance.description,
+                    widget.performance.description!,
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge
@@ -158,9 +159,12 @@ class _PerfomanceDescriptionScreenState
                   CachedNetworkImage(
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.fill)),
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
                     ),
                     height: 200,
                     width: 434,
@@ -179,7 +183,9 @@ class _PerfomanceDescriptionScreenState
                       Text(
                         "Аудио отрывки",
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: 24, fontWeight: FontWeight.w800),
+                              fontSize: 24,
+                              fontWeight: FontWeight.w800,
+                            ),
                       ),
                       isBought
                           ? Column(
@@ -190,7 +196,7 @@ class _PerfomanceDescriptionScreenState
                                       MediaQuery.of(context).size.height * 0.2,
                                   child: ListView.builder(
                                     itemCount:
-                                        widget.performance.audioLinks.length,
+                                        widget.performance.chapters!.length,
                                     scrollDirection: Axis.vertical,
                                     itemBuilder:
                                         (BuildContext context, int index) {
@@ -216,19 +222,19 @@ class _PerfomanceDescriptionScreenState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(top: 20, bottom: 12),
+                        padding: const EdgeInsets.only(top: 20, bottom: 12),
                         child: Text(
                           'Фотографии',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                  fontSize: 24, fontWeight: FontWeight.w800),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w800,
+                                  ),
                         ),
                       ),
                       CarouselSlider(
                         items: List.generate(
-                          widget.performance.imagesList.length,
+                          widget.performance.images!.length,
                           (index) => CachedNetworkImage(
                             imageBuilder: (context, imageProvider) => Container(
                               decoration: BoxDecoration(
@@ -242,7 +248,7 @@ class _PerfomanceDescriptionScreenState
                             height: 88,
                             width: 88,
                             imageUrl: ApiClient.baseUrl +
-                                widget.performance.coverImageLink,
+                                widget.performance.imageLink,
                             fit: BoxFit.fill,
                             placeholder: (contxt, string) => const Center(
                               child: CircularProgressIndicator(
@@ -267,17 +273,17 @@ class _PerfomanceDescriptionScreenState
                         padding: const EdgeInsets.only(top: 32, bottom: 20),
                         child: Text(
                           'Авторы',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                  fontSize: 24, fontWeight: FontWeight.w800),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w800,
+                                  ),
                         ),
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.1,
                         child: ListView.builder(
-                          itemCount: widget.performance.authorsName.length,
+                          itemCount: widget.performance.creators.length,
                           scrollDirection: Axis.horizontal,
                           cacheExtent: 1000,
                           itemBuilder: (BuildContext context, int index) {
@@ -379,7 +385,7 @@ class _PerfomanceDescriptionScreenState
                         enabledBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(color: AppColor.grey),
                         ),
-                        focusedBorder: UnderlineInputBorder(
+                        focusedBorder: const UnderlineInputBorder(
                           borderSide:
                               BorderSide(color: AppColor.purpleDarkPrimary),
                         ),
