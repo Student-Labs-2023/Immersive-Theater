@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shebalin/src/features/promocodes/bloc/tickets_state.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../../../theme/images.dart';
@@ -51,80 +52,77 @@ class _PromocodePanelPageState extends State<PromocodePanelPage> {
                       ),
                       child: const SizedBox(
                         height: 3,
-                        width: 50,
+                        width: 25,
                       ),
                     ),
                     panel: SingleChildScrollView(
                       child: InputPromocodePanelPage(bloc: _ticketsBloc),
                     ),
                     body: BlocBuilder<TicketsBloc, TicketsState>(
-                        bloc: _ticketsBloc,
-                        builder: (context, state) => state.tickets.isEmpty
-                            ? Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Center(
-                                        child: Image.asset(
-                                            ImagesSources.ticketOutline),
+                      bloc: _ticketsBloc,
+                      builder: (context, state) => state.tickets.isEmpty
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  children: [
+                                    Center(
+                                      child: Image.asset(
+                                          ImagesSources.ticketOutline),
+                                    ),
+                                    const SizedBox(
+                                      height: 24,
+                                    ),
+                                    Text(
+                                      'У вас еще нет билетов',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            color: secondaryTextColor,
+                                          ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 32),
+                                    child: ElevatedButton(
+                                      onPressed: (() =>
+                                          _panelController.open()),
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                AppColor.purplePrimary),
+                                        elevation: MaterialStateProperty.all(0),
+                                        shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        minimumSize: MaterialStateProperty.all(
+                                          const Size(328, 48),
+                                        ),
                                       ),
-                                      const SizedBox(
-                                        height: 24,
-                                      ),
-                                      Text(
-                                        'У вас еще нет билетов',
+                                      child: Text(
+                                        'Ввести промокод',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall
-                                            ?.copyWith(
-                                                color: Colors.black
-                                                    .withOpacity(0.3)),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 32),
-                                      child: ElevatedButton(
-                                        onPressed: (() =>
-                                            _panelController.open()),
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  accentTextColor),
-                                          elevation:
-                                              MaterialStateProperty.all(0),
-                                          shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                          ),
-                                          minimumSize:
-                                              MaterialStateProperty.all(
-                                            const Size(328, 48),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          'Активировать промокод',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall
-                                              ?.copyWith(color: Colors.white),
-                                        ),
+                                            ?.copyWith(color: Colors.white),
                                       ),
                                     ),
                                   ),
-                                ],
-                              )
-                            : ListView(
-                                children: state.tickets,
-                              )),
+                                ),
+                              ],
+                            )
+                          : ListView(
+                              children: state.tickets,
+                            ),
+                    ),
                   ),
                 )
               ],

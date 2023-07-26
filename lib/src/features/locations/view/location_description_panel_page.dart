@@ -6,20 +6,21 @@ import 'package:shebalin/src/features/locations/view/widgets/audio_content_locat
 import 'package:shebalin/src/features/locations/view/widgets/header_content_location_panel.dart';
 import 'package:shebalin/src/features/locations/view/widgets/historical_content_location_panel.dart';
 import 'package:shebalin/src/features/locations/view/widgets/images_content_location_panel.dart';
+import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/ui/app_button.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../../models/payment_model.dart';
 import '../../detailed_performaces/view/performance_double_screen.dart';
 
 class LocationDescriptionPanelPage extends StatefulWidget {
-  const LocationDescriptionPanelPage({Key? key, required this.mapObjectId})
+  const LocationDescriptionPanelPage({Key? key, required this.mapObjectId,})
       : super(key: key);
   final String mapObjectId;
-
   @override
   State<LocationDescriptionPanelPage> createState() =>
       _LocationDescriptionPanelPageState();
@@ -41,6 +42,33 @@ class _LocationDescriptionPanelPageState
       extendBody: true,
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
+      floatingActionButton: ElevatedButton(
+        onPressed: () async {
+          _openYandexWidgetOnTap();
+        },
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(accentTextColor),
+          elevation: MaterialStateProperty.all(5),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          minimumSize: MaterialStateProperty.all(
+            Size(
+              mediaQuerySize.width * 0.85,
+              mediaQuerySize.width * 0.13,
+            ),
+          ),
+        ),
+        child: Text(
+          'Перейти к спектаклю',
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge
+              ?.copyWith(color: AppColor.whiteText),
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Padding(
         padding: const EdgeInsets.only(top: 12),
@@ -73,7 +101,7 @@ class _LocationDescriptionPanelPageState
                               _closePanel();
                             },
                             child: const Image(
-                              color: AppColor.blackText,
+                              color: AppColor.grey,
                               image: AssetImage(ImagesSources.cancelLoc),
                             ),
                           ),
@@ -114,42 +142,9 @@ class _LocationDescriptionPanelPageState
                             height: 12,
                           ),
                           const AudioContentLocationPanel(),
-                          // SizedBox(
-                          //   height: mediaQuerySize.width * 0.13 + 25,
-                          // )
                         ],
                       ),
                     ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          _openYandexWidgetOnTap();
-                        },
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(accentTextColor),
-                          elevation: MaterialStateProperty.all(5),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          minimumSize: MaterialStateProperty.all(
-                            Size(
-                              mediaQuerySize.width * 0.85,
-                              mediaQuerySize.width * 0.13,
-                            ),
-                          ),
-                        ),
-                        child: Text(
-                          'Перейти к спектаклю',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: AppColor.whiteText),
-                        ),
-                      ),
-                    )
                   ],
                 );
               }
@@ -166,6 +161,6 @@ class _LocationDescriptionPanelPageState
   }
 
   void _closePanel() {
-    context.read<MapPinBloc>().add(CloseMapPin());
+    context.read<MapPinBloc>().emit(MapPinClosingState());
   }
 }

@@ -86,9 +86,11 @@ class _PerfomanceDescriptionScreenState
                 Container(
                   width: 36,
                   height: 36,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColor.lightGray,
+                    color: _isExpanded
+                        ? AppColor.lightGray
+                        : AppColor.whiteBackground,
                   ),
                   child: Center(
                     child: IconButton(
@@ -112,33 +114,27 @@ class _PerfomanceDescriptionScreenState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.timer,
                         size: 20,
                         color: AppColor.greyText,
                       ),
                       Text(
                         widget.performance.duration,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(color: AppColor.greyText, fontSize: 12),
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ],
                   ),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.location_pin,
                         size: 20,
                         color: AppColor.greyText,
                       ),
                       Text(
                         widget.performance.tag,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(color: AppColor.greyText, fontSize: 12),
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ],
                   ),
@@ -147,10 +143,7 @@ class _PerfomanceDescriptionScreenState
                   ),
                   Text(
                     widget.performance.description,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(
                     height: 6,
@@ -178,8 +171,10 @@ class _PerfomanceDescriptionScreenState
                     children: [
                       Text(
                         "Аудио отрывки",
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: 24, fontWeight: FontWeight.w800),
+                        style: Theme.of(context)
+                            .textTheme
+                            .displaySmall
+                            ?.copyWith(fontWeight: FontWeight.w700),
                       ),
                       isBought
                           ? Column(
@@ -221,39 +216,43 @@ class _PerfomanceDescriptionScreenState
                           'Фотографии',
                           style: Theme.of(context)
                               .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                  fontSize: 24, fontWeight: FontWeight.w800),
+                              .displaySmall
+                              ?.copyWith(fontWeight: FontWeight.w700),
                         ),
                       ),
                       CarouselSlider(
                         items: List.generate(
                           widget.performance.imagesList.length,
-                          (index) => CachedNetworkImage(
-                            imageBuilder: (context, imageProvider) => Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.fill,
+                          (index) => Padding(
+                            padding: const EdgeInsets.only(
+                              right: 8,
+                            ),
+                            child: CachedNetworkImage(
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
                               ),
-                            ),
-                            height: 88,
-                            width: 88,
-                            imageUrl: ApiClient.baseUrl +
-                                widget.performance.coverImageLink,
-                            fit: BoxFit.fill,
-                            placeholder: (contxt, string) => const Center(
-                              child: CircularProgressIndicator(
-                                color: AppColor.lightGray,
+                              height: MediaQuery.of(context).size.width * 0.32,
+                              width: MediaQuery.of(context).size.width * 0.32,
+                              imageUrl: ApiClient.baseUrl +
+                                  widget.performance.coverImageLink,
+                              fit: BoxFit.fill,
+                              placeholder: (contxt, string) => const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColor.lightGray,
+                                ),
                               ),
                             ),
                           ),
                         ),
                         options: CarouselOptions(
                           enableInfiniteScroll: true,
-                          height: 88,
                           aspectRatio: 3.0,
                           viewportFraction: 0.3,
                         ),
@@ -269,9 +268,8 @@ class _PerfomanceDescriptionScreenState
                           'Авторы',
                           style: Theme.of(context)
                               .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                  fontSize: 24, fontWeight: FontWeight.w800),
+                              .displaySmall
+                              ?.copyWith(fontWeight: FontWeight.w700),
                         ),
                       ),
                       SizedBox(
@@ -373,15 +371,14 @@ class _PerfomanceDescriptionScreenState
                             fontSize: 20,
                             decoration: TextDecoration.none,
                           ),
-                      cursorColor: AppColor.purpleDarkPrimary,
+                      cursorColor: AppColor.purplePrimary,
                       controller: textEditingController,
                       decoration: InputDecoration(
                         enabledBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(color: AppColor.grey),
                         ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppColor.purpleDarkPrimary),
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.purplePrimary),
                         ),
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 12),
