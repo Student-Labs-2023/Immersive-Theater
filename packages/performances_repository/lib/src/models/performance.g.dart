@@ -13,25 +13,13 @@ Performance _$PerformanceFromJson(Map<String, dynamic> json) => Performance(
       creators: (json['authors'] as List<dynamic>)
           .map((e) => Creator.fromJson(e as Map<String, dynamic>))
           .toList(),
-      description: json['description'] as String?,
-      duration: json['duration'] == null
-          ? null
-          : Duration(microseconds: json['duration'] as int),
-      images:
-          (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      chapters: (json['audio'] as List<dynamic>?)
-          ?.map((e) => Chapter.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+    )..fullInfo = PerformanceFullInfo.fromJson(json);
 
 Map<String, dynamic> _$PerformanceToJson(Performance instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'strapi': instance.id,
       'name': instance.title,
       'image_link': instance.imageLink,
       'authors': instance.creators,
-      'description': instance.description,
-      'duration': instance.duration?.inMicroseconds,
-      'images': instance.images,
-      'audio': instance.chapters,
+      'fullInfo': instance.fullInfo,
     };
