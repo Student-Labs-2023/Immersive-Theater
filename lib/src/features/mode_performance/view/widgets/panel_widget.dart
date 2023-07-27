@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:locations_repository/locations_repository.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/images_location.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/location_item.dart';
@@ -11,11 +11,11 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class PanelWidget extends StatefulWidget {
   final PanelController controller;
-  final List<Location> locations;
+  final List<Chapter> chapters;
   const PanelWidget({
     super.key,
     required this.controller,
-    required this.locations,
+    required this.chapters,
   });
 
   @override
@@ -45,7 +45,7 @@ class _PanelWidgetState extends State<PanelWidget> {
               return Padding(
                 padding: const EdgeInsets.only(left: 16.0),
                 child: ImagesLocation(
-                  imageLinks: widget.locations[state.indexLocation].imageLinks,
+                  imageLinks: widget.chapters[state.indexLocation].images,
                 ),
               );
             },
@@ -85,10 +85,10 @@ class _PanelWidgetState extends State<PanelWidget> {
             return ListView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.zero,
-              itemCount: widget.locations.length,
+              itemCount: widget.chapters.length,
               itemBuilder: (context, index) {
                 return LocationItem(
-                  locationName: widget.locations[index].title,
+                  locationName: widget.chapters[index].place.title,
                   isCurrentLocation: state.indexLocation == index,
                   isCompleted: index < state.indexLocation,
                 );

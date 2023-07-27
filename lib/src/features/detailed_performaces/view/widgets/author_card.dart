@@ -1,11 +1,12 @@
 import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:performances_repository/performances_repository.dart';
 
 class AuthorCard extends StatelessWidget {
-  const AuthorCard({Key? key, this.performance, required this.index})
+  const AuthorCard({Key? key, required this.performance, required this.index})
       : super(key: key);
-  final dynamic performance;
+  final Performance performance;
   final int index;
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,8 @@ class AuthorCard extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(50)),
                   child: CachedNetworkImage(
-                    imageUrl: ApiClient.baseUrl + performance.authorsImage[index],
+                    imageUrl: ApiClient.baseUrl +
+                        performance.creators[index].imageLink,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -44,11 +46,11 @@ class AuthorCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    performance.authorsName[index],
+                    performance.creators[index].fullName,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(
-                    performance.authorsRole[index],
+                    performance.creators[index].role,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ],

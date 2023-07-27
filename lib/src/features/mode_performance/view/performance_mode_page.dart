@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:locations_repository/locations_repository.dart';
-import 'package:shebalin/src/features/locations/bloc/location_bloc.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/map_performance/view/map_page.dart';
@@ -12,6 +11,7 @@ import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_windo
 import 'package:shebalin/src/features/mode_performance/view/widgets/panel_widget.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/progress_bar.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/tip.dart';
+import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/animated_visibility.dart';
@@ -32,7 +32,7 @@ class PerformanceModePage extends StatefulWidget {
 class _PerformanceModePageState extends State<PerformanceModePage> {
   late double heightButton = 3.0;
   final panelController = PanelController();
-  late List<Location> locations;
+  late List<Chapter> chapters;
   final String performanceTitle = 'Шебалин в Омске';
   final String imageLink =
       '/uploads/1650699780207_58cb89ec46.jpg?updated_at=2023-03-30T05:51:54.127Z';
@@ -44,21 +44,21 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
     final double heightPanelOpened = height * 0.5;
 
     final double heightPanelClosed = height * 0.17;
-    return BlocBuilder<LocationBloc, LocationState>(
+    return BlocBuilder<PerformanceBloc, PerformanceState>(
       builder: (context, state) {
-        if (state is LocationsLoadSuccess) {
-          locations = state.locations;
+        if (state is PerformanceLoadSuccess) {
+          chapters = state.perfomances[0].chapters!;
           return MultiBlocProvider(
             providers: [
               BlocProvider(
                 create: (context) => PerfModeBloc(
                   [],
                   0,
-                  locations.length,
+                  chapters.length,
                   performanceTitle,
                   imageLink,
                   audioPlayerBloc,
-                  locations,
+                  chapters.map((e) => e.place).toList(),
                 ),
               ),
               BlocProvider(
@@ -67,7 +67,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                     ..add(AudioPlayerInitialEvent())
                     ..add(
                       AudioPlayerAddPlaylistEvent(
-                        listAudio: locations[0].paidAudioLink,
+                        audio: chapters[0].audioLink,
                       ),
                     );
                 },
@@ -91,13 +91,13 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                         borderRadius: panelRadius,
                         panelBuilder: (scrollController) => PanelWidget(
                           controller: panelController,
-                          locations: locations,
+                          chapters: chapters,
                         ),
                         body: MapPage(
-                          locations: locations,
+                          locations: chapters.map((e) => e.place).toList(),
                           initialCoords: Point(
-                            latitude: double.parse(locations[0].latitude),
-                            longitude: double.parse(locations[0].longitude),
+                            latitude: chapters[0].place.latitude,
+                            longitude: chapters[0].place.longitude,
                           ),
                         ),
                         onPanelSlide: (position) {
@@ -119,9 +119,11 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                             FloatingActionButton(
                               heroTag: "getUserLocation",
                               backgroundColor: Colors.white,
-                              onPressed: () => context
-                                  .read<PerfModeBloc>()
-                                  .add(PerfModeGetUserLocationEvent(locations)),
+                              onPressed: () => context.read<PerfModeBloc>().add(
+                                    PerfModeGetUserLocationEvent(
+                                      chapters.map((e) => e.place).toList(),
+                                    ),
+                                  ),
                               child: const Image(
                                 image: AssetImage(ImagesSources.locationIcon),
                               ),
@@ -174,8 +176,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                     listener: (context, state) {
                       context.read<AudioPlayerBloc>().add(
                             AudioPlayerAddPlaylistEvent(
-                              listAudio:
-                                  locations[state.indexLocation].paidAudioLink,
+                              audio: chapters[state.indexLocation].audioLink,
                             ),
                           );
                     },
@@ -212,7 +213,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ProgressLocationsBar(
-                countLocation: locations.length,
+                countLocation: chapters.length,
                 durationPerformance: 45,
               ),
               FloatingActionButton(

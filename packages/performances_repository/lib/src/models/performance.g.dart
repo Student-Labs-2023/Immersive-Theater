@@ -7,7 +7,7 @@ part of 'performance.dart';
 // **************************************************************************
 
 Performance _$PerformanceFromJson(Map<String, dynamic> json) => Performance(
-      id: json['id'] as String,
+      id: json['strapi'] as String,
       title: json['name'] as String,
       imageLink: json['image_link'] as String,
       creators: (json['authors'] as List<dynamic>)

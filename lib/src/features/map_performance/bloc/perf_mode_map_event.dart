@@ -15,7 +15,7 @@ class PerfModeInitialEvent extends PerfModeEvent {
 }
 
 class PerfModeGetUserLocationEvent extends PerfModeEvent {
-  final List<Location> locations;
+  final List<Place> locations;
 
   const PerfModeGetUserLocationEvent(this.locations);
 }

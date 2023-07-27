@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:locations_repository/locations_repository.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MapPage extends StatefulWidget {
-  final List<Location> locations;
+  final List<Place> locations;
   final Point initialCoords;
 
   const MapPage({

@@ -1,13 +1,14 @@
 import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/performance_double_screen.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
 class PerformanceCard extends StatelessWidget {
   const PerformanceCard({Key? key, required this.performance})
       : super(key: key);
-  final dynamic performance;
+  final Performance performance;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -47,7 +48,7 @@ class PerformanceCard extends StatelessWidget {
                   color: secondaryColor,
                 ),
                 child: CachedNetworkImage(
-                  imageUrl: ApiClient.baseUrl + performance.cardImageLink,
+                  imageUrl: ApiClient.baseUrl + performance.imageLink,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Center(
                     child: CircularProgressIndicator(
@@ -60,7 +61,7 @@ class PerformanceCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(4, 0, 16, 4),
                 child: Text(
-                  performance.tag,
+                  performance.chapters![0].place.address,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),

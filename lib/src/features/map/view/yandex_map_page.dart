@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:locations_repository/locations_repository.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 
 import 'package:shebalin/src/theme/images.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class YandexMapPage extends StatefulWidget {
-  final List<Location> locations;
+  final List<Place> locations;
   const YandexMapPage({Key? key, required this.locations}) : super(key: key);
 
   @override
@@ -32,11 +32,11 @@ class _YandexMapState extends State<YandexMapPage> {
             onTap: (mapObject, point) {
               _mapPinTapped(mapObject, point, context);
             },
-            mapId: MapObjectId(location.number),
+            mapId: MapObjectId(location.address),
             opacity: 1,
             point: Point(
-              latitude: double.parse(location.latitude),
-              longitude: double.parse(location.longitude),
+              latitude: location.latitude,
+              longitude: location.longitude,
             ),
             isDraggable: true,
             icon: PlacemarkIcon.single(

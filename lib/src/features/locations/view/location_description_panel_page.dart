@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:locations_repository/locations_repository.dart';
-import 'package:shebalin/src/features/locations/bloc/location_bloc.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/locations/view/widgets/audio_content_location_panel.dart';
-import 'package:shebalin/src/features/locations/view/widgets/header_content_location_panel.dart';
 import 'package:shebalin/src/features/locations/view/widgets/historical_content_location_panel.dart';
 import 'package:shebalin/src/features/locations/view/widgets/images_content_location_panel.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
+import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
-import 'package:shebalin/src/theme/ui/app_button.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
 import '../../../models/payment_model.dart';
-import '../../detailed_performaces/view/performance_double_screen.dart';
 
 class LocationDescriptionPanelPage extends StatefulWidget {
   const LocationDescriptionPanelPage({Key? key, required this.mapObjectId})
@@ -28,7 +25,7 @@ class LocationDescriptionPanelPage extends StatefulWidget {
 class _LocationDescriptionPanelPageState
     extends State<LocationDescriptionPanelPage> {
   Payment paymentService = Payment();
-  late Location currentLocation;
+  late Chapter currentLocation;
   @override
   void initState() {
     super.initState();
@@ -45,16 +42,17 @@ class _LocationDescriptionPanelPageState
       body: Padding(
         padding: const EdgeInsets.only(top: 12),
         child: SingleChildScrollView(
-          child: BlocBuilder<LocationBloc, LocationState>(
+          child: BlocBuilder<PerformanceBloc, PerformanceState>(
             builder: (context, state) {
-              if (state is LocationsLoadInProgress) {
+              if (state is PerformanceLoadInProgress) {
                 return Center(
                   child: CircularProgressIndicator(color: accentTextColor),
                 );
               }
-              if (state is LocationsLoadSuccess) {
-                currentLocation = state.locations[state.locations.indexWhere(
-                  (location) => location.number == widget.mapObjectId,
+              if (state is PerformanceLoadSuccess) {
+                currentLocation = state.perfomances[0]
+                    .chapters![state.perfomances[0].chapters!.indexWhere(
+                  (location) => location.place.address == widget.mapObjectId,
                 )];
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +85,7 @@ class _LocationDescriptionPanelPageState
                         bottom: 20,
                       ),
                       child: Text(
-                        currentLocation.tag,
+                        currentLocation.place.address,
                         style: Theme.of(context)
                             .textTheme
                             .labelSmall
@@ -95,7 +93,7 @@ class _LocationDescriptionPanelPageState
                       ),
                     ),
                     ImagesContentLocationPanel(
-                      imageLinks: currentLocation.imageLinks,
+                      imageLinks: currentLocation.images,
                     ),
                     Padding(
                       padding:
@@ -105,7 +103,7 @@ class _LocationDescriptionPanelPageState
                         children: [
                           const AppTextHeader(title: 'Историческая справка'),
                           HistoricalContentLocationPanel(
-                            locationDescription: currentLocation.description,
+                            locationDescription: currentLocation.title,
                           ),
                           const AppTextHeader(
                             title: 'Аудио отрывок',

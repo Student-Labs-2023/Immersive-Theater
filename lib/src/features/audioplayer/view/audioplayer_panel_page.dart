@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -10,8 +11,9 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../../theme/theme.dart';
 
 class AudioPlayerPanelPage extends StatefulWidget {
-  const AudioPlayerPanelPage({Key? key, this.performance}) : super(key: key);
-  final dynamic performance;
+  const AudioPlayerPanelPage({Key? key, required this.performance})
+      : super(key: key);
+  final Performance performance;
   @override
   State<AudioPlayerPanelPage> createState() => _AudioPlayerPanelPageState();
 }
@@ -36,9 +38,9 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
     super.initState();
     playlist = ConcatenatingAudioSource(
       useLazyPreparation: true,
-      children: widget.performance.audioLinks
+      children: widget.performance.chapters!
           .map<AudioSource>(
-            (audioLink) => AudioSource.uri(Uri.parse(audioLink)),
+            (chapter) => AudioSource.uri(Uri.parse(chapter.shortAudioLink)),
           )
           .toList(),
     );
@@ -140,8 +142,7 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
                       const CircularProgressIndicator(
                     color: AppColor.grey,
                   ),
-                  imageUrl:
-                      ApiClient.baseUrl + widget.performance.coverImageLink,
+                  imageUrl: ApiClient.baseUrl + widget.performance.imageLink,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -154,7 +155,7 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
                       children: [
                         Text(
                           widget.performance
-                              .audioTitles[audioPlayer.currentIndex],
+                              .chapters![audioPlayer.currentIndex!].title,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(

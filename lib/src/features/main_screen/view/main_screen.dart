@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shebalin/src/features/locations/bloc/location_bloc.dart';
 import 'package:shebalin/src/features/locations/view/location_description_panel_page.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/map/view/yandex_map_page.dart';
+import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/performances/view/performances_panel_page.dart';
-import 'package:shebalin/src/features/promocodes/view/widgets/input_promocode_panel_page.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
-import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
-import 'package:shebalin/src/features/user/view/personal_panel_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
-import 'package:shebalin/src/theme/images.dart';
 
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -68,28 +64,32 @@ class _MainScreenState extends State<MainScreen> {
                       const Padding(padding: EdgeInsets.only(left: 20)),
                       TextButton(
                         onPressed: () => _isPerformancePanelShowed(true),
-                        child: Text("Спектакли",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
-                              color: isPerfomnceButtonPressed
-                                  ? AppColor.blackText
-                                  : AppColor.greyText,
-                            )),
+                        child: Text(
+                          "Спектакли",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            color: isPerfomnceButtonPressed
+                                ? AppColor.blackText
+                                : AppColor.greyText,
+                          ),
+                        ),
                       ),
                       const SizedBox(
                         width: 40,
                       ),
                       TextButton(
                         onPressed: () => _isPerformancePanelShowed(false),
-                        child: Text("Мои билеты",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
-                              color: isPerfomnceButtonPressed
-                                  ? AppColor.greyText
-                                  : AppColor.blackText,
-                            )),
+                        child: Text(
+                          "Мои билеты",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            color: isPerfomnceButtonPressed
+                                ? AppColor.greyText
+                                : AppColor.blackText,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -156,12 +156,13 @@ class _MainScreenState extends State<MainScreen> {
           },
         ),
         body: Center(
-          child: BlocBuilder<LocationBloc, LocationState>(
+          child: BlocBuilder<PerformanceBloc, PerformanceState>(
             builder: (context, state) {
-              if (state is LocationsLoadInProgress) {
+              if (state is PerformanceLoadInProgress) {
                 return const CircularProgressIndicator();
-              } else if (state is LocationsLoadSuccess) {
-                var locations = state.locations;
+              } else if (state is PerformanceLoadSuccess) {
+                var locations =
+                    state.perfomances[0].chapters!.map((e) => e.place).toList();
                 return YandexMapPage(
                   locations: locations,
                 );

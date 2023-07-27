@@ -4,7 +4,7 @@ import 'package:performances_repository/src/performaces_repository.dart';
 import 'package:api_client/api_client.dart';
 
 enum _PerformancesEndpoint {
-  everything('perfomances'),
+  everything('performances'),
   byId('perfomances/');
 
   const _PerformancesEndpoint(this.endpoint);
@@ -30,6 +30,7 @@ class PerformancesRepositoryImpl implements PerformancesRepository {
 
     final result = ResponseMapper.fromJson(response.data);
     final List<Performance> performances = [];
+    // log(response.data);
     for (final rawPerformance in result.data) {
       performances.add(Performance.fromJson(rawPerformance));
     }
