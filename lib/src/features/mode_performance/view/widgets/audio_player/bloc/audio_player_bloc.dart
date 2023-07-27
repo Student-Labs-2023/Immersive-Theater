@@ -43,12 +43,7 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     log('_onAudioPlayerAddPlaylistEvent', name: 'Theater');
     AudioSource playlist = ConcatenatingAudioSource(
       useLazyPreparation: true,
-      children: event.listAudio
-          .map<AudioSource>(
-            (audioLink) =>
-                AudioSource.uri(Uri.parse(ApiClient.baseUrl + audioLink)),
-          )
-          .toList(),
+      children: [AudioSource.uri(Uri.parse(ApiClient.baseUrl + event.audio))],
     );
     player.setAudioSource(
       playlist,

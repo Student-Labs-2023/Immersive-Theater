@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:locations_repository/locations_repository.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/performance_double_screen.dart';
 import 'package:shebalin/src/features/loading/view/loading_screen.dart';
-import 'package:shebalin/src/features/locations/bloc/location_bloc.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/performance_mode_page.dart';
@@ -27,12 +25,6 @@ class App extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (BuildContext context) => MapPinBloc(),
-        ),
-        BlocProvider(
-          create: (_) => LocationBloc(
-            locationRepository:
-                RepositoryProvider.of<LocationsRepository>(context),
-          )..add(LocationsStarted()),
         ),
         BlocProvider(
           create: (_) => PerformanceBloc(

@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location_service/location_service.dart';
-import 'package:locations_repository/locations_repository.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
@@ -22,7 +22,7 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
   final AudioPlayerBloc audioPlayerBloc;
   late StreamSubscription subscriptionStateBothBlocs;
   late YandexMapController mapcontroller;
-  final List<Location> locations;
+  final List<Place> places;
   late StreamSubscription<Position> positionStream;
   UserLocationView? userLocationView;
   final LocationServiceImpl locationService = LocationServiceImpl();
@@ -33,7 +33,7 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     this.performanceTitle,
     this.imagePerformanceLink,
     this.audioPlayerBloc,
-    this.locations,
+    this.places,
   ) : super(
           PerfModeInProgress(
             mapObjects,
@@ -90,8 +90,8 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
       final dist = locationService.getDistanceBetweenTwoLocations(
         position!.latitude,
         position.longitude,
-        double.parse(event.locations[state.indexLocation + 1].latitude),
-        double.parse(event.locations[state.indexLocation + 1].longitude),
+        places[state.indexLocation + 1].latitude,
+        places[state.indexLocation + 1].longitude,
       );
       if (dist < 10) {
         add(PerfModeUserOnPlaceNow(state.indexLocation));
@@ -197,10 +197,10 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
       placemarks.add(
         PlacemarkMapObject(
           opacity: 1,
-          mapId: MapObjectId(locations[i].number),
+          mapId: MapObjectId(places[i].address),
           point: Point(
-            latitude: double.parse(locations[i].latitude),
-            longitude: double.parse(locations[i].longitude),
+            latitude: places[i].latitude,
+            longitude: places[i].longitude,
           ),
           icon: PlacemarkIcon.single(
             PlacemarkIconStyle(
@@ -243,18 +243,18 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     final int indexLocation = event.index;
     final countLocations = event.countLocations;
 
-    final locationsNotDone = locations.sublist(indexLocation);
+    final locationsNotDone = places.sublist(indexLocation);
 
     if (indexLocation != 0) {
-      final locationsDone = locations.sublist(0, indexLocation + 1);
+      final locationsDone = places.sublist(0, indexLocation + 1);
       BicycleResultWithSession resultWithSessionDone =
           YandexBicycle.requestRoutes(
         points: locationsDone
             .map(
               (e) => RequestPoint(
                 point: Point(
-                  latitude: double.parse(e.latitude),
-                  longitude: double.parse(e.longitude),
+                  latitude: e.latitude,
+                  longitude: e.longitude,
                 ),
                 requestPointType: RequestPointType.wayPoint,
               ),
@@ -293,8 +293,8 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
             .map(
               (e) => RequestPoint(
                 point: Point(
-                  latitude: double.parse(e.latitude),
-                  longitude: double.parse(e.longitude),
+                  latitude: e.latitude,
+                  longitude: e.longitude,
                 ),
                 requestPointType: RequestPointType.wayPoint,
               ),

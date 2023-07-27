@@ -574,13 +574,6 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
-  locations_repository:
-    dependency: "direct main"
-    description:
-      path: "packages/locations_repository"
-      relative: true
-    source: path
-    version: "0.0.1"
   logging:
     dependency: transitive
     description:

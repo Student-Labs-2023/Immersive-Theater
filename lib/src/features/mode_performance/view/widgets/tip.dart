@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shebalin/src/theme/app_color.dart';
-import 'package:shebalin/src/theme/images.dart';
 
 class Tip extends StatelessWidget {
   final String title;
