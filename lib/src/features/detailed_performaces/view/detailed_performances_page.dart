@@ -42,7 +42,7 @@ class _PerfomanceDescriptionScreenState
   @override
   Widget build(BuildContext context) {
     var mediaQuerySize = MediaQuery.of(context).size;
-    final List<Widget> imageSliders = widget.performance.images!
+    final List<Widget> imageSliders = widget.performance.fullInfo!.images
         .map(
           (e) => TikTokPhoto(
             entry: e,
@@ -119,7 +119,7 @@ class _PerfomanceDescriptionScreenState
                         color: AppColor.greyText,
                       ),
                       Text(
-                        widget.performance.duration.toString(),
+                        widget.performance.fullInfo!.duration.toString(),
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -135,7 +135,7 @@ class _PerfomanceDescriptionScreenState
                         color: AppColor.greyText,
                       ),
                       Text(
-                        widget.performance.chapters![0].place.address,
+                        widget.performance.fullInfo!.chapters[0].place.address,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -147,7 +147,7 @@ class _PerfomanceDescriptionScreenState
                     height: 12,
                   ),
                   Text(
-                    widget.performance.description!,
+                    widget.performance.fullInfo!.description,
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge
@@ -195,8 +195,8 @@ class _PerfomanceDescriptionScreenState
                                   height:
                                       MediaQuery.of(context).size.height * 0.2,
                                   child: ListView.builder(
-                                    itemCount:
-                                        widget.performance.chapters!.length,
+                                    itemCount: widget
+                                        .performance.fullInfo!.chapters.length,
                                     scrollDirection: Axis.vertical,
                                     itemBuilder:
                                         (BuildContext context, int index) {
@@ -234,7 +234,7 @@ class _PerfomanceDescriptionScreenState
                       ),
                       CarouselSlider(
                         items: List.generate(
-                          widget.performance.images!.length,
+                          widget.performance.fullInfo!.images.length,
                           (index) => CachedNetworkImage(
                             imageBuilder: (context, imageProvider) => Container(
                               decoration: BoxDecoration(

@@ -47,7 +47,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
     return BlocBuilder<PerformanceBloc, PerformanceState>(
       builder: (context, state) {
         if (state is PerformanceLoadSuccess) {
-          chapters = state.perfomances[0].chapters!;
+          chapters = state.perfomances[0].fullInfo!.chapters;
           return MultiBlocProvider(
             providers: [
               BlocProvider(

@@ -50,8 +50,8 @@ class _LocationDescriptionPanelPageState
                 );
               }
               if (state is PerformanceLoadSuccess) {
-                currentLocation = state.perfomances[0]
-                    .chapters![state.perfomances[0].chapters!.indexWhere(
+                currentLocation = state.perfomances[0].fullInfo!.chapters[
+                    state.perfomances[0].fullInfo!.chapters.indexWhere(
                   (location) => location.place.address == widget.mapObjectId,
                 )];
                 return Column(
