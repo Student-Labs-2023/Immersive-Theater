@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shebalin/src/features/promocodes/bloc/tickets_state.dart';
-import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -111,7 +110,7 @@ class _PromocodePanelPageState extends State<PromocodePanelPage> {
                                         'Ввести промокод',
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodySmall
+                                            .bodyLarge
                                             ?.copyWith(color: Colors.white),
                                       ),
                                     ),

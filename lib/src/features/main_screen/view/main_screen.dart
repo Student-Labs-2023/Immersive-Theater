@@ -7,7 +7,6 @@ import 'package:shebalin/src/features/map/view/yandex_map_page.dart';
 import 'package:shebalin/src/features/performances/view/performances_panel_page.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/input_promocode_panel_page.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
-import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
 import 'package:shebalin/src/features/user/view/personal_panel_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
@@ -129,7 +128,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                         child: const SizedBox(
                           height: 3,
-                          width: 50,
+                          width: 25,
                         ),
                       ),
                     ],

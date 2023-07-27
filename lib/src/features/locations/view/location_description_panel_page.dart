@@ -15,7 +15,6 @@ import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../../models/payment_model.dart';
-import '../../detailed_performaces/view/performance_double_screen.dart';
 
 class LocationDescriptionPanelPage extends StatefulWidget {
   const LocationDescriptionPanelPage({Key? key, required this.mapObjectId,})

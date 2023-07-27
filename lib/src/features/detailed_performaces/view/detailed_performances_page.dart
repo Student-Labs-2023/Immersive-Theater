@@ -44,9 +44,11 @@ class _PerfomanceDescriptionScreenState
   Widget build(BuildContext context) {
     var mediaQuerySize = MediaQuery.of(context).size;
     final List<Widget> imageSliders = widget.performance.imagesList
-        .map((e) => TikTokPhoto(
-              entry: e,
-            ))
+        .map(
+          (e) => TikTokPhoto(
+            entry: e,
+          ),
+        )
         .toList();
     return Scaffold(
       body: CustomScrollView(
@@ -55,7 +57,7 @@ class _PerfomanceDescriptionScreenState
         slivers: [
           SliverAppBar(
             backgroundColor: AppColor.whiteBackground,
-            expandedHeight: 260,
+            expandedHeight: MediaQuery.of(context).size.height * 0.32,
             floating: false,
             centerTitle: false,
             pinned: true,
@@ -94,7 +96,9 @@ class _PerfomanceDescriptionScreenState
                   ),
                   child: Center(
                     child: IconButton(
-                      color: _textColor,
+                      color: _isExpanded
+                          ? AppColor.whiteBackground
+                          : AppColor.grey,
                       onPressed: () => Navigator.of(context).pop(),
                       icon: Image.asset(
                         ImagesSources.closeIcon,
@@ -114,27 +118,39 @@ class _PerfomanceDescriptionScreenState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Icon(
-                        Icons.timer,
-                        size: 20,
-                        color: AppColor.greyText,
+                      const Padding(
+                        padding: EdgeInsets.only(right: 4),
+                        child: Icon(
+                          Icons.access_time_outlined,
+                          size: 20,
+                          color: AppColor.greyText,
+                        ),
                       ),
                       Text(
                         widget.performance.duration,
-                        style: Theme.of(context).textTheme.titleSmall,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: AppColor.greyText),
                       ),
                     ],
                   ),
                   Row(
                     children: [
-                      const Icon(
-                        Icons.location_pin,
-                        size: 20,
-                        color: AppColor.greyText,
+                      const Padding(
+                        padding: EdgeInsets.only(right: 4),
+                        child: Icon(
+                          Icons.location_on_outlined,
+                          size: 20,
+                          color: AppColor.greyText,
+                        ),
                       ),
                       Text(
-                        widget.performance.tag,
-                        style: Theme.of(context).textTheme.titleSmall,
+                        widget.performance.number.toString(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: AppColor.greyText),
                       ),
                     ],
                   ),
@@ -145,36 +161,42 @@ class _PerfomanceDescriptionScreenState
                     widget.performance.description,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  CachedNetworkImage(
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
+                  Padding(
+                    padding: EdgeInsets.only(top: 12, bottom: 32),
+                    child: CachedNetworkImage(
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.fill)),
-                    ),
-                    height: 200,
-                    width: 434,
-                    imageUrl:
-                        "https://sun9-39.userapi.com/impg/wvR1_YIXqeP3hgZUUELQ5U3bvq1kEvKgvRbycA/f8n1n84CfzQ.jpg?size=343x200&quality=95&sign=99b10e66c024f3b0f08b823e49b1e412&type=album",
-                    fit: BoxFit.cover,
-                    placeholder: (contxt, string) => const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColor.lightGray,
+                            image: imageProvider,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      imageUrl:
+                          "https://sun9-39.userapi.com/impg/wvR1_YIXqeP3hgZUUELQ5U3bvq1kEvKgvRbycA/f8n1n84CfzQ.jpg?size=343x200&quality=95&sign=99b10e66c024f3b0f08b823e49b1e412&type=album",
+                      fit: BoxFit.cover,
+                      placeholder: (contxt, string) => const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.lightGray,
+                        ),
                       ),
                     ),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Аудио отрывки",
-                        style: Theme.of(context)
-                            .textTheme
-                            .displaySmall
-                            ?.copyWith(fontWeight: FontWeight.w700),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: Text(
+                          "Аудио отрывки",
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
                       ),
                       isBought
                           ? Column(
@@ -307,7 +329,7 @@ class _PerfomanceDescriptionScreenState
               },
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all(AppColor.purpleDarkPrimary),
+                    MaterialStateProperty.all(AppColor.purplePrimary),
                 elevation: MaterialStateProperty.all(5),
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
@@ -394,7 +416,7 @@ class _PerfomanceDescriptionScreenState
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all(AppColor.purpleDarkPrimary),
+                          MaterialStateProperty.all(AppColor.purplePrimary),
                       elevation: MaterialStateProperty.all(5),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(

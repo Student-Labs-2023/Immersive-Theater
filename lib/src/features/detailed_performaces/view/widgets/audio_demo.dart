@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shebalin/src/features/audioplayer/model/audio_panel_state.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 
 import '../../../../theme/theme.dart';
@@ -44,7 +45,8 @@ class _AudioDemoState extends State<AudioDemo> {
                         child:
                             CircularProgressIndicator(color: accentTextColor),
                       ),
-                      imageUrl: ApiClient.baseUrl +widget.performance.audioCoverImageLink,
+                      imageUrl: ApiClient.baseUrl +
+                          widget.performance.audioCoverImageLink,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -57,15 +59,13 @@ class _AudioDemoState extends State<AudioDemo> {
                   children: [
                     Text(
                       widget.performance.audioTitles[widget.index],
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    Text(
-                      widget.performance.title,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: 12,
-                            color: secondaryTextColor,
-                          ),
-                    ),
+                    Text(widget.performance.title,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: AppColor.greyText)),
                   ],
                 ),
               ],

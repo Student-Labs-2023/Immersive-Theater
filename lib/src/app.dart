@@ -13,7 +13,6 @@ import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboar
 import 'package:shebalin/src/features/onbording/view/onbording_screen.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/photo_slider/view/vertical_sliding_screen.dart';
-import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
 import 'package:shebalin/src/features/review/view/review_page.dart';
 import 'package:shebalin/src/features/review/models/emoji.dart';
@@ -49,14 +48,13 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Shebalin",
         theme: defaultTheme(),
-        initialRoute: '/onboarding-performance',
+        initialRoute: '/main-screen',
         routes: {
           '/loading-screen': (context) => const LoadingScreen(),
           '/onbording-screen': (context) => const OnbordingScreen(),
           '/main-screen': (context) => const MainScreen(),
           '/perfomance-description-screen': (context) =>
               const PerformanceDoubleScreen(),
-          '/promocode-screen': (context) => PromocodeScreen(),
           '/vertical-sliding-screen': (context) =>
               const VerticalSlidningScreen(),
           '/images-view-page': (context) => const ImagesViewPage(),

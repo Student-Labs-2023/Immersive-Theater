@@ -2,6 +2,7 @@ import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/performance_double_screen.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
 class PerformanceCard extends StatelessWidget {
@@ -61,14 +62,17 @@ class PerformanceCard extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(4, 0, 16, 4),
                 child: Text(
                   performance.tag,
-                  style: Theme.of(context).textTheme.titleSmall,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(color: AppColor.greyText),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(4, 0, 16, 4),
                 child: Text(
                   performance.title,
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
             ],
