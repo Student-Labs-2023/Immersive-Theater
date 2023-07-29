@@ -25,7 +25,7 @@ class PerfomanceDescriptionScreen extends StatefulWidget {
 
 class _PerfomanceDescriptionScreenState
     extends State<PerfomanceDescriptionScreen> {
-  bool isBought = false;
+  bool isBought = true;
   bool isFavoriteLocation = false;
   final paymentService = Payment();
 

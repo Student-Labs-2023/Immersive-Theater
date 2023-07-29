@@ -6,9 +6,7 @@ part 'performance.g.dart';
 
 @JsonSerializable()
 class Performance {
-  @JsonKey(name: 'strapi')
-  // TODO: replace key
-  final String id;
+  final int id;
 
   @JsonKey(name: 'name')
   final String title;

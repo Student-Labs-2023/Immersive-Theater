@@ -62,7 +62,7 @@ class PerformanceCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(4, 0, 16, 4),
                 child: Text(
-                  performance.fullInfo!.chapters[0].place.address,
+                  performance.title,
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall

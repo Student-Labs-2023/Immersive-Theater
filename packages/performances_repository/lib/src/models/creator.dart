@@ -3,7 +3,7 @@ part 'creator.g.dart';
 
 @JsonSerializable()
 class Creator {
-  final String id;
+  final int id;
   @JsonKey(name: 'full_name')
   final String fullName;
   @JsonKey(name: 'image_link')

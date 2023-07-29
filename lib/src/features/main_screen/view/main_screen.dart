@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/locations/view/location_description_panel_page.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/map/view/yandex_map_page.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/performances/view/performances_panel_page.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
-import 'package:shebalin/src/features/user/view/personal_panel_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 
 import 'package:shebalin/src/theme/theme.dart';
@@ -175,9 +175,11 @@ class _MainScreenState extends State<MainScreen> {
               if (state is PerformanceLoadInProgress) {
                 return const CircularProgressIndicator();
               } else if (state is PerformanceLoadSuccess) {
-                var locations = state.perfomances[0].fullInfo!.chapters
-                    .map((e) => e.place)
-                    .toList();
+                List<Place> locations = state.perfomances[0].fullInfo == null
+                    ? []
+                    : state.perfomances[0].fullInfo!.chapters
+                        .map((e) => e.place)
+                        .toList();
                 return YandexMapPage(
                   locations: locations,
                 );
