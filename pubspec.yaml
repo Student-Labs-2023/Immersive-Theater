@@ -60,12 +60,14 @@ dependencies:
   audioplayers: ^4.0.1
   flutter_svg: 
   geolocator: ^9.0.2
+  rxdart: ^0.27.7
   performances_repository:
     path: ./packages/performances_repository
-  locations_repository:
-    path: ./packages/locations_repository
   api_client:
     path: ./packages/api_client
+  location_service:
+    path: ./packages/location_service
+
   
   
 

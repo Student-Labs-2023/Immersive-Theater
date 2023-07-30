@@ -5,11 +5,9 @@ class AnimatedBottomSheet extends StatefulWidget {
   const AnimatedBottomSheet({
     super.key,
     required this.child,
-    required this.needMoreSpace,
   });
 
   final Widget child;
-  final bool needMoreSpace;
 
   @override
   State<AnimatedBottomSheet> createState() => _AnimatedBottomSheetState();
@@ -43,21 +41,17 @@ class _AnimatedBottomSheetState extends State<AnimatedBottomSheet>
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 44,
-            spreadRadius: 0,
-            offset: const Offset(0, -12),
-            color: AppColor.blackText.withOpacity(0.12),
-          )
-        ],
+      decoration: const BoxDecoration(
         color: AppColor.whiteBackground,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
       ),
       child: SizeTransition(
         sizeFactor: _animation,
-        child: widget.child,
+        child: AnimatedSize(
+          curve: Curves.easeOut,
+          duration: const Duration(milliseconds: 500),
+          child: widget.child,
+        ),
       ),
     );
   }

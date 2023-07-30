@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:locations_repository/locations_repository.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shebalin/src/app.dart';
@@ -27,12 +26,6 @@ void main() async {
         ),
         RepositoryProvider<PerformancesRepository>(
           create: (context) => PerformancesRepositoryImpl(
-            apiClient: RepositoryProvider.of<ApiClient>(context),
-            apiKey: apiKey,
-          ),
-        ),
-        RepositoryProvider<LocationsRepository>(
-          create: (context) => LocationsRepositoryIml(
             apiClient: RepositoryProvider.of<ApiClient>(context),
             apiKey: apiKey,
           ),

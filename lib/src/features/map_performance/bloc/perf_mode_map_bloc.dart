@@ -3,9 +3,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:locations_repository/locations_repository.dart';
+import 'package:location_service/location_service.dart';
+import 'package:performances_repository/performances_repository.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
-import 'dart:developer';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -13,16 +14,18 @@ part 'perf_mode_map_event.dart';
 part 'perf_mode_map_state.dart';
 
 class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
-  late YandexMapController mapcontroller;
-  late StreamSubscription<Position> positionStream;
   final List<MapObject> mapObjects;
   final int indexLocation;
   final int countLocations;
   final String performanceTitle;
   final String imagePerformanceLink;
   final AudioPlayerBloc audioPlayerBloc;
-  late StreamSubscription audioPlayerBlocSub;
+  late StreamSubscription subscriptionStateBothBlocs;
+  late YandexMapController mapcontroller;
+  final List<Place> places;
+  late StreamSubscription<Position> positionStream;
   UserLocationView? userLocationView;
+  final LocationServiceImpl locationService = LocationServiceImpl();
   PerfModeBloc(
     this.mapObjects,
     this.indexLocation,
@@ -30,6 +33,7 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     this.performanceTitle,
     this.imagePerformanceLink,
     this.audioPlayerBloc,
+    this.places,
   ) : super(
           PerfModeInProgress(
             mapObjects,
@@ -43,86 +47,55 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     on<PerfModeMoveCameraEvent>(_onMoveCameraEvent);
     on<PerfModeInitialEvent>(_onInitialEvent);
     on<PerfModePinsLoadEvent>(_onPerfModeMapPinsLoad);
-    on<PerfModeRoutesLoadEvent>(_onPerfModeMapRoutesLoad);
-    on<PerfModeCurrentLocationUpdate>(_onModePerformanceCurrentLocationUpdate);
-    on<PerfModeUserOnPlaceNow>(_onPerfModeUserOnPlaceNow);
+    on<PerfModeRoutesLoadEvent>(
+      _onPerfModeMapRoutesLoad,
+    );
+    on<PerfModeCurrentLocationUpdate>(
+      _onModePerformanceCurrentLocationUpdate,
+    );
+    on<PerfModeUserOnPlaceNow>(
+      _onPerfModeUserOnPlaceNow,
+      transformer: (events, mapper) => events
+          .debounceTime(const Duration(seconds: 1))
+          .distinct()
+          .switchMap(mapper),
+    );
   }
 
   @override
   Future<void> close() async {
     positionStream.cancel();
-    audioPlayerBlocSub.cancel();
+    subscriptionStateBothBlocs.cancel();
     super.close();
-  }
-
-  Future<bool> _checkServiceEnabled() async {
-    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return false;
-    }
-    return true;
-  }
-
-  Future<bool> _checkPermission() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return false;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return false;
-    }
-    return true;
   }
 
   Future<void> _onGetUserLocationEvent(
     PerfModeGetUserLocationEvent event,
     Emitter<PerfModeState> emit,
   ) async {
-    if (!(await _checkServiceEnabled() && await _checkPermission())) {
+    if (!(await locationService.checkLocationPermissionOnDevice() &&
+        await locationService.checkLocationServiceOnDevice())) {
       return;
     }
     const LocationSettings locationSettings = LocationSettings(
-      accuracy: LocationAccuracy.best,
-      distanceFilter: 20,
+      accuracy: LocationAccuracy.bestForNavigation,
+      distanceFilter: 10,
     );
-    audioPlayerBlocSub = audioPlayerBloc.stream.listen((audioPlayerState) {
-      positionStream =
-          Geolocator.getPositionStream(locationSettings: locationSettings)
-              .listen((Position? position) {
-        if (state.indexLocation < state.countLocations - 1) {
-          final dist = Geolocator.distanceBetween(
-            position!.latitude,
-            position.longitude,
-            double.parse(event.locations[state.indexLocation + 1].latitude),
-            double.parse(event.locations[state.indexLocation + 1].longitude),
-          );
-          if (dist < 20) {
-            add(PerfModeUserOnPlaceNow());
-            if (audioPlayerState is AudioPlayerFinishedState) {
-              add(PerfModeCurrentLocationUpdate());
-            }
-          }
-        } else {
-          add(
-            PerfModePinsLoadEvent(
-              state.indexLocation,
-              state.countLocations,
-              event.locations,
-            ),
-          );
-          add(
-            PerfModeRoutesLoadEvent(
-              state.indexLocation,
-              state.countLocations,
-              event.locations,
-            ),
-          );
-        }
-      });
+    positionStream = locationService
+        .getPositionStream(locationSettings)
+        .listen((Position? position) {
+      if (state.indexLocation == state.countLocations - 1) {
+        return;
+      }
+      final dist = locationService.getDistanceBetweenTwoLocations(
+        position!.latitude,
+        position.longitude,
+        places[state.indexLocation + 1].latitude,
+        places[state.indexLocation + 1].longitude,
+      );
+      if (dist < 10) {
+        add(PerfModeUserOnPlaceNow(state.indexLocation));
+      }
     });
 
     mapcontroller.toggleUserLayer(
@@ -136,7 +109,15 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     Emitter<PerfModeState> emit,
   ) {
     if (state.indexLocation >= state.countLocations - 1) {
-      return;
+      return emit(
+        PerfModeInProgress(
+          state.mapObjects,
+          state.indexLocation,
+          state.countLocations,
+          state.performanceTitle,
+          state.imagePerformanceLink,
+        ),
+      );
     }
     emit(
       PerfModeInProgress(
@@ -165,6 +146,34 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     Emitter<PerfModeState> emit,
   ) {
     mapcontroller = event.controller;
+    subscriptionStateBothBlocs = ZipStream(
+      [
+        stream.where(
+          (perfModeState) => perfModeState is PerfModeUserOnPlace,
+        ),
+        audioPlayerBloc.stream
+            .where(
+              (audioPlayerState) =>
+                  audioPlayerState is AudioPlayerFinishedState,
+            )
+            .throttleTime(const Duration(seconds: 10))
+      ],
+      (values) => {},
+    ).listen((value) {
+      add(
+        PerfModeRoutesLoadEvent(
+          state.indexLocation + 1,
+          countLocations,
+        ),
+      );
+      add(
+        PerfModePinsLoadEvent(
+          state.indexLocation + 1,
+          countLocations,
+        ),
+      );
+      add(PerfModeCurrentLocationUpdate(state.indexLocation));
+    });
   }
 
   Future<FutureOr<void>> _onPerfModeMapPinsLoad(
@@ -182,17 +191,16 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     );
     final int indexLocation = event.index;
     final countLocations = event.countLocations;
-    final locations = event.locations;
     final List<MapObject> placemarks = [];
 
     for (var i = 0; i < countLocations; i++) {
       placemarks.add(
         PlacemarkMapObject(
           opacity: 1,
-          mapId: MapObjectId(locations[i].number),
+          mapId: MapObjectId(places[i].address),
           point: Point(
-            latitude: double.parse(locations[i].latitude),
-            longitude: double.parse(locations[i].longitude),
+            latitude: places[i].latitude,
+            longitude: places[i].longitude,
           ),
           icon: PlacemarkIcon.single(
             PlacemarkIconStyle(
@@ -219,7 +227,7 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     );
   }
 
-  Future<FutureOr<void>> _onPerfModeMapRoutesLoad(
+  Future<void> _onPerfModeMapRoutesLoad(
     PerfModeRoutesLoadEvent event,
     Emitter<PerfModeState> emit,
   ) async {
@@ -234,20 +242,19 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     );
     final int indexLocation = event.index;
     final countLocations = event.countLocations;
-    final locations = event.locations;
 
-    final locationsNotDone = locations.sublist(indexLocation);
+    final locationsNotDone = places.sublist(indexLocation);
 
     if (indexLocation != 0) {
-      final locationsDone = locations.sublist(0, indexLocation + 1);
+      final locationsDone = places.sublist(0, indexLocation + 1);
       BicycleResultWithSession resultWithSessionDone =
           YandexBicycle.requestRoutes(
         points: locationsDone
             .map(
               (e) => RequestPoint(
                 point: Point(
-                  latitude: double.parse(e.latitude),
-                  longitude: double.parse(e.longitude),
+                  latitude: e.latitude,
+                  longitude: e.longitude,
                 ),
                 requestPointType: RequestPointType.wayPoint,
               ),
@@ -258,7 +265,7 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
       var result = await resultWithSessionDone.result;
 
       if (result.error != null) {
-        emit(
+        return emit(
           PerfModeFailure(
             state.mapObjects,
             state.indexLocation,
@@ -286,8 +293,8 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
             .map(
               (e) => RequestPoint(
                 point: Point(
-                  latitude: double.parse(e.latitude),
-                  longitude: double.parse(e.longitude),
+                  latitude: e.latitude,
+                  longitude: e.longitude,
                 ),
                 requestPointType: RequestPointType.wayPoint,
               ),
@@ -298,7 +305,7 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
       var resultNotDone = await resultWithSession.result;
 
       if (resultNotDone.error != null) {
-        emit(
+        return emit(
           PerfModeFailure(
             state.mapObjects,
             state.indexLocation,
@@ -360,7 +367,7 @@ class PerfModeBloc extends Bloc<PerfModeEvent, PerfModeState> {
     return userLocationView;
   }
 
-  FutureOr<void> _onPerfModeUserOnPlaceNow(
+  void _onPerfModeUserOnPlaceNow(
     PerfModeUserOnPlaceNow event,
     Emitter<PerfModeState> emit,
   ) {

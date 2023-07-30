@@ -10,7 +10,6 @@ import 'package:shebalin/src/features/detailed_performaces/view/widgets/audio_de
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/author_card.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
-import 'package:shebalin/src/theme/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shebalin/src/features/photo_slider/view/widgets/tiktok_photo.dart';
 
@@ -43,10 +42,12 @@ class _PerfomanceDescriptionScreenState
   @override
   Widget build(BuildContext context) {
     var mediaQuerySize = MediaQuery.of(context).size;
-    final List<Widget> imageSliders = widget.performance.imagesList
-        .map((e) => TikTokPhoto(
-              entry: e,
-            ))
+    final List<Widget> imageSliders = widget.performance.fullInfo!.images
+        .map(
+          (e) => TikTokPhoto(
+            entry: e,
+          ),
+        )
         .toList();
     return Scaffold(
       body: CustomScrollView(
@@ -55,14 +56,14 @@ class _PerfomanceDescriptionScreenState
         slivers: [
           SliverAppBar(
             backgroundColor: AppColor.whiteBackground,
-            expandedHeight: 260,
+            expandedHeight: MediaQuery.of(context).size.height * 0.32,
             floating: false,
             centerTitle: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: false,
               background: CachedNetworkImage(
-                imageUrl: ApiClient.baseUrl + widget.performance.coverImageLink,
+                imageUrl: ApiClient.baseUrl + widget.performance.imageLink,
                 fit: BoxFit.fill,
                 placeholder: (contxt, string) => const Center(
                   child: CircularProgressIndicator(
@@ -86,13 +87,17 @@ class _PerfomanceDescriptionScreenState
                 Container(
                   width: 36,
                   height: 36,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColor.lightGray,
+                    color: _isExpanded
+                        ? AppColor.lightGray
+                        : AppColor.whiteBackground,
                   ),
                   child: Center(
                     child: IconButton(
-                      color: _textColor,
+                      color: _isExpanded
+                          ? AppColor.whiteBackground
+                          : AppColor.grey,
                       onPressed: () => Navigator.of(context).pop(),
                       icon: Image.asset(
                         ImagesSources.closeIcon,
@@ -112,33 +117,39 @@ class _PerfomanceDescriptionScreenState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.timer,
-                        size: 20,
-                        color: AppColor.greyText,
+                      const Padding(
+                        padding: EdgeInsets.only(right: 4),
+                        child: Icon(
+                          Icons.access_time_outlined,
+                          size: 20,
+                          color: AppColor.greyText,
+                        ),
                       ),
                       Text(
-                        widget.performance.duration,
+                        widget.performance.fullInfo!.duration.toString(),
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
-                            ?.copyWith(color: AppColor.greyText, fontSize: 12),
+                            ?.copyWith(color: AppColor.greyText),
                       ),
                     ],
                   ),
                   Row(
                     children: [
-                      Icon(
-                        Icons.location_pin,
-                        size: 20,
-                        color: AppColor.greyText,
+                      const Padding(
+                        padding: EdgeInsets.only(right: 4),
+                        child: Icon(
+                          Icons.location_pin,
+                          size: 20,
+                          color: AppColor.greyText,
+                        ),
                       ),
                       Text(
-                        widget.performance.tag,
+                        widget.performance.fullInfo!.chapters[0].place.address,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
-                            ?.copyWith(color: AppColor.greyText, fontSize: 12),
+                            ?.copyWith(color: AppColor.greyText),
                       ),
                     ],
                   ),
@@ -146,40 +157,45 @@ class _PerfomanceDescriptionScreenState
                     height: 12,
                   ),
                   Text(
-                    widget.performance.description,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
+                    widget.performance.fullInfo!.description,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  CachedNetworkImage(
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12, bottom: 32),
+                    child: CachedNetworkImage(
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.fill)),
-                    ),
-                    height: 200,
-                    width: 434,
-                    imageUrl:
-                        "https://sun9-39.userapi.com/impg/wvR1_YIXqeP3hgZUUELQ5U3bvq1kEvKgvRbycA/f8n1n84CfzQ.jpg?size=343x200&quality=95&sign=99b10e66c024f3b0f08b823e49b1e412&type=album",
-                    fit: BoxFit.cover,
-                    placeholder: (contxt, string) => const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColor.lightGray,
+                            image: imageProvider,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      imageUrl:
+                          "https://sun9-39.userapi.com/impg/wvR1_YIXqeP3hgZUUELQ5U3bvq1kEvKgvRbycA/f8n1n84CfzQ.jpg?size=343x200&quality=95&sign=99b10e66c024f3b0f08b823e49b1e412&type=album",
+                      fit: BoxFit.cover,
+                      placeholder: (contxt, string) => const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.lightGray,
+                        ),
                       ),
                     ),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Аудио отрывки",
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: 24, fontWeight: FontWeight.w800),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Text(
+                          "Аудио отрывки",
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
                       ),
                       isBought
                           ? Column(
@@ -189,8 +205,8 @@ class _PerfomanceDescriptionScreenState
                                   height:
                                       MediaQuery.of(context).size.height * 0.2,
                                   child: ListView.builder(
-                                    itemCount:
-                                        widget.performance.audioLinks.length,
+                                    itemCount: widget
+                                        .performance.fullInfo!.chapters.length,
                                     scrollDirection: Axis.vertical,
                                     itemBuilder:
                                         (BuildContext context, int index) {
@@ -216,44 +232,48 @@ class _PerfomanceDescriptionScreenState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(top: 20, bottom: 12),
+                        padding: const EdgeInsets.only(top: 20, bottom: 12),
                         child: Text(
                           'Фотографии',
                           style: Theme.of(context)
                               .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                  fontSize: 24, fontWeight: FontWeight.w800),
+                              .displaySmall
+                              ?.copyWith(fontWeight: FontWeight.w700),
                         ),
                       ),
                       CarouselSlider(
                         items: List.generate(
-                          widget.performance.imagesList.length,
-                          (index) => CachedNetworkImage(
-                            imageBuilder: (context, imageProvider) => Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.fill,
+                          widget.performance.fullInfo!.images.length,
+                          (index) => Padding(
+                            padding: const EdgeInsets.only(
+                              right: 8,
+                            ),
+                            child: CachedNetworkImage(
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
                               ),
-                            ),
-                            height: 88,
-                            width: 88,
-                            imageUrl: ApiClient.baseUrl +
-                                widget.performance.coverImageLink,
-                            fit: BoxFit.fill,
-                            placeholder: (contxt, string) => const Center(
-                              child: CircularProgressIndicator(
-                                color: AppColor.lightGray,
+                              height: MediaQuery.of(context).size.width * 0.32,
+                              width: MediaQuery.of(context).size.width * 0.32,
+                              imageUrl: ApiClient.baseUrl +
+                                  widget.performance.imageLink,
+                              fit: BoxFit.fill,
+                              placeholder: (contxt, string) => const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColor.lightGray,
+                                ),
                               ),
                             ),
                           ),
                         ),
                         options: CarouselOptions(
                           enableInfiniteScroll: true,
-                          height: 88,
                           aspectRatio: 3.0,
                           viewportFraction: 0.3,
                         ),
@@ -269,15 +289,14 @@ class _PerfomanceDescriptionScreenState
                           'Авторы',
                           style: Theme.of(context)
                               .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                  fontSize: 24, fontWeight: FontWeight.w800),
+                              .displaySmall
+                              ?.copyWith(fontWeight: FontWeight.w700),
                         ),
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.1,
                         child: ListView.builder(
-                          itemCount: widget.performance.authorsName.length,
+                          itemCount: widget.performance.creators.length,
                           scrollDirection: Axis.horizontal,
                           cacheExtent: 1000,
                           itemBuilder: (BuildContext context, int index) {
@@ -309,7 +328,7 @@ class _PerfomanceDescriptionScreenState
               },
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all(AppColor.purpleDarkPrimary),
+                    MaterialStateProperty.all(AppColor.purplePrimary),
                 elevation: MaterialStateProperty.all(5),
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
@@ -373,15 +392,14 @@ class _PerfomanceDescriptionScreenState
                             fontSize: 20,
                             decoration: TextDecoration.none,
                           ),
-                      cursorColor: AppColor.purpleDarkPrimary,
+                      cursorColor: AppColor.purplePrimary,
                       controller: textEditingController,
                       decoration: InputDecoration(
                         enabledBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(color: AppColor.grey),
                         ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppColor.purpleDarkPrimary),
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.purplePrimary),
                         ),
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 12),
@@ -397,7 +415,7 @@ class _PerfomanceDescriptionScreenState
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all(AppColor.purpleDarkPrimary),
+                          MaterialStateProperty.all(AppColor.purplePrimary),
                       elevation: MaterialStateProperty.all(5),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(

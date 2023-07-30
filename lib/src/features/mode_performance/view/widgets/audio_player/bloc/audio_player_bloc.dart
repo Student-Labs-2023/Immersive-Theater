@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -39,14 +40,10 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     AudioPlayerAddPlaylistEvent event,
     Emitter<AudioPlayerState> emit,
   ) async {
+    log('_onAudioPlayerAddPlaylistEvent', name: 'Theater');
     AudioSource playlist = ConcatenatingAudioSource(
       useLazyPreparation: true,
-      children: event.listAudio
-          .map<AudioSource>(
-            (audioLink) =>
-                AudioSource.uri(Uri.parse(ApiClient.baseUrl + audioLink)),
-          )
-          .toList(),
+      children: [AudioSource.uri(Uri.parse(ApiClient.baseUrl + event.audio))],
     );
     player.setAudioSource(
       playlist,
@@ -59,6 +56,7 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     AudioPlayerInitialEvent event,
     Emitter<AudioPlayerState> emit,
   ) {
+    log('_onAudioPlayerInitialEvent', name: 'Theater');
     player.setVolume(1.0);
     player.setSpeed(1.0);
     player.setLoopMode(LoopMode.off);
@@ -120,6 +118,7 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     AudioPlayerUpdatePlayerStateEvent event,
     Emitter<AudioPlayerState> emit,
   ) {
+    log('_onAudioPlayerUpdatePlayerStateEvent', name: 'Theater');
     emit(
       state.copyWith(isPlaying: event.isPlaying),
     );
@@ -129,6 +128,7 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     AudioPlayerPlayPauseButtonPressedEvent event,
     Emitter<AudioPlayerState> emit,
   ) {
+    log('_onAudioPlayerPlayPauseButtonPressedEvent', name: 'Theater');
     if (state.isPlaying) {
       player.pause();
 
@@ -155,6 +155,7 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     AudioPlayerWindForwardButtonPressedEvent event,
     Emitter<AudioPlayerState> emit,
   ) {
+    log('_onAudioPlayerWindForwardButtonPressedEvent', name: 'Theater');
     Duration position = state.position + const Duration(seconds: 10);
     if (position > state.duration) {
       position = state.duration;
@@ -167,6 +168,7 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     AudioPlayerWindBackButtonPressedEvent event,
     Emitter<AudioPlayerState> emit,
   ) {
+    log('_onAudioPlayerWindBackButtonPressedEvent', name: 'Theater');
     Duration position = state.position - const Duration(seconds: 10);
     if (position < Duration.zero) {
       position = Duration.zero;
@@ -195,6 +197,7 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     AudioLocationFinishedEvent event,
     Emitter<AudioPlayerState> emit,
   ) {
+    log('_onAudioLocationFinishedEvent', name: 'Theater');
     if (!event.isCompleted) {
       emit(
         AudioPlayerFinishedState(

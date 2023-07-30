@@ -1,15 +1,17 @@
 import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:shebalin/src/features/audioplayer/model/audio_panel_state.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 
 import '../../../../theme/theme.dart';
 
 class AudioDemo extends StatefulWidget {
   final bool isBought;
-  final dynamic performance;
+  final Performance performance;
   final int index;
   const AudioDemo({
     Key? key,
@@ -44,7 +46,8 @@ class _AudioDemoState extends State<AudioDemo> {
                         child:
                             CircularProgressIndicator(color: accentTextColor),
                       ),
-                      imageUrl: ApiClient.baseUrl +widget.performance.audioCoverImageLink,
+                      imageUrl:
+                          ApiClient.baseUrl + widget.performance.imageLink,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -56,15 +59,15 @@ class _AudioDemoState extends State<AudioDemo> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.performance.audioTitles[widget.index],
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(),
+                      widget.performance.fullInfo!.chapters[widget.index].title,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Text(
                       widget.performance.title,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: 12,
-                            color: secondaryTextColor,
-                          ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: AppColor.greyText),
                     ),
                   ],
                 ),

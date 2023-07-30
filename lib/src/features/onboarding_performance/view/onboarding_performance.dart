@@ -46,26 +46,9 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.whiteBackground,
+      backgroundColor: AppColor.accentBackground,
       body: AnimatedImage(image: pages[currentIndex].image),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 34),
-        child: showOneButtonAtHome
-            ? AppIconButton.primaryButton(
-                title: pages[currentIndex].buttonTitle,
-                onTap: curIndexLessLastindex ? _nextPage : _openPerfModeScreen,
-                icon: ImagesSources.right,
-              )
-            : OnboardControllButton(
-                titlePrimary: pages[currentIndex].buttonTitle,
-                onTapPrimary: listenAtHome ? _nextPage : _launchUrl,
-                titleSecondary: 'Доберусь сам',
-                onTapSecondary:
-                    curIndexLessLastindex ? _nextPage : _openPerfModeScreen,
-              ),
-      ),
       bottomSheet: AnimatedBottomSheet(
-        needMoreSpace: !showOneButtonAtHome,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
             16,
@@ -91,6 +74,25 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
               const SizedBox(
                 height: 40,
               ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 34),
+                child: showOneButtonAtHome
+                    ? AppIconButton.primaryButton(
+                        title: pages[currentIndex].buttonTitle,
+                        onTap: curIndexLessLastindex
+                            ? _nextPage
+                            : _openPerfModeScreen,
+                        icon: ImagesSources.right,
+                      )
+                    : OnboardControllButton(
+                        titlePrimary: pages[currentIndex].buttonTitle,
+                        onTapPrimary: listenAtHome ? _nextPage : _launchUrl,
+                        titleSecondary: 'Доберусь сам',
+                        onTapSecondary: curIndexLessLastindex
+                            ? _nextPage
+                            : _openPerfModeScreen,
+                      ),
+              ),
             ],
           ),
         ),
@@ -107,8 +109,7 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   Future<void> _launchUrl() async {
     final latitude = widget.startPoint.latitude;
     final longitude = widget.startPoint.longitude;
-    final linkYandexMap =
-        "http://maps.yandex.ru/?text=${latitude},${longitude}";
+    final linkYandexMap = "http://maps.yandex.ru/?text=$latitude,$longitude";
     if (!await launchUrl(Uri.parse(linkYandexMap))) {
       return;
     }

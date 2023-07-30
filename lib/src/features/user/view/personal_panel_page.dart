@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
-
-import 'package:shebalin/src/features/user/view/widgets/ticket.dart';
-
-import '../../../theme/theme.dart';
+import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
 
 class PersonalPanelPage extends StatelessWidget {
   PersonalPanelPage({Key? key}) : super(key: key);
@@ -22,7 +18,7 @@ class PersonalPanelPage extends StatelessWidget {
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
-            child: PromocodeScreen(),
+            child: PromocodePanelPage(),
           ),
         ),
       ),

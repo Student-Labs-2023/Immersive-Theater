@@ -16,14 +16,14 @@ class AudioPlayerWindForwardButtonPressedEvent extends AudioPlayerEvent {}
 class AudioPlayerWindBackButtonPressedEvent extends AudioPlayerEvent {}
 
 class AudioPlayerAddPlaylistEvent extends AudioPlayerEvent {
-  final List<String> listAudio;
+  final String audio;
 
   const AudioPlayerAddPlaylistEvent({
-    required this.listAudio,
+    required this.audio,
   });
 
   @override
-  List<Object> get props => [listAudio];
+  List<Object> get props => [audio];
 }
 
 class AudioPlayerChangeSliderEvent extends AudioPlayerEvent {

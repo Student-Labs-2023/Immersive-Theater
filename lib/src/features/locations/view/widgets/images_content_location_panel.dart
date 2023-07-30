@@ -14,8 +14,9 @@ class ImagesContentLocationPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      height: MediaQuery.of(context).size.height * 0.17,
+      height: MediaQuery.of(context).size.height * 0.12,
       child: ListView.builder(
+
         scrollDirection: Axis.horizontal,
         itemCount: imageLinks.length,
         itemBuilder: (BuildContext context, int index) {
@@ -32,8 +33,8 @@ class ImagesContentLocationPanel extends StatelessWidget {
                 margin: const EdgeInsets.only(
                   right: 8,
                 ),
-                height: MediaQuery.of(context).size.height * 0.17,
-                width: MediaQuery.of(context).size.height * 0.17,
+                height: MediaQuery.of(context).size.height * 0.12,
+                width: MediaQuery.of(context).size.height * 0.12,
                 clipBehavior: Clip.hardEdge,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(4)),
@@ -53,11 +54,9 @@ class ImagesContentLocationPanel extends StatelessWidget {
                         ),
                       ),
                     ),
-                    height: 88,
-                    width: 88,
                     imageUrl: ApiClient.baseUrl + imageLinks[index],
                     fit: BoxFit.fill,
-                    placeholder: (contxt, string) => const Center(
+                    placeholder: (context, string) => const Center(
                       child: CircularProgressIndicator(
                         color: AppColor.whiteText,
                       ),

@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shebalin/src/features/locations/bloc/location_bloc.dart';
 import 'package:shebalin/src/features/locations/view/location_description_panel_page.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/map/view/yandex_map_page.dart';
+import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/performances/view/performances_panel_page.dart';
-import 'package:shebalin/src/features/promocodes/view/widgets/input_promocode_panel_page.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
-import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
 import 'package:shebalin/src/features/user/view/personal_panel_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
-import 'package:shebalin/src/theme/images.dart';
 
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -32,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
       appBar: null,
       body: SlidingUpPanel(
         controller: panelController,
-        defaultPanelState: PanelState.OPEN,
+        defaultPanelState: PanelState.CLOSED,
         minHeight: MediaQuery.of(context).size.height * 0.12,
         maxHeight: context.watch<MapPinBloc>().state is MapPinLoaded
             ? MediaQuery.of(context).size.height * 0.63
@@ -47,50 +44,67 @@ class _MainScreenState extends State<MainScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(
-                        width: 24,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.12),
-                          borderRadius: containerRadius,
+                      Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const SizedBox(
+                            height: 3,
+                            width: 25,
+                          ),
                         ),
-                        child: const SizedBox(
-                          height: 3,
-                          width: 50,
-                        ),
-                      ),
+                      )
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Padding(padding: EdgeInsets.only(left: 20)),
-                      TextButton(
-                        onPressed: () => _isPerformancePanelShowed(true),
-                        child: Text("Спектакли",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
-                              color: isPerfomnceButtonPressed
-                                  ? AppColor.blackText
-                                  : AppColor.greyText,
-                            )),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        child: TextButton(
+                          onPressed: () {
+                            _isPerformancePanelShowed(true);
+                            panelController.open();
+                          },
+                          child: Text(
+                            "Спектакли",
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: isPerfomnceButtonPressed
+                                      ? AppColor.blackText
+                                      : AppColor.greyText,
+                                ),
+                          ),
+                        ),
                       ),
-                      const SizedBox(
-                        width: 40,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        child: TextButton(
+                          onPressed: () {
+                            _isPerformancePanelShowed(false);
+                            panelController.open();
+                          },
+                          child: Text(
+                            "Мои билеты",
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: isPerfomnceButtonPressed
+                                      ? AppColor.greyText
+                                      : AppColor.blackText,
+                                ),
+                          ),
+                        ),
                       ),
-                      TextButton(
-                        onPressed: () => _isPerformancePanelShowed(false),
-                        child: Text("Мои билеты",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
-                              color: isPerfomnceButtonPressed
-                                  ? AppColor.greyText
-                                  : AppColor.blackText,
-                            )),
-                      ),
+                      const Padding(padding: EdgeInsets.only(right: 20)),
                     ],
                   ),
                 ],
@@ -112,7 +126,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                         child: const SizedBox(
                           height: 3,
-                          width: 50,
+                          width: 25,
                         ),
                       ),
                     ],
@@ -145,9 +159,9 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               );
             } else if (state is MapPinClosingState) {
-              Future.delayed(const Duration(seconds: 1), () {
-                panelController.open();
-              });
+              // Future.delayed(const Duration(seconds: 1), () {
+              //   panelController.close();
+              // });
               return isPerfomnceButtonPressed
                   ? const PerformancesPanelPage()
                   : const PromocodePanelPage();
@@ -156,12 +170,14 @@ class _MainScreenState extends State<MainScreen> {
           },
         ),
         body: Center(
-          child: BlocBuilder<LocationBloc, LocationState>(
+          child: BlocBuilder<PerformanceBloc, PerformanceState>(
             builder: (context, state) {
-              if (state is LocationsLoadInProgress) {
+              if (state is PerformanceLoadInProgress) {
                 return const CircularProgressIndicator();
-              } else if (state is LocationsLoadSuccess) {
-                var locations = state.locations;
+              } else if (state is PerformanceLoadSuccess) {
+                var locations = state.perfomances[0].fullInfo!.chapters
+                    .map((e) => e.place)
+                    .toList();
                 return YandexMapPage(
                   locations: locations,
                 );
