@@ -175,11 +175,8 @@ class _MainScreenState extends State<MainScreen> {
               if (state is PerformanceLoadInProgress) {
                 return const CircularProgressIndicator();
               } else if (state is PerformanceLoadSuccess) {
-                List<Place> locations = state.perfomances[0].fullInfo == null
-                    ? []
-                    : state.perfomances[0].fullInfo!.chapters
-                        .map((e) => e.place)
-                        .toList();
+                List<Place> locations =
+                    state.perfomances[0].chapters.map((e) => e.place).toList();
                 return YandexMapPage(
                   locations: locations,
                 );

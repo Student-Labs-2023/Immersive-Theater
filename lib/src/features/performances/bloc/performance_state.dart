@@ -11,6 +11,8 @@ class PerformanceLoadInProgress extends PerformanceState {}
 
 class PerformanceLoadFailure extends PerformanceState {}
 
+class PerformanceFullInfoLoadFailure extends PerformanceState {}
+
 class PerformanceLoadSuccess extends PerformanceState {
   final List<Performance> perfomances;
   const PerformanceLoadSuccess(List<Object> props, {required this.perfomances});
@@ -19,11 +21,8 @@ class PerformanceLoadSuccess extends PerformanceState {
   List<Object> get props => [perfomances];
 }
 
-class PerformanceDescriptionLoadSuccess extends PerformanceState {
-  final Performance perfomance;
-  const PerformanceDescriptionLoadSuccess(List<Object> props,
-      {required this.perfomance});
-
+class PerformanceFullInfoLoadSuccess extends PerformanceState {
+  const PerformanceFullInfoLoadSuccess();
   @override
-  List<Object> get props => [perfomance];
+  List<Object> get props => [];
 }

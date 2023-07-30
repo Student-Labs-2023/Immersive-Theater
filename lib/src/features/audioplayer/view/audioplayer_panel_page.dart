@@ -38,7 +38,7 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
     super.initState();
     playlist = ConcatenatingAudioSource(
       useLazyPreparation: true,
-      children: widget.performance.fullInfo!.chapters
+      children: widget.performance.chapters
           .map<AudioSource>(
             (chapter) => AudioSource.uri(Uri.parse(chapter.shortAudioLink)),
           )
@@ -154,8 +154,8 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.performance.fullInfo!
-                              .chapters[audioPlayer.currentIndex!].title,
+                          widget.performance.chapters[audioPlayer.currentIndex!]
+                              .title,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(

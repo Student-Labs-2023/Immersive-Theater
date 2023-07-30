@@ -4,14 +4,15 @@ import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
+import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/models/payment_model.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/audio_demo.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/author_card.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:shebalin/src/features/photo_slider/view/widgets/tiktok_photo.dart';
 
 class PerfomanceDescriptionScreen extends StatefulWidget {
   const PerfomanceDescriptionScreen({Key? key, required this.performance})
@@ -40,15 +41,17 @@ class _PerfomanceDescriptionScreenState
   Color _textColor = AppColor.whiteText;
 
   @override
+  void initState() {
+    context
+        .read<PerformanceBloc>()
+        .add(PerformanceLoadFullInfo(widget.performance));
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var mediaQuerySize = MediaQuery.of(context).size;
-    final List<Widget> imageSliders = widget.performance.fullInfo!.images
-        .map(
-          (e) => TikTokPhoto(
-            entry: e,
-          ),
-        )
-        .toList();
+
     return Scaffold(
       body: CustomScrollView(
         controller: _controller,
@@ -126,7 +129,7 @@ class _PerfomanceDescriptionScreenState
                         ),
                       ),
                       Text(
-                        widget.performance.fullInfo!.duration.toString(),
+                        widget.performance.duration.toString(),
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -145,7 +148,7 @@ class _PerfomanceDescriptionScreenState
                         ),
                       ),
                       Text(
-                        widget.performance.fullInfo!.chapters[0].place.address,
+                        widget.performance.chapters[0].place.address,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -157,7 +160,7 @@ class _PerfomanceDescriptionScreenState
                     height: 12,
                   ),
                   Text(
-                    widget.performance.fullInfo!.description,
+                    widget.performance.description,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   Padding(
@@ -205,8 +208,8 @@ class _PerfomanceDescriptionScreenState
                                   height:
                                       MediaQuery.of(context).size.height * 0.2,
                                   child: ListView.builder(
-                                    itemCount: widget
-                                        .performance.fullInfo!.chapters.length,
+                                    itemCount:
+                                        widget.performance.chapters.length,
                                     scrollDirection: Axis.vertical,
                                     itemBuilder:
                                         (BuildContext context, int index) {
@@ -243,7 +246,7 @@ class _PerfomanceDescriptionScreenState
                       ),
                       CarouselSlider(
                         items: List.generate(
-                          widget.performance.fullInfo!.images.length,
+                          widget.performance.images.length,
                           (index) => Padding(
                             padding: const EdgeInsets.only(
                               right: 8,

@@ -1,6 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
-import 'package:performances_repository/src/models/creator.dart';
-import 'package:performances_repository/src/models/performance_full_info.dart';
+import 'package:performances_repository/performances_repository.dart';
 
 part 'performance.g.dart';
 
@@ -13,19 +13,55 @@ class Performance {
 
   @JsonKey(name: 'image_link')
   final String imageLink;
+
   @JsonKey(name: 'authors')
   final List<Creator> creators;
-  PerformanceFullInfo? fullInfo;
 
-  Performance({
-    required this.id,
-    required this.title,
-    required this.imageLink,
-    required this.creators,
-  });
+  @JsonKey(defaultValue: '')
+  final String description;
+
+  final Duration duration;
+
+  @JsonKey(defaultValue: [])
+  final List<String> images;
+
+  @JsonKey(name: 'audio', defaultValue: [])
+  final List<Chapter> chapters;
+
+  Performance(
+      {required this.id,
+      required this.title,
+      required this.imageLink,
+      required this.creators,
+      required this.description,
+      required this.duration,
+      required this.images,
+      required this.chapters});
 
   factory Performance.fromJson(Map<String, dynamic> json) =>
       _$PerformanceFromJson(json);
 
   Map<String, dynamic> toJson() => _$PerformanceToJson(this);
+
+  Performance copyWith({
+    int? id,
+    String? title,
+    String? imageLink,
+    List<Creator>? creators,
+    String? description,
+    Duration? duration,
+    List<String>? images,
+    List<Chapter>? chapters,
+  }) {
+    return Performance(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      imageLink: imageLink ?? this.imageLink,
+      creators: creators ?? this.creators,
+      description: description ?? this.description,
+      duration: duration ?? this.duration,
+      images: images ?? this.images,
+      chapters: chapters ?? this.chapters,
+    );
+  }
 }
