@@ -52,7 +52,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
     try {
       final performance =
           await _performanceRepository.fetchPerformanceById(event.id);
-      log(performance.chapters.isNotEmpty.toString());
+      log(performance.toString());
       emit(
         PerformanceLoadSuccess(
           perfomances: state.perfomances

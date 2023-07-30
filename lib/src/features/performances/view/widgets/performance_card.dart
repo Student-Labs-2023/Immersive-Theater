@@ -6,6 +6,7 @@ import 'package:shebalin/src/features/detailed_performaces/view/performance_doub
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
+import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 
 class PerformanceCard extends StatelessWidget {
   const PerformanceCard({Key? key, required this.performance})
@@ -57,11 +58,7 @@ class PerformanceCard extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageUrl: performance.imageLink,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => Center(
-                    child: CircularProgressIndicator(
-                      color: accentTextColor,
-                    ),
-                  ),
+                  placeholder: (context, url) => const AppProgressBar(),
                 ),
               ),
               const SizedBox(height: 6),

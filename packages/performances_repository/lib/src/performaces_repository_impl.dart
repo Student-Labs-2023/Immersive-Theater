@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:performances_repository/src/models/performance.dart';
@@ -31,7 +30,6 @@ class PerformancesRepositoryImpl implements PerformancesRepository {
         options: Options(responseType: ResponseType.json));
     final result = ResponseMapper.fromJson(jsonDecode(response.data));
     final List<Performance> performances = [];
-    log(result.data.toString());
     for (final rawPerformance in result.data) {
       performances.add(Performance.fromJson(rawPerformance));
     }
@@ -46,7 +44,6 @@ class PerformancesRepositoryImpl implements PerformancesRepository {
         options: Options(responseType: ResponseType.json));
     final Performance performance =
         Performance.fromJson(jsonDecode(response.data));
-    log(response.data);
     return performance;
   }
 }

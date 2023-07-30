@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/images_location.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/models/payment_model.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/audio_demo.dart';
@@ -26,7 +28,7 @@ class PerfomanceDescriptionScreen extends StatefulWidget {
 
 class _PerfomanceDescriptionScreenState
     extends State<PerfomanceDescriptionScreen> {
-  bool isBought = true;
+  bool isBought = false;
   bool isFavoriteLocation = false;
   final paymentService = Payment();
 
@@ -131,7 +133,7 @@ class _PerfomanceDescriptionScreenState
                           state is PerformanceFullInfoLoadInProgress
                               ? const AppProgressBar()
                               : Text(
-                                  '${state.perfomances[widget.performance.id].duration.inHours} ч. ${state.perfomances[widget.performance.id].duration.inMinutes} мин .'
+                                  '${state.perfomances[widget.performance.id].duration.inHours} ч. ${state.perfomances[widget.performance.id].duration.inMinutes} мин.'
                                       .toString(),
                                   style: Theme.of(context)
                                       .textTheme
@@ -209,36 +211,29 @@ class _PerfomanceDescriptionScreenState
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
-                          isBought
-                              ? Column(
-                                  children: [
-                                    const Divider(height: 1, thickness: 1),
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.2,
-                                      child: ListView.builder(
-                                        itemCount:
-                                            widget.performance.chapters.length,
-                                        scrollDirection: Axis.vertical,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return AudioDemo(
-                                            isBought: isBought,
-                                            performance: widget.performance,
-                                            index: index,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    const Divider(height: 1, thickness: 1)
-                                  ],
-                                )
-                              : AudioDemo(
-                                  isBought: isBought,
-                                  performance: widget.performance,
-                                  index: 0,
+                          Column(
+                            children: [
+                              const Divider(height: 1, thickness: 1),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                child: ListView.builder(
+                                  itemCount: widget.performance.chapters.length,
+                                  scrollDirection: Axis.vertical,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return AudioDemo(
+                                      isBought: isBought,
+                                      performance: state
+                                          .perfomances[widget.performance.id],
+                                      index: index,
+                                    );
+                                  },
                                 ),
+                              ),
+                              const Divider(height: 1, thickness: 1)
+                            ],
+                          )
                         ],
                       ),
                       Column(
@@ -300,68 +295,31 @@ class _PerfomanceDescriptionScreenState
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: mediaQuerySize.width * 0.13 + 20,
+              height: mediaQuerySize.width * 0.15,
             ),
           )
         ],
       ),
-      floatingActionButton: isBought
-          ? ElevatedButton(
-              onPressed: () async {
-                showInformationDialog(context);
-              },
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(AppColor.purplePrimary),
-                elevation: MaterialStateProperty.all(5),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                minimumSize: MaterialStateProperty.all(
-                  Size(
-                    mediaQuerySize.width * 0.85,
-                    mediaQuerySize.width * 0.13,
-                  ),
-                ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+        ),
+        child: isBought
+            ? AppButton(
+                title: 'Начать спектакль',
+                onTap: _perfModeOpen,
+                textColor: AppColor.whiteText,
+                backgroundColor: AppColor.purplePrimary,
+                borderColor: AppColor.purplePrimary,
+              )
+            : AppButton(
+                title: 'Приобрессти за 299 р',
+                onTap: _buyButton,
+                textColor: AppColor.whiteText,
+                backgroundColor: AppColor.purplePrimary,
+                borderColor: AppColor.purplePrimary,
               ),
-              child: Text(
-                'Перейти к спектаклю',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: AppColor.whiteText),
-              ),
-            )
-          : ElevatedButton(
-              onPressed: () async {
-                showInformationDialog(context);
-              },
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(AppColor.purplePrimary),
-                elevation: MaterialStateProperty.all(5),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                minimumSize: MaterialStateProperty.all(
-                  Size(
-                    mediaQuerySize.width * 0.85,
-                    mediaQuerySize.width * 0.13,
-                  ),
-                ),
-              ),
-              child: Text(
-                'Приобрести за 299 ₽',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: AppColor.whiteText),
-              ),
-            ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -480,5 +438,9 @@ class _PerfomanceDescriptionScreenState
     setState(() {
       isFavoriteLocation = !isFavoriteLocation;
     });
+  }
+
+  void _perfModeOpen() {
+    Navigator.of(context).pushNamed(OnboardWelcome.routeName);
   }
 }

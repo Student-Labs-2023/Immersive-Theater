@@ -22,10 +22,11 @@ Performance _$PerformanceFromJson(Map<String, dynamic> json) => Performance(
               ?.map((e) => e as String)
               .toList() ??
           [],
-      chapters: (json['audio'] as List<dynamic>?)
+      chapters: (json['audios'] as List<dynamic>?)
               ?.map((e) => Chapter.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
+      // firstPlace: Place.fromJson(json['first_place']) ,
     );
 
 Map<String, dynamic> _$PerformanceToJson(Performance instance) =>
