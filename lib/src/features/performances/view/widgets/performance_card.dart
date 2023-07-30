@@ -1,8 +1,9 @@
-import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/performance_double_screen.dart';
+import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
@@ -15,10 +16,15 @@ class PerformanceCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 12),
       child: InkWell(
-        onTap: () => Navigator.of(context).pushNamed(
-          PerformanceDoubleScreen.routeName,
-          arguments: performance,
-        ),
+        onTap: () {
+          context
+              .read<PerformanceBloc>()
+              .add(PerformanceLoadFullInfo(performance.id));
+          Navigator.of(context).pushNamed(
+            PerformanceDoubleScreen.routeName,
+            arguments: performance,
+          );
+        },
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 28),
           padding: const EdgeInsets.only(top: 12, bottom: 4),
@@ -49,7 +55,7 @@ class PerformanceCard extends StatelessWidget {
                   color: secondaryColor,
                 ),
                 child: CachedNetworkImage(
-                  imageUrl: ApiClient.baseUrl + performance.imageLink,
+                  imageUrl: performance.imageLink,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Center(
                     child: CircularProgressIndicator(

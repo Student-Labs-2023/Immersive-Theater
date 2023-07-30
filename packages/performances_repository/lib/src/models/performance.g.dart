@@ -10,12 +10,13 @@ Performance _$PerformanceFromJson(Map<String, dynamic> json) => Performance(
       id: json['id'] as int,
       title: json['name'] as String,
       imageLink: json['image_link'] as String,
-      creators: (json['authors'] as List<dynamic>)
-          .map((e) => Creator.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      creators: (json['authors'] as List<dynamic>?)
+              ?.map((e) => Creator.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
       description: json['description'] as String? ?? '',
       duration: json['duration'] != null
-          ? Duration(microseconds: json['duration'] as int)
+          ? Duration(seconds: json['duration'] as int)
           : Duration.zero,
       images: (json['images'] as List<dynamic>?)
               ?.map((e) => e as String)

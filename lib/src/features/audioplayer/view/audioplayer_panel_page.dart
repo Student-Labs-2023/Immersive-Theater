@@ -1,4 +1,3 @@
-import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -142,7 +141,7 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
                       const CircularProgressIndicator(
                     color: AppColor.grey,
                   ),
-                  imageUrl: ApiClient.baseUrl + widget.performance.imageLink,
+                  imageUrl: widget.performance.imageLink,
                   fit: BoxFit.cover,
                 ),
               ),

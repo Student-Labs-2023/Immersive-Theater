@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:just_audio/just_audio.dart';
@@ -43,7 +42,7 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     log('_onAudioPlayerAddPlaylistEvent', name: 'Theater');
     AudioSource playlist = ConcatenatingAudioSource(
       useLazyPreparation: true,
-      children: [AudioSource.uri(Uri.parse(ApiClient.baseUrl + event.audio))],
+      children: [AudioSource.uri(Uri.parse(event.audio))],
     );
     player.setAudioSource(
       playlist,

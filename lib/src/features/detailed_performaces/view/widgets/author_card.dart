@@ -1,4 +1,3 @@
-import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:performances_repository/performances_repository.dart';
@@ -33,8 +32,7 @@ class AuthorCard extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(50)),
                   child: CachedNetworkImage(
-                    imageUrl: ApiClient.baseUrl +
-                        performance.creators[index].imageLink,
+                    imageUrl: performance.creators[index].imageLink,
                     fit: BoxFit.cover,
                   ),
                 ),

@@ -41,11 +41,12 @@ class PerformancesRepositoryImpl implements PerformancesRepository {
 
   @override
   Future<Performance> fetchPerformanceById(int id) async {
-    final response = await _apiClient.dio
-        .get(_PerformancesEndpoint.byId.endpoint + id.toString());
-    final result = ResponseMapper.fromJson(response.data);
-    final Performance performance = Performance.fromJson(result.data.first);
+    final response = await _apiClient.dio.get(
+        _PerformancesEndpoint.byId.endpoint + id.toString(),
+        options: Options(responseType: ResponseType.json));
+    final Performance performance =
+        Performance.fromJson(jsonDecode(response.data));
+    log(response.data);
     return performance;
   }
 }
-

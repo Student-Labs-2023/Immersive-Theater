@@ -1,4 +1,3 @@
-import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +25,7 @@ class AudioInfoWidget extends StatelessWidget {
             height: 40,
             width: 40,
             placeholder: (context, url) => const AppProgressBar(),
-            imageUrl: ApiClient.baseUrl + imageLink,
+            imageUrl: imageLink,
             fit: BoxFit.cover,
           ),
         ),

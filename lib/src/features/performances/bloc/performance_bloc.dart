@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
   final PerformancesRepository _performanceRepository;
   PerformanceBloc({required PerformancesRepository performanceRepository})
       : _performanceRepository = performanceRepository,
-        super(PerformanceLoadInProgress()) {
+        super(const PerformanceLoadInProgress(perfomances: [])) {
     on<PerformancesStarted>(_onPerformanceStarted);
     on<PerformancesRefreshed>(_onPerformanceRefreshed);
     on<PerformanceLoadFullInfo>(_onPerformanceLoadFullInfo);
@@ -23,9 +24,9 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
   ) async {
     try {
       final performances = await _performanceRepository.fetchPerformances();
-      emit(PerformanceLoadSuccess(event.props, perfomances: performances));
+      emit(PerformanceLoadSuccess(perfomances: performances));
     } catch (_) {
-      emit(PerformanceLoadFailure());
+      emit(const PerformanceLoadFailure(perfomances: []));
       rethrow;
     }
   }
@@ -36,9 +37,9 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
   ) async {
     try {
       final performances = await _performanceRepository.fetchPerformances();
-      emit(PerformanceLoadSuccess(event.props, perfomances: performances));
+      emit(PerformanceLoadSuccess(perfomances: performances));
     } catch (_) {
-      emit(PerformanceLoadFailure());
+      emit(const PerformanceLoadFailure(perfomances: []));
       rethrow;
     }
   }
@@ -47,18 +48,29 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
     PerformanceLoadFullInfo event,
     Emitter<PerformanceState> emit,
   ) async {
+    emit(PerformanceLoadInProgress(perfomances: state.perfomances));
     try {
-      final performance = await _performanceRepository
-          .fetchPerformanceById(event.performance.id);
-      event.performance.copyWith(
-        description: performance.description,
-        duration: performance.duration,
-        images: performance.images,
-        chapters: performance.chapters,
+      final performance =
+          await _performanceRepository.fetchPerformanceById(event.id);
+      log(performance.chapters.isNotEmpty.toString());
+      emit(
+        PerformanceLoadSuccess(
+          perfomances: state.perfomances
+              .map(
+                (perf) => (perf.id != event.id)
+                    ? perf
+                    : perf.copyWith(
+                        duration: performance.duration,
+                        chapters: performance.chapters,
+                        description: performance.description,
+                        images: performance.images,
+                      ),
+              )
+              .toList(),
+        ),
       );
-      emit(const PerformanceFullInfoLoadSuccess());
     } catch (_) {
-      emit(PerformanceLoadFailure());
+      emit(PerformanceLoadFailure(perfomances: state.perfomances));
     }
   }
 }

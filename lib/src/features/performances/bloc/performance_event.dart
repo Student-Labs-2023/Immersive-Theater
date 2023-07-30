@@ -19,7 +19,9 @@ class PerformancesRefreshed extends PerformanceEvent {
 }
 
 class PerformanceLoadFullInfo extends PerformanceEvent {
-  final Performance performance;
+  final int id;
 
-  const PerformanceLoadFullInfo(this.performance);
+  const PerformanceLoadFullInfo(this.id);
+  @override
+  List<Object> get props => [id];
 }
