@@ -1,4 +1,3 @@
-import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/theme/images.dart';
@@ -38,7 +37,7 @@ class _BadAudioDemoState extends State<BadAudioDemo> {
                     placeholder: (context, url) => Center(
                       child: CircularProgressIndicator(color: accentTextColor),
                     ),
-                    imageUrl: ApiClient.baseUrl +widget.performance.audioCoverImageLink,
+                    imageUrl: widget.performance.audioCoverImageLink,
                     fit: BoxFit.cover,
                   ),
                 ),

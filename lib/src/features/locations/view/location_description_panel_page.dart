@@ -4,19 +4,19 @@ import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/locations/view/widgets/audio_content_location_panel.dart';
 import 'package:shebalin/src/features/locations/view/widgets/historical_content_location_panel.dart';
 import 'package:shebalin/src/features/locations/view/widgets/images_content_location_panel.dart';
-import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../../models/payment_model.dart';
 
 class LocationDescriptionPanelPage extends StatefulWidget {
-  const LocationDescriptionPanelPage({Key? key, required this.mapObjectId,})
-      : super(key: key);
+  const LocationDescriptionPanelPage({
+    Key? key,
+    required this.mapObjectId,
+  }) : super(key: key);
   final String mapObjectId;
   @override
   State<LocationDescriptionPanelPage> createState() =>
@@ -78,8 +78,8 @@ class _LocationDescriptionPanelPageState
                 );
               }
               if (state is PerformanceLoadSuccess) {
-                currentLocation = state.perfomances[0].fullInfo!.chapters[
-                    state.perfomances[0].fullInfo!.chapters.indexWhere(
+                currentLocation = state.perfomances[0]
+                    .chapters[state.perfomances[0].chapters.indexWhere(
                   (location) => location.place.address == widget.mapObjectId,
                 )];
                 return Column(
