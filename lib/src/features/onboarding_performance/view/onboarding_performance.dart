@@ -59,7 +59,12 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              PageIndicator(count: pages.length, currentIndex: currentIndex),
+              PageIndicator(
+                count: pages.length,
+                currentIndex: currentIndex,
+                elementWidth: 8,
+                elementHeight: 8,
+              ),
               const SizedBox(
                 height: 40,
               ),

@@ -7,8 +7,9 @@ class ImagesSources {
   static const String markStar = 'assets/images/mark_star.png';
 
   static const String mark = 'assets/images/mark.png';
-  static const String onbording = 'assets/images/onbording.png';
-  static const String secondOnbording = 'assets/images/secondOnbording.png';
+  static const String onbording = 'assets/images/firstOnboarding.png';
+  static const String secondOnbording = 'assets/images/secondOnboarding.png';
+  static const String thirdOnbording = 'assets/images/thirdOnboarding.png';
   static const String photo1 = 'assets/images/photo1.png';
   static const String shebalinPortrait = 'assets/images/shebalin_portrait.png';
   static const String shebalinTicket = 'assets/images/shebalin_ticket.png';
