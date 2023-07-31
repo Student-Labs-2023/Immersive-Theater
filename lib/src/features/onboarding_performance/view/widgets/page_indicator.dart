@@ -13,8 +13,8 @@ class PageIndicator extends StatelessWidget {
 
   final int count;
   final int currentIndex;
-  double elementWidth = 8;
-  double elementHeight = 8;
+  double elementWidth = 4;
+  double elementHeight = 4;
 
   @override
   Widget build(BuildContext context) {

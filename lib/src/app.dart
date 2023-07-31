@@ -74,6 +74,10 @@ class App extends StatelessWidget {
                   {
                     return const OnboardingPerformance();
                   }
+                case OnbordingScreen.routeName:
+                  {
+                    return const OnbordingScreen();
+                  }
                 case ReviewPage.routeName:
                   {
                     return const ReviewPage();

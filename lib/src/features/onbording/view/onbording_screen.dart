@@ -23,7 +23,8 @@ class OnbordingScreen extends StatefulWidget {
 
 class _OnbordingScreenState extends State<OnbordingScreen> {
   PageController _pageController = PageController(initialPage: 0);
-  double? _pageIndex = 0;
+  CarouselController carController = CarouselController();
+  double _pageIndex = 0;
   final List<Onboard> onbordingData = [
     Onboard(
       progress: 0,
@@ -53,7 +54,7 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
     _pageController.addListener(() {
       setState(() {
         if (_pageController.page != null) {
-          _pageIndex = _pageController.page;
+          _pageIndex = _pageController.page!;
         } else {
           _pageIndex = 0;
         }
@@ -69,8 +70,9 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    CarouselController carController = CarouselController();
     return Scaffold(
+      extendBody: true,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,39 +80,47 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
             const SizedBox(
               height: 5,
             ),
-            CarouselSlider.builder(
-              carouselController: carController,
-              options: CarouselOptions(
-                enlargeStrategy: CenterPageEnlargeStrategy.height,
-                enlargeCenterPage: true,
-                autoPlay: false,
-                height: MediaQuery.of(context).size.height * 0.8,
-                viewportFraction: 1,
-              ),
-              itemCount: 3,
-              itemBuilder: (context, index, pindex) {
-                _pageIndex = onbordingData[index].progress;
-                return Column(
-                  children: [
-                    OnbordingContent(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                CarouselSlider.builder(
+                  carouselController: carController,
+                  options: CarouselOptions(
+                    enlargeFactor: 0.5,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _pageIndex = onbordingData[index].progress;
+                      });
+                    },
+                    enlargeCenterPage: true,
+                    autoPlay: false,
+                    height: MediaQuery.of(context).size.height * 0.62,
+                    viewportFraction: 1,
+                  ),
+                  itemCount: 3,
+                  itemBuilder: (context, index, pindex) {
+                    _pageIndex = onbordingData[index].progress;
+                    return OnbordingContent(
                       imageName:
                           onbordingData[index % onbordingData.length].image,
                       text: onbordingData[index % onbordingData.length]
                           .description,
                       title: onbordingData[index % onbordingData.length].title,
-                    ),
-                    const SizedBox(
-                      width: 32,
-                    ),
-                    PageIndicator(
-                      count: 3,
-                      currentIndex: index % onbordingData.length,
-                      elementHeight: 4,
-                      elementWidth: 60,
-                    ),
-                  ],
-                );
-              },
+                    );
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 32,
+                  ),
+                  child: PageIndicator(
+                    count: 3,
+                    currentIndex: _pageIndex.toInt(),
+                    elementHeight: 4,
+                    elementWidth: 60,
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
@@ -118,16 +128,15 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
-                    child: Text(
-                      "Пропустить",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(color: AppColor.greyText),
-                    ),
-                    onTap: () =>
-                        Navigator.of(context).pushNamed(MainScreen.routeName),
-                  ),
+                      child: Text(
+                        "Пропустить",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(color: AppColor.greyText),
+                      ),
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => const MainScreen()))),
                   FloatingActionButton(
                     onPressed: () => carController.nextPage(
                       duration: const Duration(

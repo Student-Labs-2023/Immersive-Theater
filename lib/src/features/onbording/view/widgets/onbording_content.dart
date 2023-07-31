@@ -17,63 +17,45 @@ class OnbordingContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.06),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+    return Center(
+      child: Container(
+        alignment: Alignment.bottomCenter,
+        width: MediaQuery.of(context).size.width * 0.91,
+        height: MediaQuery.of(context).size.height * 0.604,
+        clipBehavior: Clip.none,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          color: AppColor.whiteBackground,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          child: Column(
             children: [
-              Container(
-                alignment: Alignment.bottomCenter,
-                width: MediaQuery.of(context).size.width * 0.91,
-                height: MediaQuery.of(context).size.height * 0.6,
-                clipBehavior: Clip.none,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: AppColor.whiteBackground,
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                  child: Column(
-                    children: [
-                      Image(
-                        height: MediaQuery.of(context).size.height * 0.34,
-                        image: AssetImage(imageName),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 32,
-                          ),
-                          Text(
-                            title,
-                            textAlign: TextAlign.start,
-                            style: Theme.of(context).textTheme.displaySmall,
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Text(
-                            text,
-                            textAlign: TextAlign.start,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+              Image(
+                height: MediaQuery.of(context).size.height * 0.34,
+                image: AssetImage(imageName),
               ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 32, bottom: 24),
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+                  ),
+                  Text(
+                    text,
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
+              )
             ],
           ),
-        ],
+        ),
       ),
     );
   }
