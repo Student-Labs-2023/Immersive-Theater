@@ -1,4 +1,3 @@
-import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/theme/images.dart';
@@ -24,7 +23,7 @@ class _TikTokPhotoState extends State<TikTokPhoto> {
       fit: StackFit.expand,
       children: [
         CachedNetworkImage(
-          imageUrl: ApiClient.baseUrl + widget.entry.value,
+          imageUrl: widget.entry.value,
           fit: BoxFit.cover,
           placeholder: (context, url) => Center(
             child: CircularProgressIndicator(

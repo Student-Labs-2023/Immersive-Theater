@@ -1,6 +1,5 @@
 // ignore_for_file: require_trailing_commas
 
-import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/photo_slider/view/vertical_sliding_screen.dart';
@@ -25,7 +24,7 @@ class PhotoCard extends StatelessWidget {
           ),
           margin: const EdgeInsets.only(right: 16),
           child: CachedNetworkImage(
-            imageUrl: ApiClient.baseUrl + performance.imagesList[index],
+            imageUrl: performance.imagesList[index],
             fit: BoxFit.cover,
             placeholder: (context, url) => Center(
               child: CircularProgressIndicator(

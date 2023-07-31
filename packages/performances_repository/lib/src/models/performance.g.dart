@@ -7,19 +7,36 @@ part of 'performance.dart';
 // **************************************************************************
 
 Performance _$PerformanceFromJson(Map<String, dynamic> json) => Performance(
-      id: json['strapi'] as String,
+      id: json['id'] as int,
       title: json['name'] as String,
       imageLink: json['image_link'] as String,
-      creators: (json['authors'] as List<dynamic>)
-          .map((e) => Creator.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    )..fullInfo = PerformanceFullInfo.fromJson(json);
+      creators: (json['authors'] as List<dynamic>?)
+              ?.map((e) => Creator.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      description: json['description'] as String? ?? '',
+      duration: json['duration'] != null
+          ? Duration(seconds: json['duration'] as int)
+          : Duration.zero,
+      images: (json['images'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      chapters: (json['audios'] as List<dynamic>?)
+              ?.map((e) => Chapter.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      // firstPlace: Place.fromJson(json['first_place']) ,
+    );
 
 Map<String, dynamic> _$PerformanceToJson(Performance instance) =>
     <String, dynamic>{
-      'strapi': instance.id,
+      'id': instance.id,
       'name': instance.title,
       'image_link': instance.imageLink,
       'authors': instance.creators,
-      'fullInfo': instance.fullInfo,
+      'description': instance.description,
+      'duration': instance.duration.inMicroseconds,
+      'images': instance.images,
+      'audio': instance.chapters,
     };

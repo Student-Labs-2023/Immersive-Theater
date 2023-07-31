@@ -40,7 +40,55 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Shebalin",
         theme: defaultTheme(),
-        initialRoute: '/main-screen',
+        onGenerateRoute: (RouteSettings routeSettings) {
+          return MaterialPageRoute<void>(
+            settings: routeSettings,
+            builder: (BuildContext context) {
+              switch (routeSettings.name) {
+                case MainScreen.routeName:
+                  {
+                    return const MainScreen();
+                  }
+                case LoadingScreen.routeName:
+                  {
+                    return const LoadingScreen();
+                  }
+                case PerformanceDoubleScreen.routeName:
+                  {
+                    return const PerformanceDoubleScreen();
+                  }
+
+                case VerticalSlidningScreen.routeName:
+                  {
+                    return const VerticalSlidningScreen();
+                  }
+                case ImagesViewPage.routeName:
+                  {
+                    return const ImagesViewPage();
+                  }
+                case OnboardWelcome.routeName:
+                  {
+                    return const OnboardWelcome();
+                  }
+                case OnboardingPerformance.routeName:
+                  {
+                    return const OnboardingPerformance();
+                  }
+                case ReviewPage.routeName:
+                  {
+                    return const ReviewPage();
+                  }
+                case PerformanceModePage.routeName:
+                  {
+                    return const PerformanceModePage();
+                  }
+
+                default:
+                  throw ('Undefined route');
+              }
+            },
+          );
+        },
         routes: {
           '/loading-screen': (context) => const LoadingScreen(),
           '/onbording-screen': (context) => const OnbordingScreen(),

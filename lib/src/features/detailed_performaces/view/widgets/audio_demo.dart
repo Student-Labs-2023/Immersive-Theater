@@ -1,4 +1,3 @@
-import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:performances_repository/performances_repository.dart';
@@ -46,8 +45,7 @@ class _AudioDemoState extends State<AudioDemo> {
                         child:
                             CircularProgressIndicator(color: accentTextColor),
                       ),
-                      imageUrl:
-                          ApiClient.baseUrl + widget.performance.imageLink,
+                      imageUrl: widget.performance.imageLink,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -59,7 +57,7 @@ class _AudioDemoState extends State<AudioDemo> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.performance.fullInfo!.chapters[widget.index].title,
+                      widget.performance.chapters[widget.index].title,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Text(

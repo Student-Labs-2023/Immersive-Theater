@@ -17,3 +17,11 @@ class PerformancesRefreshed extends PerformanceEvent {
   @override
   List<Object> get props => [performances];
 }
+
+class PerformanceLoadFullInfo extends PerformanceEvent {
+  final int id;
+
+  const PerformanceLoadFullInfo(this.id);
+  @override
+  List<Object> get props => [id];
+}
