@@ -37,9 +37,7 @@ class AudioInfoWidget extends StatelessWidget {
           children: [
             Text(
               performanceTitle,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontSize: 12,
-                  ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             BlocBuilder<PerfModeBloc, PerfModeState>(
               builder: (context, state) {
@@ -47,8 +45,8 @@ class AudioInfoWidget extends StatelessWidget {
                   'Глава ${state.indexLocation + 1}',
                   style: Theme.of(context)
                       .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: AppColor.purplePrimary),
+                      .bodySmall!
+                      .copyWith(color: AppColor.greyText),
                 );
               },
             ),

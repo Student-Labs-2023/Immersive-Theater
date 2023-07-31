@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shebalin/src/app.dart';
+import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
 import 'package:shebalin/src/features/onboarding_performance/models/onboard_performance.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_container.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_image.dart';
@@ -10,7 +10,6 @@ import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_ic
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 import 'widgets/page_indicator.dart';
 
@@ -23,10 +22,7 @@ class OnboardingPerformance extends StatefulWidget {
 
   final void Function(bool listenAtHome) onOnboardingComplete;
   final bool listenAtHome;
-  final Point startPoint = const Point(
-    latitude: 54.988707,
-    longitude: 73.368659,
-  );
+
   static const routeName = 'rules';
 
   @override
@@ -38,12 +34,13 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   int currentIndex = 0;
   bool get curIndexLessLastindex => currentIndex < pages.length - 1;
   bool get showOneButtonAtHome => currentIndex != 0 || widget.listenAtHome;
+
   @override
-  void didChangeDependencies() {
+  void initState() {
     pages = widget.listenAtHome
         ? OnboardPerformance.home
         : OnboardPerformance.outside;
-    super.didChangeDependencies();
+    super.initState();
   }
 
   @override
@@ -113,16 +110,18 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   }
 
   Future<void> _launchUrl() async {
-    final double latitude = RepositoryProvider.of<CurrentPerformance>(context)
-        .performance
-        .chapters[0]
-        .place
-        .latitude;
-    final double longitude = RepositoryProvider.of<CurrentPerformance>(context)
-        .performance
-        .chapters[0]
-        .place
-        .longitude;
+    final double latitude =
+        RepositoryProvider.of<CurrentPerformanceProvider>(context)
+            .performance
+            .chapters[0]
+            .place
+            .latitude;
+    final double longitude =
+        RepositoryProvider.of<CurrentPerformanceProvider>(context)
+            .performance
+            .chapters[0]
+            .place
+            .longitude;
     final linkYandexMap = "http://maps.yandex.ru/?text=$latitude,$longitude";
     if (!await launchUrl(Uri.parse(linkYandexMap))) {
       return;

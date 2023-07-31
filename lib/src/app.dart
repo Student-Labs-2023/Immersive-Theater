@@ -73,11 +73,3 @@ class App extends StatelessWidget {
     );
   }
 }
-
-class CurrentPerformance {
-  final Performance performance;
-  String get title => performance.title;
-  CurrentPerformance({
-    required this.performance,
-  });
-}

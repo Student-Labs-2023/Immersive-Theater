@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:performances_repository/performances_repository.dart';
+import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
+import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/performance_mode_page.dart';
+import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
+import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance_args.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
@@ -42,23 +48,36 @@ class PerfModeFlowState extends State<PerfModeFlow> {
     }
   }
 
+  void _onPerfModeComplete() {
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(MainScreen.routeName, (builder) => false);
+  }
+
+  void _onPerfModeResume() {
+    Navigator.of(context).pop(false);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Navigator(
-      key: _navigatorKey,
-      initialRoute: widget.perfModePageRoute,
-      onGenerateRoute: _onGenerateRoute,
+    return RepositoryProvider(
+      create: (context) =>
+          CurrentPerformanceProvider(performance: widget.performance),
+      child: Navigator(
+        key: _navigatorKey,
+        initialRoute: widget.perfModePageRoute,
+        onGenerateRoute: _onGenerateRoute,
+      ),
     );
   }
 
   Route _onGenerateRoute(RouteSettings routeSettings) {
     late Widget page;
+
     switch (routeSettings.name) {
       case OnboardWelcome.routeName:
         {
           page = OnboardWelcome(
             onOnboardWelcomeComplete: _onOnboardWelcomeComplete,
-            performance: widget.performance,
           );
           break;
         }
@@ -74,8 +93,42 @@ class PerfModeFlowState extends State<PerfModeFlow> {
         }
 
       case PerformanceModePage.routeName:
-        page = const PerformanceModePage();
+        final AudioPlayerBloc audioPlayerBloc = AudioPlayerBloc(AudioPlayer());
+        page = MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => PerfModeBloc(
+                [],
+                0,
+                widget.performance.chapters.length,
+                widget.performance.title,
+                widget.performance.imageLink,
+                audioPlayerBloc,
+                widget.performance.chapters.map((e) => e.place).toList(),
+              ),
+            ),
+            BlocProvider(
+              create: (context) {
+                return audioPlayerBloc
+                  ..add(AudioPlayerInitialEvent())
+                  ..add(
+                    AudioPlayerAddPlaylistEvent(
+                      audio: widget.performance.chapters[0].audioLink,
+                    ),
+                  );
+              },
+            ),
+          ],
+          child: PerformanceModePage(
+            onPerfModeComplete: _onPerfModeComplete,
+            onPerfModeResume: _onPerfModeResume,
+          ),
+        );
         break;
+      case MainScreen.routeName:
+        {
+          page = const MainScreen();
+        }
     }
 
     return MaterialPageRoute<dynamic>(
