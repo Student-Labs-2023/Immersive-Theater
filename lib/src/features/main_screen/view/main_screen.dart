@@ -14,7 +14,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
-  static const routeName = '/main-screen';
+  static const routeName = '/';
 
   @override
   State<MainScreen> createState() => _MainScreenState();
