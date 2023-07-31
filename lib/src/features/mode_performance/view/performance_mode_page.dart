@@ -20,7 +20,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class PerformanceModePage extends StatefulWidget {
-  static const routeName = '/performance-mode-screen';
+  static const routeName = 'mode';
   const PerformanceModePage({
     super.key,
   });

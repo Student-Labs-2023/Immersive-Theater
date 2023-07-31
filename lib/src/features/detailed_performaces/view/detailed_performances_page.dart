@@ -7,6 +7,7 @@ import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/images_location.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome_args.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/models/payment_model.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/audio_demo.dart';
@@ -305,12 +306,21 @@ class _PerfomanceDescriptionScreenState
           horizontal: 16,
         ),
         child: isBought
-            ? AppButton(
-                title: 'Начать спектакль',
-                onTap: _perfModeOpen,
-                textColor: AppColor.whiteText,
-                backgroundColor: AppColor.purplePrimary,
-                borderColor: AppColor.purplePrimary,
+            ? BlocBuilder<PerformanceBloc, PerformanceState>(
+                builder: (context, state) {
+                  return AppButton(
+                    title: 'Начать спектакль',
+                    onTap: () => Navigator.of(context).pushNamed(
+                      routePrefixPerfMode + OnboardWelcome.routeName,
+                      arguments: OnboardingWelcomeArgs(
+                        performance: state.perfomances[widget.performance.id],
+                      ),
+                    ),
+                    textColor: AppColor.whiteText,
+                    backgroundColor: AppColor.purplePrimary,
+                    borderColor: AppColor.purplePrimary,
+                  );
+                },
               )
             : AppButton(
                 title: 'Приобрессти за 299 р',
@@ -440,7 +450,5 @@ class _PerfomanceDescriptionScreenState
     });
   }
 
-  void _perfModeOpen() {
-    Navigator.of(context).pushNamed(OnboardWelcome.routeName);
-  }
+  void _perfModeOpen() {}
 }

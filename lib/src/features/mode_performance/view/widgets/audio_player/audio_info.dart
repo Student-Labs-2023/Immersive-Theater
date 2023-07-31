@@ -35,6 +35,12 @@ class AudioInfoWidget extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              performanceTitle,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: 12,
+                  ),
+            ),
             BlocBuilder<PerfModeBloc, PerfModeState>(
               builder: (context, state) {
                 return Text(
@@ -45,12 +51,6 @@ class AudioInfoWidget extends StatelessWidget {
                       ?.copyWith(color: AppColor.purplePrimary),
                 );
               },
-            ),
-            Text(
-              performanceTitle,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontSize: 12,
-                  ),
             ),
           ],
         ),
