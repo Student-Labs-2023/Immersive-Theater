@@ -10,6 +10,8 @@ import 'package:shebalin/src/features/mode_performance_flow/models/current_perfo
 import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance_args.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
+import 'package:shebalin/src/features/view_images/models/image_view_args.dart';
+import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 
 class PerfModeFlow extends StatefulWidget {
   final String perfModePageRoute;
@@ -53,6 +55,13 @@ class PerfModeFlowState extends State<PerfModeFlow> {
         .pushNamedAndRemoveUntil(MainScreen.routeName, (builder) => false);
   }
 
+  void _onImageOpen(List<String> imageLinks, int index) {
+    _navigatorKey.currentState!.pushNamed(
+      ImagesViewPage.routeName,
+      arguments: ImageViewArgs(imageLinks, index),
+    );
+  }
+
   void _onPerfModeResume() {
     Navigator.of(context).pop(false);
   }
@@ -93,37 +102,47 @@ class PerfModeFlowState extends State<PerfModeFlow> {
         }
 
       case PerformanceModePage.routeName:
-        final AudioPlayerBloc audioPlayerBloc = AudioPlayerBloc(AudioPlayer());
-        page = MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => PerfModeBloc(
-                [],
-                0,
-                widget.performance.chapters.length,
-                widget.performance.title,
-                widget.performance.imageLink,
-                audioPlayerBloc,
-                widget.performance.chapters.map((e) => e.place).toList(),
+        {
+          final AudioPlayerBloc audioPlayerBloc =
+              AudioPlayerBloc(AudioPlayer());
+          page = MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => PerfModeBloc(
+                  [],
+                  0,
+                  widget.performance.chapters.length,
+                  widget.performance.title,
+                  widget.performance.imageLink,
+                  audioPlayerBloc,
+                  widget.performance.chapters.map((e) => e.place).toList(),
+                ),
               ),
+              BlocProvider(
+                create: (context) {
+                  return audioPlayerBloc
+                    ..add(AudioPlayerInitialEvent())
+                    ..add(
+                      AudioPlayerAddPlaylistEvent(
+                        audio: widget.performance.chapters[0].audioLink,
+                      ),
+                    );
+                },
+              ),
+            ],
+            child: PerformanceModePage(
+              onPerfModeComplete: _onPerfModeComplete,
+              onPerfModeResume: _onPerfModeResume,
+              onImageOpen: _onImageOpen,
             ),
-            BlocProvider(
-              create: (context) {
-                return audioPlayerBloc
-                  ..add(AudioPlayerInitialEvent())
-                  ..add(
-                    AudioPlayerAddPlaylistEvent(
-                      audio: widget.performance.chapters[0].audioLink,
-                    ),
-                  );
-              },
-            ),
-          ],
-          child: PerformanceModePage(
-            onPerfModeComplete: _onPerfModeComplete,
-            onPerfModeResume: _onPerfModeResume,
-          ),
-        );
+          );
+          break;
+        }
+
+      case ImagesViewPage.routeName:
+        {
+          page = const ImagesViewPage();
+        }
         break;
       case MainScreen.routeName:
         {

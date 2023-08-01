@@ -20,10 +20,12 @@ class PerformanceModePage extends StatefulWidget {
   static const routeName = 'mode';
   final VoidCallback onPerfModeComplete;
   final VoidCallback onPerfModeResume;
+  final void Function(List<String>, int) onImageOpen;
   const PerformanceModePage({
     super.key,
     required this.onPerfModeComplete,
     required this.onPerfModeResume,
+    required this.onImageOpen,
   });
 
   @override
@@ -66,6 +68,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
             panelBuilder: (scrollController) => PanelWidget(
               controller: panelController,
               chapters: chapters,
+              onImageOpen: widget.onImageOpen,
             ),
             body: MapPage(
               locations: chapters.map((e) => e.place).toList(),

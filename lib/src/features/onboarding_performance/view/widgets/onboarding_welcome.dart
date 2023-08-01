@@ -30,7 +30,7 @@ class OnboardWelcome extends StatelessWidget {
               height: 16,
             ),
             Text(
-              '«${RepositoryProvider.of<CurrentPerformanceProvider>(context).performance.title}',
+              '«${RepositoryProvider.of<CurrentPerformanceProvider>(context).performance.title}»',
               style: Theme.of(context)
                   .textTheme
                   .displayMedium!
