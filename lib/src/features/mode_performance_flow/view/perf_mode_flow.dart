@@ -78,10 +78,13 @@ class PerfModeFlowState extends State<PerfModeFlow> {
     return RepositoryProvider(
       create: (context) =>
           CurrentPerformanceProvider(performance: widget.performance),
-      child: Navigator(
-        key: _navigatorKey,
-        initialRoute: widget.perfModePageRoute,
-        onGenerateRoute: _onGenerateRoute,
+      child: WillPopScope(
+        onWillPop: () async => false,
+        child: Navigator(
+          key: _navigatorKey,
+          initialRoute: widget.perfModePageRoute,
+          onGenerateRoute: _onGenerateRoute,
+        ),
       ),
     );
   }

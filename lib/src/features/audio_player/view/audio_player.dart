@@ -86,10 +86,8 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
                     indexLocation: widget.indexLocation,
                     countLocation:
                         RepositoryProvider.of<CurrentPerformanceProvider>(
-                                context)
-                            .performance
-                            .chapters
-                            .length,
+                      context,
+                    ).performance.chapters.length,
                     performanceTitle:
                         RepositoryProvider.of<CurrentPerformanceProvider>(
                       context,

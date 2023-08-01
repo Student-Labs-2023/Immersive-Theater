@@ -55,7 +55,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
       floatingActionButton: FloatingActionButton(
         heroTag: "closePerformance",
         backgroundColor: Colors.white,
-        onPressed: () => _closePerformance(context),
+        onPressed: () => _closePerformance(),
         child: const Image(
           image: AssetImage(ImagesSources.closePerformance),
         ),
@@ -172,17 +172,22 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
     );
   }
 
-  void _closePerformance(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) => DialogWindow(
-        title: "Завершить спектакль?",
-        subtitle: "Прогресс прохождения не будет\nсохранен.",
-        onTapPrimary: widget.onPerfModeComplete,
-        titlePrimary: "Завершить",
-        titleSecondary: "Отмена",
-        onTapSecondary: widget.onPerfModeResume,
-      ),
-    );
+  Future<bool> showDialogWindow() async {
+    return await showDialog(
+          context: context,
+          builder: (_) => DialogWindow(
+            title: "Завершить спектакль?",
+            subtitle: "Прогресс прохождения не будет\nсохранен.",
+            onTapPrimary: widget.onPerfModeComplete,
+            titlePrimary: "Завершить",
+            titleSecondary: "Отмена",
+            onTapSecondary: widget.onPerfModeResume,
+          ),
+        ) ??
+        false;
+  }
+
+  void _closePerformance() {
+    showDialogWindow();
   }
 }

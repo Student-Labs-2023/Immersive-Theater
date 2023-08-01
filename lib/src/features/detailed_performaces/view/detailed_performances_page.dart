@@ -135,10 +135,10 @@ class _PerfomanceDescriptionScreenState
                           state is PerformanceFullInfoLoadInProgress
                               ? const AppProgressBar()
                               : Text(
-                                  durationToHoursMinutes(state
-                                          .perfomances[widget.performance.id]
-                                          .duration)
-                                      .toString(),
+                                  durationToHoursMinutes(
+                                    state.perfomances[widget.performance.id]
+                                        .duration,
+                                  ).toString(),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall
