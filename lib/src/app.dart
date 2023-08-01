@@ -11,7 +11,6 @@ import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboar
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/photo_slider/view/vertical_sliding_screen.dart';
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
-import 'package:shebalin/src/features/review/view/review_page.dart';
 import 'package:shebalin/src/features/review/models/emoji.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/theme/theme.dart';
@@ -51,8 +50,6 @@ class App extends StatelessWidget {
             page = const VerticalSlidningScreen();
           } else if (routeSettings.name == ImagesViewPage.routeName) {
             page = const ImagesViewPage();
-          } else if (routeSettings.name == ReviewPage.routeName) {
-            page = const ReviewPage();
           } else if (routeSettings.name!.startsWith(routePrefixPerfMode)) {
             final subRoute =
                 routeSettings.name!.substring(routePrefixPerfMode.length);

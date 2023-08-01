@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:performances_repository/performances_repository.dart';
+import 'package:shebalin/src/features/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
+import 'package:shebalin/src/features/mode_perf_home/bloc/perf_home_mode_bloc.dart';
+import 'package:shebalin/src/features/mode_perf_home/view/performance_home_mode_page.dart';
 import 'package:shebalin/src/features/mode_performance/view/performance_mode_page.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance_args.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
+import 'package:shebalin/src/features/review/view/review_page.dart';
 import 'package:shebalin/src/features/view_images/models/image_view_args.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 
@@ -42,6 +45,10 @@ class PerfModeFlowState extends State<PerfModeFlow> {
 
   void _onOnboardingComplete(bool listenAtHome) {
     if (listenAtHome) {
+      _navigatorKey.currentState!.pushNamedAndRemoveUntil(
+        PerformanceAtHomeModePage.routeName,
+        (route) => false,
+      );
     } else {
       _navigatorKey.currentState!.pushNamedAndRemoveUntil(
         PerformanceModePage.routeName,
@@ -138,7 +145,43 @@ class PerfModeFlowState extends State<PerfModeFlow> {
           );
           break;
         }
-
+      case PerformanceAtHomeModePage.routeName:
+        {
+          final AudioPlayerBloc audioPlayerBloc =
+              AudioPlayerBloc(AudioPlayer());
+          page = MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => PerfHomeModeBloc(
+                  [],
+                  0,
+                  widget.performance.chapters.length,
+                  widget.performance.title,
+                  widget.performance.imageLink,
+                  audioPlayerBloc,
+                  widget.performance.chapters.map((e) => e.place).toList(),
+                ),
+              ),
+              BlocProvider(
+                create: (context) {
+                  return audioPlayerBloc
+                    ..add(AudioPlayerInitialEvent())
+                    ..add(
+                      AudioPlayerAddPlaylistEvent(
+                        audio: widget.performance.chapters[0].audioLink,
+                      ),
+                    );
+                },
+              ),
+            ],
+            child: PerformanceAtHomeModePage(
+              onPerfModeComplete: _onPerfModeComplete,
+              onPerfModeResume: _onPerfModeResume,
+              onImageOpen: _onImageOpen,
+            ),
+          );
+          break;
+        }
       case ImagesViewPage.routeName:
         {
           page = const ImagesViewPage();
@@ -148,6 +191,14 @@ class PerfModeFlowState extends State<PerfModeFlow> {
         {
           page = const MainScreen();
         }
+        break;
+      case ReviewPage.routeName:
+        {
+          page = ReviewPage(
+            onPerfModeComplete: _onPerfModeComplete,
+          );
+        }
+        break;
     }
 
     return MaterialPageRoute<dynamic>(

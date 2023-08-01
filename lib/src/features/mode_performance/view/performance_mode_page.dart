@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
+import 'package:shebalin/src/features/audio_player/view/audio_player.dart';
+import 'package:shebalin/src/features/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/map_performance/view/map_page.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_player.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/panel_widget.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/progress_bar.dart';
@@ -156,7 +156,9 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
             color: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             constraints: const BoxConstraints(maxHeight: 150, maxWidth: 400),
-            child: const AudioPlayerPanel(),
+            child: AudioPlayerPanel(
+              indexLocation: state.indexLocation,
+            ),
           );
         },
       ),

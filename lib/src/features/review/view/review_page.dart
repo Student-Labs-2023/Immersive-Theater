@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
+import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_title.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
@@ -12,7 +13,8 @@ import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 
 class ReviewPage extends StatefulWidget {
-  const ReviewPage({super.key});
+  const ReviewPage({super.key, required this.onPerfModeComplete});
+  final VoidCallback onPerfModeComplete;
   static const routeName = '/review-page';
 
   @override
@@ -20,7 +22,6 @@ class ReviewPage extends StatefulWidget {
 }
 
 class _ReviewPageState extends State<ReviewPage> {
-  final String performanceTitle = 'Шебалин в Омске';
   late final ReviewPageBloc reviewbloc;
 
   @override
@@ -62,7 +63,8 @@ class _ReviewPageState extends State<ReviewPage> {
                       isDismissible: false,
                       context: context,
                       builder: (context) {
-                        return const ReviewBottomSheet();
+                        return ReviewBottomSheet(
+                            onPerfModeComplete: widget.onPerfModeComplete);
                       },
                     )
                   }
@@ -75,8 +77,9 @@ class _ReviewPageState extends State<ReviewPage> {
                       height: 16,
                     ),
                     AppSubtitle(
-                      subtitle: 'Как у вас прошёл спектакль .',
-                      subtitleAccent: '«$performanceTitle».',
+                      subtitle: 'Как у вас прошёл спектакль ',
+                      subtitleAccent:
+                          '\n«${RepositoryProvider.of<CurrentPerformanceProvider>(context).performance.title}».',
                     ),
                     const SizedBox(
                       height: 16,
