@@ -7,11 +7,13 @@ class AudioInfoWidget extends StatelessWidget {
   final String performanceTitle;
   final String imageLink;
   final int indexLocation;
+  final int countLocation;
   const AudioInfoWidget({
     super.key,
     required this.performanceTitle,
     required this.imageLink,
     required this.indexLocation,
+    required this.countLocation,
   });
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class AudioInfoWidget extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
-              'Глава ${indexLocation + 1}',
+              'Глава ${indexLocation + 1} / $countLocation',
               style: Theme.of(context)
                   .textTheme
                   .bodySmall!
