@@ -39,11 +39,14 @@ class OnbordingContent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 32, bottom: 24),
+                    padding: const EdgeInsets.only(top: 32, bottom: 24),
                     child: Text(
                       title,
                       textAlign: TextAlign.start,
-                      style: Theme.of(context).textTheme.displaySmall,
+                      style: Theme.of(context)
+                          .textTheme
+                          .displaySmall
+                          ?.copyWith(fontWeight: FontWeight.w700),
                     ),
                   ),
                   Text(

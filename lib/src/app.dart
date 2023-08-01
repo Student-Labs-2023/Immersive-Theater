@@ -8,6 +8,7 @@ import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/mode_performance_flow/view/perf_mode_flow.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome_args.dart';
+import 'package:shebalin/src/features/onbording/view/onbording_screen.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/photo_slider/view/vertical_sliding_screen.dart';
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
@@ -43,6 +44,8 @@ class App extends StatelessWidget {
           late Widget page;
           if (routeSettings.name == MainScreen.routeName) {
             page = const MainScreen();
+          } else if (routeSettings.name == OnbordingScreen.routeName) {
+            page = const OnbordingScreen();
           } else if (routeSettings.name == LoadingScreen.routeName) {
             page = const LoadingScreen();
           } else if (routeSettings.name == PerformanceDoubleScreen.routeName) {
