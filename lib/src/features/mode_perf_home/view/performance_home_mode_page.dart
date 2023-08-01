@@ -6,7 +6,6 @@ import 'package:shebalin/src/features/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/features/mode_perf_home/bloc/perf_home_mode_bloc.dart';
 import 'package:shebalin/src/features/mode_perf_home/view/widgets/home_map_page.dart';
 import 'package:shebalin/src/features/mode_perf_home/view/widgets/panel_widget.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
@@ -15,14 +14,12 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class PerformanceAtHomeModePage extends StatefulWidget {
   static const routeName = 'mode-home';
-  final VoidCallback onPerfModeComplete;
-  final VoidCallback onPerfModeResume;
+  final VoidCallback closePerformance;
   final void Function(List<String>, int) onImageOpen;
   const PerformanceAtHomeModePage({
     super.key,
-    required this.onPerfModeComplete,
-    required this.onPerfModeResume,
     required this.onImageOpen,
+    required this.closePerformance,
   });
 
   @override
@@ -53,7 +50,7 @@ class _PerformanceAtHomeModePageState extends State<PerformanceAtHomeModePage> {
       floatingActionButton: FloatingActionButton(
         heroTag: "closePerformance",
         backgroundColor: Colors.white,
-        onPressed: () => _closePerformance(context),
+        onPressed: widget.closePerformance,
         child: const Image(
           image: AssetImage(ImagesSources.closePerformance),
         ),
@@ -105,20 +102,6 @@ class _PerformanceAtHomeModePageState extends State<PerformanceAtHomeModePage> {
             child: AudioPlayerPanel(indexLocation: state.indexLocation),
           );
         },
-      ),
-    );
-  }
-
-  void _closePerformance(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) => DialogWindow(
-        title: "Завершить спектакль?",
-        subtitle: "Прогресс прохождения не будет\nсохранен.",
-        onTapPrimary: widget.onPerfModeComplete,
-        titlePrimary: "Завершить",
-        titleSecondary: "Отмена",
-        onTapSecondary: widget.onPerfModeResume,
       ),
     );
   }

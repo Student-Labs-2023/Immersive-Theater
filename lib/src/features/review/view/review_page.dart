@@ -44,10 +44,7 @@ class _ReviewPageState extends State<ReviewPage> {
                 ImagesSources.closePerformance,
                 color: AppColor.blackText,
               ),
-              onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                MainScreen.routeName,
-                (route) => false,
-              ),
+              onPressed: widget.onPerfModeComplete,
             ),
           ),
           backgroundColor: AppColor.whiteBackground,
@@ -64,7 +61,8 @@ class _ReviewPageState extends State<ReviewPage> {
                       context: context,
                       builder: (context) {
                         return ReviewBottomSheet(
-                            onPerfModeComplete: widget.onPerfModeComplete);
+                          onPerfModeComplete: widget.onPerfModeComplete,
+                        );
                       },
                     )
                   }

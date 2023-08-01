@@ -8,6 +8,7 @@ import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.da
 import 'package:shebalin/src/features/mode_perf_home/bloc/perf_home_mode_bloc.dart';
 import 'package:shebalin/src/features/mode_perf_home/view/performance_home_mode_page.dart';
 import 'package:shebalin/src/features/mode_performance/view/performance_mode_page.dart';
+import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance_args.dart';
@@ -71,6 +72,21 @@ class PerfModeFlowState extends State<PerfModeFlow> {
 
   void _onPerfModeResume() {
     Navigator.of(context).pop(false);
+  }
+
+  Future<bool> _showDialogWindow() async {
+    return await showDialog(
+          context: context,
+          builder: (_) => DialogWindow(
+            title: "Завершить спектакль?",
+            subtitle: "Прогресс прохождения не будет\nсохранен.",
+            onTapPrimary: _onPerfModeComplete,
+            titlePrimary: "Завершить",
+            titleSecondary: "Отмена",
+            onTapSecondary: _onPerfModeResume,
+          ),
+        ) ??
+        false;
   }
 
   @override
@@ -178,8 +194,7 @@ class PerfModeFlowState extends State<PerfModeFlow> {
               ),
             ],
             child: PerformanceAtHomeModePage(
-              onPerfModeComplete: _onPerfModeComplete,
-              onPerfModeResume: _onPerfModeResume,
+              closePerformance: _showDialogWindow,
               onImageOpen: _onImageOpen,
             ),
           );
@@ -197,8 +212,11 @@ class PerfModeFlowState extends State<PerfModeFlow> {
         break;
       case ReviewPage.routeName:
         {
-          page = ReviewPage(
-            onPerfModeComplete: _onPerfModeComplete,
+          page = WillPopScope(
+            onWillPop: () async => false,
+            child: ReviewPage(
+              onPerfModeComplete: _onPerfModeComplete,
+            ),
           );
         }
         break;
