@@ -16,6 +16,7 @@ import 'package:shebalin/src/features/detailed_performaces/view/widgets/audio_de
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/author_card.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
+import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,8 +35,7 @@ class _PerfomanceDescriptionScreenState
   bool isBought = false;
   final paymentService = Payment();
 
-  bool get _isExpanded =>
-      _controller.hasClients && _controller.offset < (kToolbarHeight);
+  bool _isExpanded = true;
   late final ScrollController _controller = ScrollController()
     ..addListener(() {
       setState(() {
@@ -46,26 +46,29 @@ class _PerfomanceDescriptionScreenState
 
   @override
   void initState() {
+    _isExpanded =
+        _controller.hasClients && _controller.offset <= (kToolbarHeight);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     var mediaQuerySize = MediaQuery.of(context).size;
-
+    _isExpanded =
+        _controller.hasClients && _controller.offset <= (kToolbarHeight);
     return Scaffold(
       body: CustomScrollView(
         controller: _controller,
         scrollDirection: Axis.vertical,
         slivers: [
           SliverAppBar(
+            elevation: 0.7,
             backgroundColor: AppColor.whiteBackground,
             expandedHeight: MediaQuery.of(context).size.height * 0.32,
             floating: false,
-            centerTitle: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              centerTitle: false,
+              centerTitle: true,
               background: CachedNetworkImage(
                 imageUrl: widget.performance.imageLink,
                 fit: BoxFit.fill,
@@ -75,12 +78,20 @@ class _PerfomanceDescriptionScreenState
                   ),
                 ),
               ),
-              title: Text(
-                widget.performance.title,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: _textColor),
+              title: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  widget.performance.title,
+                  style: _isExpanded
+                      ? Theme.of(context).textTheme.displayLarge?.copyWith(
+                            color: _textColor,
+                            fontWeight: FontWeight.w700,
+                          )
+                      : Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            color: _textColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                ),
               ),
             ),
             leading: Row(
@@ -89,23 +100,21 @@ class _PerfomanceDescriptionScreenState
                   width: 20,
                 ),
                 Container(
-                  width: 36,
-                  height: 36,
+                  width: 32,
+                  height: 32,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: _isExpanded
-                        ? AppColor.lightGray
-                        : AppColor.whiteBackground,
+                    color:
+                        _isExpanded ? AppColor.grey : AppColor.whiteBackground,
                   ),
                   child: Center(
                     child: IconButton(
-                      color: _isExpanded
-                          ? AppColor.whiteBackground
-                          : AppColor.grey,
                       onPressed: () => Navigator.of(context).pop(),
                       icon: Image.asset(
-                        ImagesSources.closeIcon,
-                        color: _textColor,
+                        ImagesSources.closePerformance,
+                        color: _isExpanded
+                            ? AppColor.whiteText
+                            : AppColor.blackText,
                       ),
                     ),
                   ),
@@ -124,21 +133,17 @@ class _PerfomanceDescriptionScreenState
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.only(right: 4),
-                            child: Icon(
-                              Icons.access_time_outlined,
-                              size: 20,
-                              color: AppColor.greyText,
-                            ),
+                            child: Image.asset(ImagesSources.timeGrey),
                           ),
                           state is PerformanceFullInfoLoadInProgress
                               ? const AppProgressBar()
                               : Text(
-                                  durationToHoursMinutes(state
-                                          .perfomances[widget.performance.id]
-                                          .duration)
-                                      .toString(),
+                                  durationToHoursMinutes(
+                                    state.perfomances[widget.performance.id]
+                                        .duration,
+                                  ).toString(),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall
@@ -148,13 +153,9 @@ class _PerfomanceDescriptionScreenState
                       ),
                       Row(
                         children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 4),
-                            child: Icon(
-                              Icons.location_pin,
-                              size: 20,
-                              color: AppColor.greyText,
-                            ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 4),
+                            child: Image.asset(ImagesSources.location),
                           ),
                           state is PerformanceFullInfoLoadInProgress ||
                                   state.perfomances[widget.performance.id]
@@ -309,30 +310,41 @@ class _PerfomanceDescriptionScreenState
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
         ),
-        child: isBought
-            ? BlocBuilder<PerformanceBloc, PerformanceState>(
-                builder: (context, state) {
-                  return AppButton(
-                    title: 'Начать спектакль',
-                    onTap: () => Navigator.of(context).pushNamed(
-                      routePrefixPerfMode + OnboardWelcome.routeName,
-                      arguments: OnboardingWelcomeArgs(
-                        performance: state.perfomances[widget.performance.id],
-                      ),
-                    ),
-                    textColor: AppColor.whiteText,
-                    backgroundColor: AppColor.purplePrimary,
-                    borderColor: AppColor.purplePrimary,
-                  );
-                },
-              )
-            : AppButton(
-                title: 'Приобрессти за 299 р',
-                onTap: _buyButton,
-                textColor: AppColor.whiteText,
-                backgroundColor: AppColor.purplePrimary,
-                borderColor: AppColor.purplePrimary,
+        child: BlocBuilder<PerformanceBloc, PerformanceState>(
+          builder: (context, state) {
+            return ElevatedButton(
+              onPressed: () => Navigator.of(context).pushNamed(
+                routePrefixPerfMode + OnboardWelcome.routeName,
+                arguments: OnboardingWelcomeArgs(
+                  performance: state.perfomances[widget.performance.id],
+                ),
               ),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(AppColor.purplePrimary),
+                elevation: MaterialStateProperty.all(5),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                minimumSize: MaterialStateProperty.all(
+                  Size(
+                    mediaQuerySize.width - 32,
+                    mediaQuerySize.width * 0.13,
+                  ),
+                ),
+              ),
+              child: Text(
+                'Перейти к спектаклю',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(color: AppColor.whiteText),
+              ),
+            );
+          },
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

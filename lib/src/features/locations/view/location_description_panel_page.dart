@@ -53,8 +53,8 @@ class _LocationDescriptionPanelPageState
           ),
           minimumSize: MaterialStateProperty.all(
             Size(
-              mediaQuerySize.width * 0.85,
-              mediaQuerySize.width * 0.13,
+              mediaQuerySize.width - 32,
+              48,
             ),
           ),
         ),
@@ -98,9 +98,9 @@ class _LocationDescriptionPanelPageState
                             onTap: () {
                               _closePanel();
                             },
-                            child: const Image(
-                              color: AppColor.grey,
-                              image: AssetImage(ImagesSources.cancelLoc),
+                            child: Image.asset(
+                              ImagesSources.cross,
+                              height: 24,
                             ),
                           ),
                         ],
