@@ -3,14 +3,18 @@ import 'package:shebalin/src/features/onboarding_performance/models/onboard_perf
 import 'package:shebalin/src/theme/app_color.dart';
 
 class PageIndicator extends StatelessWidget {
-  const PageIndicator({
+  PageIndicator({
     super.key,
     required this.count,
     required this.currentIndex,
+    required this.elementHeight,
+    required this.elementWidth,
   });
 
   final int count;
   final int currentIndex;
+  double elementWidth = 4;
+  double elementHeight = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +26,8 @@ class PageIndicator extends StatelessWidget {
           count,
           (index) => DotIndicator(
             isActive: index == currentIndex,
+            height: elementHeight,
+            width: elementWidth,
           ),
         ),
       ],
@@ -31,10 +37,13 @@ class PageIndicator extends StatelessWidget {
 
 class DotIndicator extends StatelessWidget {
   final bool isActive;
-  const DotIndicator({
-    super.key,
-    required this.isActive,
-  });
+  double width;
+  double height;
+  DotIndicator(
+      {super.key,
+      required this.isActive,
+      required this.width,
+      required this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +51,8 @@ class DotIndicator extends StatelessWidget {
       duration: const Duration(milliseconds: 300),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4),
-        height: 8,
-        width: 8,
+        height: height,
+        width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(40),
           color: isActive ? AppColor.yellowSecondary : AppColor.grey,
