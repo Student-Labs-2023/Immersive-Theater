@@ -18,6 +18,7 @@ Color accentTextColor = const Color.fromARGB(255, 114, 91, 255);
 
 Color defaultTextColor = Colors.black;
 ThemeData defaultTheme() => ThemeData(
+      useMaterial3: false,
       focusColor: AppColor.accentBackground,
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: Colors.transparent,

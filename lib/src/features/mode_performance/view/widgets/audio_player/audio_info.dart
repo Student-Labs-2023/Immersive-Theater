@@ -35,22 +35,20 @@ class AudioInfoWidget extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              performanceTitle,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             BlocBuilder<PerfModeBloc, PerfModeState>(
               builder: (context, state) {
                 return Text(
                   'Глава ${state.indexLocation + 1}',
                   style: Theme.of(context)
                       .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: AppColor.purplePrimary),
+                      .bodySmall!
+                      .copyWith(color: AppColor.greyText),
                 );
               },
-            ),
-            Text(
-              performanceTitle,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontSize: 12,
-                  ),
             ),
           ],
         ),

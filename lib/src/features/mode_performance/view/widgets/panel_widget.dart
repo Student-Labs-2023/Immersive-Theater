@@ -12,10 +12,12 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 class PanelWidget extends StatefulWidget {
   final PanelController controller;
   final List<Chapter> chapters;
+  final void Function(List<String>, int) onImageOpen;
   const PanelWidget({
     super.key,
     required this.controller,
     required this.chapters,
+    required this.onImageOpen,
   });
 
   @override
@@ -46,6 +48,7 @@ class _PanelWidgetState extends State<PanelWidget> {
                 padding: const EdgeInsets.only(left: 16.0),
                 child: ImagesLocation(
                   imageLinks: widget.chapters[state.indexLocation].images,
+                  onTap: widget.onImageOpen,
                 ),
               );
             },

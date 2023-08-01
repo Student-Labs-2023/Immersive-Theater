@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/theme/images.dart';
 
 import '../../../../theme/theme.dart';
 
 class BadAudioDemo extends StatefulWidget {
   final bool isBought;
-  final dynamic performance;
+  final Performance performance;
   final int index;
   const BadAudioDemo({
     Key? key,
@@ -37,7 +38,7 @@ class _BadAudioDemoState extends State<BadAudioDemo> {
                     placeholder: (context, url) => Center(
                       child: CircularProgressIndicator(color: accentTextColor),
                     ),
-                    imageUrl: widget.performance.audioCoverImageLink,
+                    imageUrl: widget.performance.imageLink,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -49,7 +50,7 @@ class _BadAudioDemoState extends State<BadAudioDemo> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.performance.audioTitles[widget.index],
+                    widget.performance.chapters[widget.index].shortAudioLink,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(),
                   ),
                   Text(

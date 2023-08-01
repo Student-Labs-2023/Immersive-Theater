@@ -5,10 +5,9 @@ import 'package:shebalin/src/features/detailed_performaces/view/performance_doub
 import 'package:shebalin/src/features/loading/view/loading_screen.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
-import 'package:shebalin/src/features/mode_performance/view/performance_mode_page.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance.dart';
+import 'package:shebalin/src/features/mode_performance_flow/view/perf_mode_flow.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
-import 'package:shebalin/src/features/onbording/view/onbording_screen.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome_args.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/photo_slider/view/vertical_sliding_screen.dart';
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
@@ -41,71 +40,34 @@ class App extends StatelessWidget {
         title: "Shebalin",
         theme: defaultTheme(),
         onGenerateRoute: (RouteSettings routeSettings) {
+          late Widget page;
+          if (routeSettings.name == MainScreen.routeName) {
+            page = const MainScreen();
+          } else if (routeSettings.name == LoadingScreen.routeName) {
+            page = const LoadingScreen();
+          } else if (routeSettings.name == PerformanceDoubleScreen.routeName) {
+            page = const PerformanceDoubleScreen();
+          } else if (routeSettings.name == VerticalSlidningScreen.routeName) {
+            page = const VerticalSlidningScreen();
+          } else if (routeSettings.name == ImagesViewPage.routeName) {
+            page = const ImagesViewPage();
+          } else if (routeSettings.name == ReviewPage.routeName) {
+            page = const ReviewPage();
+          } else if (routeSettings.name!.startsWith(routePrefixPerfMode)) {
+            final subRoute =
+                routeSettings.name!.substring(routePrefixPerfMode.length);
+            final args = routeSettings.arguments as OnboardingWelcomeArgs;
+            page = PerfModeFlow(
+              perfModePageRoute: subRoute,
+              performance: args.performance,
+            );
+          } else {
+            throw Exception('Unknown route: ${routeSettings.name}');
+          }
           return MaterialPageRoute<void>(
             settings: routeSettings,
-            builder: (BuildContext context) {
-              switch (routeSettings.name) {
-                case MainScreen.routeName:
-                  {
-                    return const MainScreen();
-                  }
-                case LoadingScreen.routeName:
-                  {
-                    return const LoadingScreen();
-                  }
-                case PerformanceDoubleScreen.routeName:
-                  {
-                    return const PerformanceDoubleScreen();
-                  }
-
-                case VerticalSlidningScreen.routeName:
-                  {
-                    return const VerticalSlidningScreen();
-                  }
-                case ImagesViewPage.routeName:
-                  {
-                    return const ImagesViewPage();
-                  }
-                case OnboardWelcome.routeName:
-                  {
-                    return const OnboardWelcome();
-                  }
-                case OnboardingPerformance.routeName:
-                  {
-                    return const OnboardingPerformance();
-                  }
-                case OnbordingScreen.routeName:
-                  {
-                    return const OnbordingScreen();
-                  }
-                case ReviewPage.routeName:
-                  {
-                    return const ReviewPage();
-                  }
-                case PerformanceModePage.routeName:
-                  {
-                    return const PerformanceModePage();
-                  }
-
-                default:
-                  throw ('Undefined route');
-              }
-            },
+            builder: (BuildContext context) => page,
           );
-        },
-        routes: {
-          '/loading-screen': (context) => const LoadingScreen(),
-          '/onbording-screen': (context) => const OnbordingScreen(),
-          '/main-screen': (context) => const MainScreen(),
-          '/perfomance-description-screen': (context) =>
-              const PerformanceDoubleScreen(),
-          '/vertical-sliding-screen': (context) =>
-              const VerticalSlidningScreen(),
-          '/images-view-page': (context) => const ImagesViewPage(),
-          '/onboarding-performance': (context) => const OnboardWelcome(),
-          '/onboarding-rules': (context) => const OnboardingPerformance(),
-          '/review-page': (context) => const ReviewPage(),
-          '/performance-mode-screen': (context) => const PerformanceModePage(),
         },
       ),
     );

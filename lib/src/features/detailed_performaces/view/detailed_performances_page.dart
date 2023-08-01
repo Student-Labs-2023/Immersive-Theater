@@ -7,7 +7,10 @@ import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/images_location.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
+import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome_args.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
+import 'package:shebalin/src/features/view_images/models/image_view_args.dart';
+import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/models/payment_model.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/audio_demo.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/author_card.dart';
@@ -29,7 +32,6 @@ class PerfomanceDescriptionScreen extends StatefulWidget {
 class _PerfomanceDescriptionScreenState
     extends State<PerfomanceDescriptionScreen> {
   bool isBought = false;
-  bool isFavoriteLocation = false;
   final paymentService = Payment();
 
   bool get _isExpanded =>
@@ -133,7 +135,9 @@ class _PerfomanceDescriptionScreenState
                           state is PerformanceFullInfoLoadInProgress
                               ? const AppProgressBar()
                               : Text(
-                                  '${state.perfomances[widget.performance.id].duration.inHours} ч. ${state.perfomances[widget.performance.id].duration.inMinutes} мин.'
+                                  durationToHoursMinutes(state
+                                          .perfomances[widget.performance.id]
+                                          .duration)
                                       .toString(),
                                   style: Theme.of(context)
                                       .textTheme
@@ -255,6 +259,7 @@ class _PerfomanceDescriptionScreenState
                                   imageLinks: state
                                       .perfomances[widget.performance.id]
                                       .images,
+                                  onTap: _onImageTap,
                                 )
                         ],
                       ),
@@ -305,12 +310,21 @@ class _PerfomanceDescriptionScreenState
           horizontal: 16,
         ),
         child: isBought
-            ? AppButton(
-                title: 'Начать спектакль',
-                onTap: _perfModeOpen,
-                textColor: AppColor.whiteText,
-                backgroundColor: AppColor.purplePrimary,
-                borderColor: AppColor.purplePrimary,
+            ? BlocBuilder<PerformanceBloc, PerformanceState>(
+                builder: (context, state) {
+                  return AppButton(
+                    title: 'Начать спектакль',
+                    onTap: () => Navigator.of(context).pushNamed(
+                      routePrefixPerfMode + OnboardWelcome.routeName,
+                      arguments: OnboardingWelcomeArgs(
+                        performance: state.perfomances[widget.performance.id],
+                      ),
+                    ),
+                    textColor: AppColor.whiteText,
+                    backgroundColor: AppColor.purplePrimary,
+                    borderColor: AppColor.purplePrimary,
+                  );
+                },
               )
             : AppButton(
                 title: 'Приобрессти за 299 р',
@@ -434,13 +448,16 @@ class _PerfomanceDescriptionScreenState
     });
   }
 
-  void _changeStatus() {
-    setState(() {
-      isFavoriteLocation = !isFavoriteLocation;
-    });
+  void _onImageTap(List<String> imageLinks, int index) {
+    Navigator.of(context).pushNamed(
+      ImagesViewPage.routeName,
+      arguments: ImageViewArgs(imageLinks, index),
+    );
   }
 
-  void _perfModeOpen() {
-    Navigator.of(context).pushNamed(OnboardWelcome.routeName);
+  String durationToHoursMinutes(Duration duration) {
+    final int hours = duration.inHours;
+    final int minutes = duration.inMinutes - hours * 60;
+    return '$hours ч. $minutes мин.';
   }
 }

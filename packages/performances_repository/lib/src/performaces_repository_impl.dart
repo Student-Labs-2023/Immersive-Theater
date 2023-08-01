@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:performances_repository/src/models/performance.dart';
@@ -44,6 +45,7 @@ class PerformancesRepositoryImpl implements PerformancesRepository {
         options: Options(responseType: ResponseType.json));
     final Performance performance =
         Performance.fromJson(jsonDecode(response.data));
+    log(performance.images[0], name: 'image');
     return performance;
   }
 }

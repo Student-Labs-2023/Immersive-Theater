@@ -37,6 +37,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
   ) async {
     try {
       final performances = await _performanceRepository.fetchPerformances();
+      log(performances[0].imageLink, name: 'imagelink');
       emit(PerformanceLoadSuccess(perfomances: performances));
     } catch (_) {
       emit(const PerformanceLoadFailure(perfomances: []));
@@ -52,7 +53,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
     try {
       final performance =
           await _performanceRepository.fetchPerformanceById(event.id);
-      log(performance.toString());
+
       emit(
         PerformanceLoadSuccess(
           perfomances: state.perfomances
