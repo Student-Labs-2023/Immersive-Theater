@@ -8,6 +8,7 @@ import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/mode_performance_flow/view/perf_mode_flow.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome_args.dart';
+import 'package:shebalin/src/features/onbording/view/onbording_screen.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/photo_slider/view/vertical_sliding_screen.dart';
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
@@ -16,7 +17,8 @@ import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  final bool? isFirstRun;
+  const App({Key? key, required this.isFirstRun}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -41,7 +43,11 @@ class App extends StatelessWidget {
         onGenerateRoute: (RouteSettings routeSettings) {
           late Widget page;
           if (routeSettings.name == MainScreen.routeName) {
-            page = const MainScreen();
+            if (isFirstRun == null) {
+              page = const OnbordingScreen();
+            } else {
+              page = const MainScreen();
+            }
           } else if (routeSettings.name == LoadingScreen.routeName) {
             page = const LoadingScreen();
           } else if (routeSettings.name == PerformanceDoubleScreen.routeName) {

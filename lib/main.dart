@@ -14,6 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences preferences = await SharedPreferences.getInstance();
   isFirstRun = preferences.getBool(SharedPreferencesKeys.isFirstRunName);
+  preferences.setBool(SharedPreferencesKeys.isFirstRunName, false);
   await dotenv.load();
   final apiKey = dotenv.env['API_KEY']!;
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -31,7 +32,7 @@ void main() async {
           ),
         ),
       ],
-      child: const App(),
+      child: App(isFirstRun: isFirstRun),
     ),
   );
 }
