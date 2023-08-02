@@ -51,8 +51,8 @@ class _MainScreenState extends State<MainScreen> {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: const SizedBox(
-                            height: 3,
-                            width: 25,
+                            height: 4,
+                            width: 32,
                           ),
                         ),
                       )
@@ -112,25 +112,19 @@ class _MainScreenState extends State<MainScreen> {
             } else if (state is MapPinLoadingState || state is MapPinLoaded) {
               return Column(
                 children: [
-                  const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 8)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5 - 25,
+                  const Padding(padding: EdgeInsets.fromLTRB(0, 12, 0, 20)),
+                  Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.12),
+                        borderRadius: containerRadius,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.12),
-                          borderRadius: containerRadius,
-                        ),
-                        child: const SizedBox(
-                          height: 3,
-                          width: 25,
-                        ),
+                      child: const SizedBox(
+                        height: 4,
+                        width: 32,
                       ),
-                    ],
-                  ),
+                    ),
+                  )
                 ],
               );
             }
