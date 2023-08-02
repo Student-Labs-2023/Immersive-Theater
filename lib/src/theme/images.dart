@@ -2,7 +2,7 @@ class ImagesSources {
   static const String barcode = 'assets/images/barcode.png';
   static const String card = 'assets/images/card.png';
   static const String image5 = 'assets/images/image5.png';
-  static const String loadingEmblem = 'assets/images/loadingEmblem.png';
+  static const String logo = 'assets/images/logo.svg';
   static const String markGift = 'assets/images/mark_gift.png';
   static const String markStar = 'assets/images/mark_star.png';
 
