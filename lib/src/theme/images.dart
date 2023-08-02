@@ -45,6 +45,7 @@ class ImagesSources {
   static const String closePerformance = "assets/icons/close_performance.png";
   static const String currentLocationItem =
       "assets/icons/current_location_item.png";
+  static const String location = "assets/icons/Location.png";
   static const String locationItem = "assets/icons/location_item.png";
   static const String backIcon = "assets/icons/back_icon.png";
   static const String tipIcon = "assets/icons/tip_icon.png";
@@ -64,4 +65,6 @@ class ImagesSources {
   static const String goodSmile = "assets/images/happy_smile.svg";
   static const String perfectSmile = "assets/images/perfect_smile.svg";
   static const String time = 'assets/icons/time.png';
+  static const String timeGrey = 'assets/icons/time_grey.png';
+  static const String cross = 'assets/icons/Cross.png';
 }

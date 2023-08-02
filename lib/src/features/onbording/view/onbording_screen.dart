@@ -128,22 +128,33 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
-                      child: Text(
-                        "Пропустить",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(color: AppColor.greyText),
-                      ),
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => const MainScreen()))),
-                  FloatingActionButton(
-                    onPressed: () => carController.nextPage(
-                      duration: const Duration(
-                        milliseconds: 350,
-                      ),
-                      curve: Curves.linear,
+                    child: Text(
+                      "Пропустить",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(color: AppColor.greyText),
                     ),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const MainScreen(),
+                      ),
+                    ),
+                  ),
+                  FloatingActionButton(
+                    elevation: 0,
+                    onPressed: _pageIndex == 2
+                        ? () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const MainScreen(),
+                              ),
+                            )
+                        : () => carController.nextPage(
+                              duration: const Duration(
+                                milliseconds: 350,
+                              ),
+                              curve: Curves.linear,
+                            ),
                     backgroundColor: AppColor.purplePrimary,
                     child: const Icon(Icons.arrow_forward),
                   )
