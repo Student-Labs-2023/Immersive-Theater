@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
+import 'package:shebalin/src/features/audio_player/view/audio_player.dart';
+import 'package:shebalin/src/features/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/map_performance/view/map_page.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_player.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/panel_widget.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/progress_bar.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/tip.dart';
 import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
 import 'package:shebalin/src/theme/images.dart';
@@ -53,7 +52,15 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: _appBar(),
+      floatingActionButton: FloatingActionButton(
+        heroTag: "closePerformance",
+        backgroundColor: Colors.white,
+        onPressed: () => _closePerformance(),
+        child: const Image(
+          image: AssetImage(ImagesSources.closePerformance),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       body: Stack(
         alignment: AlignmentDirectional.center,
         children: [
@@ -156,58 +163,31 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
             color: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             constraints: const BoxConstraints(maxHeight: 150, maxWidth: 400),
-            child: const AudioPlayerPanel(),
+            child: AudioPlayerPanel(
+              indexLocation: state.indexLocation,
+            ),
           );
         },
       ),
     );
   }
 
-  AppBar _appBar() {
-    return AppBar(
-      toolbarHeight: 100,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      automaticallyImplyLeading: false,
-      flexibleSpace: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 5.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ProgressLocationsBar(
-                countLocation: chapters.length,
-                durationPerformance: 45,
-              ),
-              FloatingActionButton(
-                heroTag: "closePerformance",
-                backgroundColor: Colors.white,
-                onPressed: () => _closePerformance(context),
-                child: const Image(
-                  image: AssetImage(ImagesSources.closePerformance),
-                ),
-              ),
-            ],
+  Future<bool> showDialogWindow() async {
+    return await showDialog(
+          context: context,
+          builder: (_) => DialogWindow(
+            title: "Завершить спектакль?",
+            subtitle: "Прогресс прохождения не будет\nсохранен.",
+            onTapPrimary: widget.onPerfModeComplete,
+            titlePrimary: "Завершить",
+            titleSecondary: "Отмена",
+            onTapSecondary: widget.onPerfModeResume,
           ),
-        ),
-      ),
-    );
+        ) ??
+        false;
   }
 
-  void _closePerformance(BuildContext context) {
-    onPressedCancel() => Navigator.pop(
-          context,
-        );
-    showDialog(
-      context: context,
-      builder: (_) => DialogWindow(
-        title: "Завершить спектакль?",
-        subtitle: "Прогресс прохождения не будет\nсохранен.",
-        onTapPrimary: widget.onPerfModeComplete,
-        titlePrimary: "Завершить",
-        titleSecondary: "Отмена",
-        onTapSecondary: widget.onPerfModeResume,
-      ),
-    );
+  void _closePerformance() {
+    showDialogWindow();
   }
 }

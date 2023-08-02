@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
+import 'package:shebalin/src/features/audio_player/bloc/audio_player_bloc.dart';
+import 'package:shebalin/src/features/audio_player/view/widgets/audio_info.dart';
+import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
 import 'package:shebalin/src/theme/ui/animated_icon.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/audio_info.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/features/review/view/review_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 
 class AudioPlayerPanel extends StatefulWidget {
+  final int indexLocation;
   const AudioPlayerPanel({
     super.key,
+    required this.indexLocation,
   });
 
   @override
@@ -20,17 +22,10 @@ class AudioPlayerPanel extends StatefulWidget {
 }
 
 class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
-  late int currentIndex;
   @override
   void initState() {
     initializeDateFormatting();
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    currentIndex = context.watch<PerfModeBloc>().state.indexLocation;
-    super.didChangeDependencies();
   }
 
   @override
@@ -41,9 +36,13 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
       },
       listener: (context, state) {
         final int indexLastLocation =
-            context.read<PerfModeBloc>().state.countLocations - 1;
+            RepositoryProvider.of<CurrentPerformanceProvider>(context)
+                    .performance
+                    .chapters
+                    .length -
+                1;
         if (state is AudioPlayerFinishedState &&
-            currentIndex == indexLastLocation) {
+            widget.indexLocation == indexLastLocation) {
           Navigator.pushNamed(context, ReviewPage.routeName);
         }
       },
@@ -83,14 +82,20 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: BlocBuilder<PerfModeBloc, PerfModeState>(
-                    builder: (context, state) {
-                      return AudioInfoWidget(
-                        performanceTitle: state.performanceTitle,
-                        audioTitle: "Глава 1",
-                        imageLink: state.imagePerformanceLink,
-                      );
-                    },
+                  child: AudioInfoWidget(
+                    indexLocation: widget.indexLocation,
+                    countLocation:
+                        RepositoryProvider.of<CurrentPerformanceProvider>(
+                      context,
+                    ).performance.chapters.length,
+                    performanceTitle:
+                        RepositoryProvider.of<CurrentPerformanceProvider>(
+                      context,
+                    ).performance.title,
+                    imageLink:
+                        RepositoryProvider.of<CurrentPerformanceProvider>(
+                      context,
+                    ).performance.imageLink,
                   ),
                 ),
                 buttons(state is AudioPlayerFinishedState),
