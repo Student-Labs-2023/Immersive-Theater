@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
-import 'package:shebalin/main.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/performance_double_screen.dart';
 import 'package:shebalin/src/features/splash_screen/view/splash_screen.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
@@ -51,7 +50,6 @@ class App extends StatelessWidget {
             page = const SplashScreen();
           } else if (routeSettings.name == OnbordingScreen.routeName) {
             page = const OnbordingScreen();
-            isFirstRun = false;
           } else if (routeSettings.name == PerformanceDoubleScreen.routeName) {
             page = const PerformanceDoubleScreen();
           } else if (routeSettings.name == VerticalSlidningScreen.routeName) {
