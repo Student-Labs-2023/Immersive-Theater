@@ -1,6 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/locations/view/location_description_panel_page.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/map/view/yandex_map_page.dart';
@@ -8,9 +9,11 @@ import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/performances/view/performances_panel_page.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
+import 'package:shebalin/src/theme/images.dart';
 
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -167,13 +170,51 @@ class _MainScreenState extends State<MainScreen> {
           child: BlocBuilder<PerformanceBloc, PerformanceState>(
             builder: (context, state) {
               if (state is PerformanceLoadInProgress) {
-                return const CircularProgressIndicator();
+                return const YandexMapPage(
+                  mapObjects: [],
+                );
               } else if (state is PerformanceLoadSuccess) {
-                List<Place> locations = state.perfomances[0].info.chapters
-                    .map((e) => e.place)
-                    .toList();
+                List<PlacemarkMapObject> placeMarks = [];
+                int id;
+                for (var perf in state.perfomances) {
+                  id = 0;
+
+                  for (var place
+                      in perf.info.chapters.map((e) => e.place).toList()) {
+                    placeMarks.add(
+                      PlacemarkMapObject(
+                        onTap: (mapObject, point) {
+                          _mapPinTapped(
+                            mapObject,
+                            perf.info.chapters.length,
+                            point,
+                            context,
+                          );
+                        },
+                        mapId: MapObjectId(
+                          '${perf.id}/$id',
+                        ),
+                        opacity: 1,
+                        point: Point(
+                          latitude: place.latitude,
+                          longitude: place.longitude,
+                        ),
+                        isDraggable: true,
+                        icon: PlacemarkIcon.single(
+                          PlacemarkIconStyle(
+                            image: BitmapDescriptor.fromAssetImage(
+                              ImagesSources.mark,
+                            ),
+                            scale: 0.3,
+                          ),
+                        ),
+                      ),
+                    );
+                    id += 1;
+                  }
+                }
                 return YandexMapPage(
-                  locations: locations,
+                  mapObjects: placeMarks,
                 );
               } else {
                 return const Text("error");
@@ -194,5 +235,24 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       isPerfomnceButtonPressed = flag;
     });
+  }
+
+  void _mapPinTapped(
+    MapObject mapObject,
+    int count,
+    Point point,
+    BuildContext context,
+  ) {
+    final String id = mapObject.mapId.value.toString();
+    log(id);
+    if (id.endsWith('0') && count == 1) {
+      context.read<PerformanceBloc>().add(
+            PerformanceLoadFullInfo(
+              int.parse(id.substring(0, id.indexOf('/'))),
+            ),
+          );
+    } else {
+      context.read<MapPinBloc>().add(UpdateMapPinLocation(mapObject, point));
+    }
   }
 }

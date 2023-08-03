@@ -82,14 +82,14 @@ class _LocationDescriptionPanelPageState
                   widget.mapObjectId
                       .substring(0, widget.mapObjectId.indexOf('/')),
                 );
-                if (state.perfomances[index].info.chapters.length == 1) {
-                  currentLocation = state.perfomances[index].info.chapters[0];
-                } else {
-                  currentLocation = state.perfomances[0].info
-                      .chapters[state.perfomances[0].info.chapters.indexWhere(
-                    (location) => location.place.address == widget.mapObjectId,
-                  )];
-                }
+                final int indexPlace = int.parse(
+                  widget.mapObjectId
+                      .substring(widget.mapObjectId.indexOf('/') + 1),
+                );
+
+                currentLocation =
+                    state.perfomances[index].info.chapters[indexPlace];
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
