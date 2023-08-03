@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/locations/view/location_description_panel_page.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/map/view/yandex_map_page.dart';
@@ -175,12 +176,11 @@ class _MainScreenState extends State<MainScreen> {
                 );
               } else if (state is PerformanceLoadSuccess) {
                 List<PlacemarkMapObject> placeMarks = [];
-                int id;
-                for (var perf in state.perfomances) {
-                  id = 0;
 
-                  for (var place
-                      in perf.info.chapters.map((e) => e.place).toList()) {
+                for (var perf in state.perfomances) {
+                  List<Place> places =
+                      perf.info.chapters.map((e) => e.place).toList();
+                  for (var i = 0; i < places.length; i++) {
                     placeMarks.add(
                       PlacemarkMapObject(
                         onTap: (mapObject, point) {
@@ -192,12 +192,12 @@ class _MainScreenState extends State<MainScreen> {
                           );
                         },
                         mapId: MapObjectId(
-                          '${perf.id}/$id',
+                          '${perf.id}/$i',
                         ),
                         opacity: 1,
                         point: Point(
-                          latitude: place.latitude,
-                          longitude: place.longitude,
+                          latitude: places[i].latitude,
+                          longitude: places[i].longitude,
                         ),
                         isDraggable: true,
                         icon: PlacemarkIcon.single(
@@ -210,7 +210,6 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       ),
                     );
-                    id += 1;
                   }
                 }
                 return YandexMapPage(
