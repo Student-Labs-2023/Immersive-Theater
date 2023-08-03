@@ -35,6 +35,7 @@ class _PerformanceAtHomeModePageState extends State<PerformanceAtHomeModePage> {
   void initState() {
     chapters = RepositoryProvider.of<CurrentPerformanceProvider>(context)
         .performance
+        .info
         .chapters;
     super.initState();
   }

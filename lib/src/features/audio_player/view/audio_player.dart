@@ -38,6 +38,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
         final int indexLastLocation =
             RepositoryProvider.of<CurrentPerformanceProvider>(context)
                     .performance
+                    .info
                     .chapters
                     .length -
                 1;
@@ -87,7 +88,7 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
                     countLocation:
                         RepositoryProvider.of<CurrentPerformanceProvider>(
                       context,
-                    ).performance.chapters.length,
+                    ).performance.info.chapters.length,
                     performanceTitle:
                         RepositoryProvider.of<CurrentPerformanceProvider>(
                       context,

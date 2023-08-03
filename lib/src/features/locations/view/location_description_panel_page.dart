@@ -78,10 +78,18 @@ class _LocationDescriptionPanelPageState
                 );
               }
               if (state is PerformanceLoadSuccess) {
-                currentLocation = state.perfomances[0]
-                    .chapters[state.perfomances[0].chapters.indexWhere(
-                  (location) => location.place.address == widget.mapObjectId,
-                )];
+                final int index = int.parse(
+                  widget.mapObjectId
+                      .substring(0, widget.mapObjectId.indexOf('/')),
+                );
+                final int indexPlace = int.parse(
+                  widget.mapObjectId
+                      .substring(widget.mapObjectId.indexOf('/') + 1),
+                );
+
+                currentLocation =
+                    state.perfomances[index].info.chapters[indexPlace];
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

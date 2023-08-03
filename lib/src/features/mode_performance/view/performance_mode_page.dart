@@ -39,6 +39,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
   void initState() {
     chapters = RepositoryProvider.of<CurrentPerformanceProvider>(context)
         .performance
+        .info
         .chapters;
     super.initState();
   }
