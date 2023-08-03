@@ -137,11 +137,11 @@ class PerfModeFlowState extends State<PerfModeFlow> {
                 create: (context) => PerfModeBloc(
                   [],
                   0,
-                  widget.performance.chapters.length,
+                  widget.performance.info.chapters.length,
                   widget.performance.title,
                   widget.performance.imageLink,
                   audioPlayerBloc,
-                  widget.performance.chapters.map((e) => e.place).toList(),
+                  widget.performance.info.chapters.map((e) => e.place).toList(),
                 ),
               ),
               BlocProvider(
@@ -150,7 +150,7 @@ class PerfModeFlowState extends State<PerfModeFlow> {
                     ..add(AudioPlayerInitialEvent())
                     ..add(
                       AudioPlayerAddPlaylistEvent(
-                        audio: widget.performance.chapters[0].audioLink,
+                        audio: widget.performance.info.chapters[0].audioLink,
                       ),
                     );
                 },
@@ -174,11 +174,11 @@ class PerfModeFlowState extends State<PerfModeFlow> {
                 create: (context) => PerfHomeModeBloc(
                   [],
                   0,
-                  widget.performance.chapters.length,
+                  widget.performance.info.chapters.length,
                   widget.performance.title,
                   widget.performance.imageLink,
                   audioPlayerBloc,
-                  widget.performance.chapters.map((e) => e.place).toList(),
+                  widget.performance.info.chapters.map((e) => e.place).toList(),
                 ),
               ),
               BlocProvider(
@@ -187,7 +187,7 @@ class PerfModeFlowState extends State<PerfModeFlow> {
                     ..add(AudioPlayerInitialEvent())
                     ..add(
                       AudioPlayerAddPlaylistEvent(
-                        audio: widget.performance.chapters[0].audioLink,
+                        audio: widget.performance.info.chapters[0].audioLink,
                       ),
                     );
                 },

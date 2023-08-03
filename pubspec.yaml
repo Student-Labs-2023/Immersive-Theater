@@ -29,9 +29,10 @@ environment:
 flutter_icons:
   android: true
   ios: true
-  image_path: 'assets/images/loadingEmblem.png'
+  image_path: 'assets/images/logo.png'
   adaptive_icon_background: '#ffffff'
-  adaptive_icon_foreground: 'assets/images/logo2.png'
+  adaptive_icon_foreground: 'assets/images/logo.png'
+  
 
 dependencies:
   flutter:

@@ -9,6 +9,7 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class YandexMapPage extends StatefulWidget {
   final List<Place> locations;
+
   const YandexMapPage({Key? key, required this.locations}) : super(key: key);
 
   @override
@@ -19,10 +20,6 @@ class _YandexMapState extends State<YandexMapPage> {
   final _initialCoords = const Point(latitude: 54.988707, longitude: 73.368659);
   late Completer<YandexMapController> _controller;
   late List<PlacemarkMapObject> mapObjects;
-
-  // Position? _position;
-  Timer? _timer;
-  PlacemarkMapObject? _myPositionMarker;
 
   @override
   void initState() {
@@ -49,12 +46,6 @@ class _YandexMapState extends State<YandexMapPage> {
         )
         .toList();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
   }
 
   void _mapPinTapped(MapObject mapObject, Point point, BuildContext context) {

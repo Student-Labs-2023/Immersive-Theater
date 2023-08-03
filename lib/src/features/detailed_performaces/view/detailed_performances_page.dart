@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/images_location.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome_args.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
@@ -16,7 +15,6 @@ import 'package:shebalin/src/features/detailed_performaces/view/widgets/audio_de
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/author_card.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
-import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -72,11 +70,7 @@ class _PerfomanceDescriptionScreenState
               background: CachedNetworkImage(
                 imageUrl: widget.performance.imageLink,
                 fit: BoxFit.fill,
-                placeholder: (contxt, string) => const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColor.grey,
-                  ),
-                ),
+                placeholder: (contxt, string) => const AppProgressBar(),
               ),
               title: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -134,7 +128,7 @@ class _PerfomanceDescriptionScreenState
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(right: 4),
+                            padding: const EdgeInsets.only(right: 4),
                             child: Image.asset(ImagesSources.timeGrey),
                           ),
                           state is PerformanceFullInfoLoadInProgress
@@ -142,7 +136,7 @@ class _PerfomanceDescriptionScreenState
                               : Text(
                                   durationToHoursMinutes(
                                     state.perfomances[widget.performance.id]
-                                        .duration,
+                                        .info.duration,
                                   ).toString(),
                                   style: Theme.of(context)
                                       .textTheme
@@ -158,11 +152,11 @@ class _PerfomanceDescriptionScreenState
                             child: Image.asset(ImagesSources.location),
                           ),
                           state is PerformanceFullInfoLoadInProgress ||
-                                  state.perfomances[widget.performance.id]
+                                  state.perfomances[widget.performance.id].info
                                       .chapters.isEmpty
                               ? const AppProgressBar()
                               : Text(
-                                  state.perfomances[widget.performance.id]
+                                  state.perfomances[widget.performance.id].info
                                       .chapters[0].place.address,
                                   style: Theme.of(context)
                                       .textTheme
@@ -177,7 +171,7 @@ class _PerfomanceDescriptionScreenState
                       state is PerformanceLoadInProgress
                           ? const AppProgressBar()
                           : Text(
-                              state.perfomances[widget.performance.id]
+                              state.perfomances[widget.performance.id].info
                                   .description,
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
@@ -223,16 +217,19 @@ class _PerfomanceDescriptionScreenState
                                 height:
                                     MediaQuery.of(context).size.height * 0.2,
                                 child: ListView.builder(
-                                  itemCount: widget.performance.chapters.length,
+                                  itemCount:
+                                      widget.performance.info.chapters.length,
                                   scrollDirection: Axis.vertical,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return AudioDemo(
-                                      isBought: isBought,
-                                      performance: state
-                                          .perfomances[widget.performance.id],
-                                      index: index,
-                                    );
+                                    return state is PerformanceLoadInProgress
+                                        ? const AppProgressBar()
+                                        : AudioDemo(
+                                            isBought: isBought,
+                                            performance: state.perfomances[
+                                                widget.performance.id],
+                                            index: index,
+                                          );
                                   },
                                 ),
                               ),
@@ -259,6 +256,7 @@ class _PerfomanceDescriptionScreenState
                               : ImagesLocation(
                                   imageLinks: state
                                       .perfomances[widget.performance.id]
+                                      .info
                                       .images,
                                   onTap: _onImageTap,
                                 )
@@ -280,7 +278,8 @@ class _PerfomanceDescriptionScreenState
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.1,
                             child: ListView.builder(
-                              itemCount: widget.performance.creators.length,
+                              itemCount:
+                                  widget.performance.info.creators.length,
                               scrollDirection: Axis.horizontal,
                               cacheExtent: 1000,
                               itemBuilder: (BuildContext context, int index) {

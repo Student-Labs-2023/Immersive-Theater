@@ -78,10 +78,18 @@ class _LocationDescriptionPanelPageState
                 );
               }
               if (state is PerformanceLoadSuccess) {
-                currentLocation = state.perfomances[0]
-                    .chapters[state.perfomances[0].chapters.indexWhere(
-                  (location) => location.place.address == widget.mapObjectId,
-                )];
+                final int index = int.parse(
+                  widget.mapObjectId
+                      .substring(0, widget.mapObjectId.indexOf('/')),
+                );
+                if (state.perfomances[index].info.chapters.length == 1) {
+                  currentLocation = state.perfomances[index].info.chapters[0];
+                } else {
+                  currentLocation = state.perfomances[0].info
+                      .chapters[state.perfomances[0].info.chapters.indexWhere(
+                    (location) => location.place.address == widget.mapObjectId,
+                  )];
+                }
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

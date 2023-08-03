@@ -32,7 +32,7 @@ class AuthorCard extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(50)),
                   child: CachedNetworkImage(
-                    imageUrl: performance.creators[index].imageLink,
+                    imageUrl: performance.info.creators[index].imageLink,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -44,11 +44,11 @@ class AuthorCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    performance.creators[index].fullName,
+                    performance.info.creators[index].fullName,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(
-                    performance.creators[index].role,
+                    performance.info.creators[index].role,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ],

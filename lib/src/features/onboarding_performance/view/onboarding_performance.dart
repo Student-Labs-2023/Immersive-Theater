@@ -118,12 +118,14 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
     final double latitude =
         RepositoryProvider.of<CurrentPerformanceProvider>(context)
             .performance
+            .info
             .chapters[0]
             .place
             .latitude;
     final double longitude =
         RepositoryProvider.of<CurrentPerformanceProvider>(context)
             .performance
+            .info
             .chapters[0]
             .place
             .longitude;

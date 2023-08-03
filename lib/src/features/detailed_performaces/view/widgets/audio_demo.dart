@@ -57,7 +57,7 @@ class _AudioDemoState extends State<AudioDemo> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.performance.chapters[widget.index].title,
+                      widget.performance.info.chapters[widget.index].title,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Text(

@@ -50,7 +50,8 @@ class _BadAudioDemoState extends State<BadAudioDemo> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.performance.chapters[widget.index].shortAudioLink,
+                    widget
+                        .performance.info.chapters[widget.index].shortAudioLink,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(),
                   ),
                   Text(
