@@ -113,9 +113,6 @@ class _LocationDescriptionPanelPageState
                             height: 12,
                           ),
                           const AudioContentLocationPanel(),
-                          // SizedBox(
-                          //   height: mediaQuerySize.width * 0.13 + 25,
-                          // )
                         ],
                       ),
                     ),

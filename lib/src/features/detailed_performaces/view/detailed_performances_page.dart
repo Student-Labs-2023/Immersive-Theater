@@ -239,8 +239,8 @@ class _PerfomanceDescriptionScreenState
                                 ),
                               ),
                             ),
-                            height: 88,
-                            width: 88,
+                            height: MediaQuery.of(context).size.height * 0.011,
+                            width: MediaQuery.of(context).size.width * 0.24,
                             imageUrl: ApiClient.baseUrl +
                                 widget.performance.coverImageLink,
                             fit: BoxFit.fill,
@@ -279,7 +279,7 @@ class _PerfomanceDescriptionScreenState
                         child: ListView.builder(
                           itemCount: widget.performance.authorsName.length,
                           scrollDirection: Axis.horizontal,
-                          cacheExtent: 1000,
+                          cacheExtent: 10,
                           itemBuilder: (BuildContext context, int index) {
                             return AuthorCard(
                               performance: widget.performance,
@@ -296,7 +296,7 @@ class _PerfomanceDescriptionScreenState
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: mediaQuerySize.width * 0.13 + 20,
+              height: mediaQuerySize.height * 0.06 + 20,
             ),
           )
         ],
