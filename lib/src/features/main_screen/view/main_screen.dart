@@ -5,6 +5,7 @@ import 'package:shebalin/src/features/locations/view/location_description_panel_
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/map/view/yandex_map_page.dart';
 import 'package:shebalin/src/features/performances/view/performances_panel_page.dart';
+import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
 import 'package:shebalin/src/features/user/view/personal_panel_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
@@ -127,7 +128,7 @@ class _MainScreenState extends State<MainScreen> {
             if (state is MapPinInitialState) {
               return isPerfomnceButtonPressed
                   ? const PerformancesPanelPage()
-                  : PromocodeScreen();
+                  : const PromocodePanelPage();
             } else if (state is MapPinLoadingState) {
               return Center(
                 child: CircularProgressIndicator(color: accentTextColor),
@@ -148,7 +149,7 @@ class _MainScreenState extends State<MainScreen> {
               });
               return isPerfomnceButtonPressed
                   ? const PerformancesPanelPage()
-                  : PromocodeScreen();
+                  : const PromocodePanelPage();
             }
             return const Text('Упс...Что-то пошло не так');
           },

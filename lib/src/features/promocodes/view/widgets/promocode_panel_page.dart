@@ -55,12 +55,13 @@ class _PromocodePanelPageState extends State<PromocodePanelPage> {
                   child: InputPromocodePanelPage(bloc: _ticketsBloc),
                 ),
                 body: BlocBuilder<TicketsBloc, TicketsState>(
-                    bloc: _ticketsBloc,
-                    builder: (context, state) => state.tickets.isEmpty
-                        ? ZeroPromocodeScreen(controller: _panelController)
-                        : ListView(
-                            children: state.tickets,
-                          )),
+                  bloc: _ticketsBloc,
+                  builder: (context, state) => state.tickets.isEmpty
+                      ? ZeroPromocodeScreen(controller: _panelController)
+                      : ListView(
+                          children: state.tickets,
+                        ),
+                ),
               ),
             )
           ],
