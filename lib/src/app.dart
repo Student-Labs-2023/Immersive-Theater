@@ -12,7 +12,6 @@ import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboar
 import 'package:shebalin/src/features/onbording/view/onbording_screen.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/photo_slider/view/vertical_sliding_screen.dart';
-import 'package:shebalin/src/features/promocodes/view/own_promocodes_screen.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_screen.dart';
 import 'package:shebalin/src/features/ticket/view/ticket_page.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
@@ -51,8 +50,8 @@ class App extends StatelessWidget {
           '/main-screen': (context) => const MainScreen(),
           '/perfomance-description-screen': (context) =>
               const PerformanceDoubleScreen(),
-          '/promocode-screen': (context) => const PromocodeScreen(),
-          '/promocode-screen/own': (context) => const OwnPromocodesScreen(),
+          '/promocode-screen': (context) =>  PromocodeScreen(),
+
           '/vertical-sliding-screen': (context) =>
               const VerticalSlidningScreen(),
           '/ticket-page': (context) => const TicketPage(),

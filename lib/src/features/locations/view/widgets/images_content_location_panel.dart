@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:api_client/api_client.dart';
 
@@ -33,6 +34,8 @@ class ImagesContentLocationPanel extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(4)),
               ),
               child: CachedNetworkImage(
+                placeholder: (context, string) =>
+                    CircularProgressIndicator(color: AppColor.grey),
                 imageUrl: ApiClient.baseUrl + imageLinks[index],
               ),
             );
