@@ -34,8 +34,9 @@ class _PerfomanceDescriptionScreenState
     extends State<PerfomanceDescriptionScreen> {
   bool isBought = false;
   final paymentService = Payment();
-
+  double top = 0.0;
   bool _isExpanded = true;
+  bool _isCollapsed = false;
   late final ScrollController _controller = ScrollController()
     ..addListener(() {
       setState(() {
@@ -55,7 +56,7 @@ class _PerfomanceDescriptionScreenState
   Widget build(BuildContext context) {
     var mediaQuerySize = MediaQuery.of(context).size;
     _isExpanded =
-        _controller.hasClients && _controller.offset <= (kToolbarHeight);
+        _controller.hasClients && _controller.offset <= (kToolbarHeight) * 3;
     return Scaffold(
       body: CustomScrollView(
         controller: _controller,
@@ -67,32 +68,39 @@ class _PerfomanceDescriptionScreenState
             expandedHeight: MediaQuery.of(context).size.height * 0.32,
             floating: false,
             pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              background: CachedNetworkImage(
-                imageUrl: widget.performance.imageLink,
-                fit: BoxFit.fill,
-                placeholder: (contxt, string) => const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColor.grey,
+            flexibleSpace: LayoutBuilder(
+              builder: (context, constraints) {
+                top = constraints.biggest.height;
+                top == MediaQuery.of(context).padding.top + kToolbarHeight;
+                return FlexibleSpaceBar(
+                  centerTitle: !_isExpanded,
+                  background: CachedNetworkImage(
+                    imageUrl: widget.performance.imageLink,
+                    fit: BoxFit.fill,
+                    placeholder: (contxt, string) => const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.grey,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  widget.performance.title,
-                  style: _isExpanded
-                      ? Theme.of(context).textTheme.displayLarge?.copyWith(
-                            color: _textColor,
-                            fontWeight: FontWeight.w700,
-                          )
-                      : Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            color: _textColor,
-                            fontWeight: FontWeight.w700,
-                          ),
-                ),
-              ),
+                  title: Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Text(
+                      widget.performance.title,
+                      style: _isExpanded
+                          ? Theme.of(context).textTheme.displayMedium?.copyWith(
+                                color: _textColor,
+                              )
+                          : Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(
+                                color: _textColor,
+                              ),
+                    ),
+                  ),
+                );
+              },
             ),
             leading: Row(
               children: [
