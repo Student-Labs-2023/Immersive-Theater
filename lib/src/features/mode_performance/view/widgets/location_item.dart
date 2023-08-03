@@ -30,13 +30,13 @@ class LocationItem extends StatelessWidget {
                   painter: LocationFigure(
                     isCurrentLocation: isCurrentLocation,
                     color: isCompleted ? AppColor.grey : AppColor.purplePrimary,
-                    bias: 8,
+                    bias: 11,
                   ),
                 ),
               ),
             ),
             Expanded(
-              flex: 6,
+              flex: 9,
               child: Text(
                 locationName,
                 style: Theme.of(context).textTheme.bodyMedium,
