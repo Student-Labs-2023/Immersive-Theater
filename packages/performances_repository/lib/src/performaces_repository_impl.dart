@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:performances_repository/src/models/full_info_performance.dart';
 import 'package:performances_repository/src/models/performance.dart';
 import 'package:performances_repository/src/performaces_repository.dart';
 import 'package:api_client/api_client.dart';
@@ -30,22 +31,24 @@ class PerformancesRepositoryImpl implements PerformancesRepository {
         _PerformancesEndpoint.everything.endpoint,
         options: Options(responseType: ResponseType.json));
     final result = ResponseMapper.fromJson(jsonDecode(response.data));
+    log(result.data.toString());
     final List<Performance> performances = [];
     for (final rawPerformance in result.data) {
       performances.add(Performance.fromJson(rawPerformance));
     }
 
+    log(performances[0].toJson().toString());
     return performances;
   }
 
   @override
-  Future<Performance> fetchPerformanceById(int id) async {
+  Future<FullInfoPerformance> fetchPerformanceById(int id) async {
     final response = await _apiClient.dio.get(
         _PerformancesEndpoint.byId.endpoint + id.toString(),
         options: Options(responseType: ResponseType.json));
-    final Performance performance =
-        Performance.fromJson(jsonDecode(response.data));
-    log(performance.images[0], name: 'image');
-    return performance;
+    log(response.data.toString());
+    final FullInfoPerformance info =
+        FullInfoPerformance.fromJson(jsonDecode(response.data));
+    return info;
   }
 }
