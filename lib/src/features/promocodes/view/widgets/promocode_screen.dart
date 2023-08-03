@@ -23,9 +23,9 @@ class PromocodeScreen extends StatefulWidget {
 
 class _PromocodeScreenState extends State<PromocodeScreen> {
   final PanelController _panelController = PanelController();
+  final TicketsBloc _ticketsBloc = TicketsBloc();
   @override
   Widget build(BuildContext context) {
-    final TicketsBloc _ticketsBloc = TicketsBloc();
     return SlidingUpPanel(
       borderRadius: panelRadius,
       backdropEnabled: true,
@@ -49,65 +49,17 @@ class _PromocodeScreenState extends State<PromocodeScreen> {
       panel: InputPromocodePanelPage(
         bloc: _ticketsBloc,
       ),
-      body: Center(child: BlocBuilder<TicketsBloc, TicketsState>(
-        builder: (context, state) {
-          return state.tickets.isNotEmpty
-              ? ListView.builder(
-                  itemBuilder: (_, index) => state.tickets[index],)
-              : Column(
-                  children: [
-                    const SizedBox(
-                      width: 24,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            Image.asset(ImagesSources.ticketOutline),
-                            const SizedBox(
-                              height: 24,
-                            ),
-                            Text(
-                              'У вас еще нет билетов',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                      color: Colors.black.withOpacity(0.3)),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                        ElevatedButton(
-                          onPressed: (() => _panelController.open()),
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(accentTextColor),
-                            elevation: MaterialStateProperty.all(0),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            minimumSize: MaterialStateProperty.all(
-                              const Size(328, 48),
-                            ),
-                          ),
-                          child: Text(
-                            'Активировать промокод',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.copyWith(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-        },
-      )),
+      body: Center(
+        child: BlocBuilder<TicketsBloc, TicketsState>(
+          builder: (context, state) {
+            return state.tickets.isNotEmpty
+                ? ListView.builder(
+                    itemBuilder: (_, index) => state.tickets[index],
+                  )
+                : ZeroPromocodeScreen(controller: _panelController);
+          },
+        ),
+      ),
     );
   }
 }

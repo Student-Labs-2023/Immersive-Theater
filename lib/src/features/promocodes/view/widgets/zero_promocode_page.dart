@@ -1,41 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../../../theme/images.dart';
 import '../../../../theme/theme.dart';
 
 class ZeroPromocodeScreen extends StatelessWidget {
-  ZeroPromocodeScreen({super.key, required this.panelController});
-  var panelController = PanelController();
+  const ZeroPromocodeScreen({super.key, required PanelController controller})
+      : _panelController = controller;
+  final PanelController _panelController;
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Column(
           children: [
+            Center(
+              child: Image.asset(ImagesSources.ticketOutline),
+            ),
             const SizedBox(
-              height: 5,
+              height: 24,
             ),
-            Column(
-              children: [
-                Image.asset(ImagesSources.ticketOutline),
-                const SizedBox(
-                  height: 12,
-                ),
-                Text(
-                  'У вас еще нет билетов',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(color: Colors.black.withOpacity(0.3)),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+            Text(
+              'У вас еще нет билетов',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: secondaryTextColor,
+                  ),
+              textAlign: TextAlign.center,
             ),
-            ElevatedButton(
-              onPressed: (() => panelController.open()),
+          ],
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 32),
+            child: ElevatedButton(
+              onPressed: (() => _panelController.open()),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(accentTextColor),
+                backgroundColor:
+                    MaterialStateProperty.all(AppColor.purplePrimary),
                 elevation: MaterialStateProperty.all(0),
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
@@ -50,12 +54,13 @@ class ZeroPromocodeScreen extends StatelessWidget {
                 'Ввести промокод',
                 style: Theme.of(context)
                     .textTheme
-                    .bodyMedium
+                    .bodyLarge
                     ?.copyWith(color: Colors.white),
               ),
             ),
-          ],
+          ),
         ),
-      );
+      ],
+    );
   }
 }
