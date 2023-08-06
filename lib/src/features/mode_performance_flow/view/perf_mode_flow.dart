@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/audio_player/bloc/audio_player_bloc.dart';
+import 'package:shebalin/src/features/detailed_performaces/view/performance_double_screen.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/mode_perf_home/bloc/perf_home_mode_bloc.dart';
@@ -75,10 +76,6 @@ class PerfModeFlowState extends State<PerfModeFlow> {
     Navigator.of(context).pop(false);
   }
 
-  void _onOnboardingClose() {
-    Navigator.of(context).pop();
-  }
-
   Future<bool> _showDialogWindow() async {
     return await showDialog(
           context: context,
@@ -117,7 +114,9 @@ class PerfModeFlowState extends State<PerfModeFlow> {
       case OnboardWelcome.routeName:
         {
           page = OnboardWelcome(
-            onOnboardingClose: _onOnboardingClose,
+            onOnboardingClose: () => Navigator.of(context).popUntil(
+              (ModalRoute.withName(PerformanceDoubleScreen.routeName)),
+            ),
             onOnboardWelcomeComplete: _onOnboardWelcomeComplete,
           );
           break;
@@ -127,7 +126,6 @@ class PerfModeFlowState extends State<PerfModeFlow> {
         {
           final args = routeSettings.arguments as OnboardingPerformanceArgs;
           page = OnboardingPerformance(
-            onOnboardingClose: _onOnboardingClose,
             listenAtHome: args.listenAtHome,
             onOnboardingComplete: _onOnboardingComplete,
           );
@@ -222,7 +220,7 @@ class PerfModeFlowState extends State<PerfModeFlow> {
         break;
     }
 
-    return MaterialPageRoute<dynamic>(
+    return CustomMaterialPageRoute(
       builder: (context) {
         return page;
       },
@@ -234,11 +232,15 @@ class PerfModeFlowState extends State<PerfModeFlow> {
     if (currentRouteName == PerformanceAtHomeModePage.routeName ||
         currentRouteName == PerformanceModePage.routeName) {
       return await _showDialogWindow();
-    } else if (currentRouteName == OnboardWelcome.routeName ||
-        currentRouteName == OnboardingPerformance.routeName) {
-      return true;
+    } else if (currentRouteName == OnboardingPerformance.routeName) {
+      _navigatorKey.currentState!.pop();
+      currentRouteName = OnboardWelcome.routeName;
+      return false;
+    } else if (currentRouteName == OnboardWelcome.routeName) {
+      Navigator.of(context, rootNavigator: true).pop();
     } else if (currentRouteName == ReviewPage.routeName) {
       _onPerfModeComplete();
+
       return true;
     } else if (currentRouteName == ImagesViewPage.routeName) {
       return true;
@@ -246,4 +248,23 @@ class PerfModeFlowState extends State<PerfModeFlow> {
 
     return false;
   }
+}
+
+class CustomMaterialPageRoute extends MaterialPageRoute {
+  @override
+  bool get hasScopedWillPopCallback {
+    return false;
+  }
+
+  CustomMaterialPageRoute({
+    required WidgetBuilder builder,
+    required RouteSettings settings,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
+  }) : super(
+          builder: builder,
+          settings: settings,
+          maintainState: maintainState,
+          fullscreenDialog: fullscreenDialog,
+        );
 }

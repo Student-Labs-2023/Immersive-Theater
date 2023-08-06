@@ -19,11 +19,9 @@ class OnboardingPerformance extends StatefulWidget {
     super.key,
     required this.listenAtHome,
     required this.onOnboardingComplete,
-    required this.onOnboardingClose,
   });
 
   final void Function(bool listenAtHome) onOnboardingComplete;
-  final VoidCallback onOnboardingClose;
   final bool listenAtHome;
 
   static const routeName = 'rules';
@@ -50,7 +48,8 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarBtnClose(
-        onPressed: widget.onOnboardingClose,
+        icon: ImagesSources.backIcon,
+        onPressed: () => Navigator.of(context).pop(),
       ),
       backgroundColor: AppColor.accentBackground,
       body: AnimatedImage(image: pages[currentIndex].image),
@@ -88,13 +87,12 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 34),
                 child: showOneButtonAtHome
-                    ? AppIconButton.primaryButton(
+                    ? AppButton.primaryButton(
                         title: pages[currentIndex].buttonTitle,
                         onTap: curIndexLessLastindex
                             ? _nextPage
                             : () => widget
                                 .onOnboardingComplete(widget.listenAtHome),
-                        icon: ImagesSources.right,
                       )
                     : OnboardControllButton(
                         titlePrimary: pages[currentIndex].buttonTitle,

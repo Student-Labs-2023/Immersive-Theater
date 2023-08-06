@@ -2,13 +2,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:shebalin/src/theme/app_color.dart';
-import 'package:shebalin/src/theme/images.dart';
 
 class AppBarBtnClose extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onPressed;
+  final String icon;
   const AppBarBtnClose({
     Key? key,
     required this.onPressed,
+    required this.icon,
   }) : super(key: key);
 
   @override
@@ -19,7 +20,7 @@ class AppBarBtnClose extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       leading: IconButton(
         icon: Image.asset(
-          ImagesSources.closePerformance,
+          icon,
           color: AppColor.blackText,
         ),
         onPressed: onPressed,

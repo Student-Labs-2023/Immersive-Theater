@@ -9,12 +9,13 @@ import 'package:shebalin/src/features/review/view/widgets/emoji.dart';
 import 'package:shebalin/src/features/review/view/widgets/review_bottom_sheet.dart';
 import 'package:shebalin/src/features/review/view/widgets/review_field.dart';
 import 'package:shebalin/src/theme/app_color.dart';
+import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/ui/app_bar_close.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key, required this.onPerfModeComplete});
   final VoidCallback onPerfModeComplete;
-  static const routeName = '/review-page';
+  static const routeName = 'review-page';
 
   @override
   State<ReviewPage> createState() => _ReviewPageState();
@@ -34,7 +35,10 @@ class _ReviewPageState extends State<ReviewPage> {
     return Builder(
       builder: (context) {
         return Scaffold(
-          appBar: AppBarBtnClose(onPressed: widget.onPerfModeComplete),
+          appBar: AppBarBtnClose(
+            icon: ImagesSources.closeIcon,
+            onPressed: widget.onPerfModeComplete,
+          ),
           backgroundColor: AppColor.whiteBackground,
           body: Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),

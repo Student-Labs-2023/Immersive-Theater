@@ -23,7 +23,10 @@ class OnboardWelcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarBtnClose(onPressed: onOnboardingClose),
+      appBar: AppBarBtnClose(
+        icon: ImagesSources.backIcon,
+        onPressed: onOnboardingClose,
+      ),
       backgroundColor: AppColor.accentBackground,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
