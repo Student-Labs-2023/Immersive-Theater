@@ -45,7 +45,7 @@ class _PerformanceAtHomeModePageState extends State<PerformanceAtHomeModePage> {
     final double height = MediaQuery.of(context).size.height;
     final double heightPanelOpened = height * 0.5;
 
-    final double heightPanelClosed = height * 0.17;
+    final double heightPanelClosed = height * 0.21;
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
