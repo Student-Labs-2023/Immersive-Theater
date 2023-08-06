@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
@@ -77,6 +75,10 @@ class PerfModeFlowState extends State<PerfModeFlow> {
     Navigator.of(context).pop(false);
   }
 
+  void _onOnboardingClose() {
+    Navigator.of(context).pop();
+  }
+
   Future<bool> _showDialogWindow() async {
     return await showDialog(
           context: context,
@@ -100,7 +102,6 @@ class PerfModeFlowState extends State<PerfModeFlow> {
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Navigator(
-          observers: [MyNavigatorObserver()],
           key: _navigatorKey,
           initialRoute: widget.perfModePageRoute,
           onGenerateRoute: _onGenerateRoute,
@@ -116,6 +117,7 @@ class PerfModeFlowState extends State<PerfModeFlow> {
       case OnboardWelcome.routeName:
         {
           page = OnboardWelcome(
+            onOnboardingClose: _onOnboardingClose,
             onOnboardWelcomeComplete: _onOnboardWelcomeComplete,
           );
           break;
@@ -125,6 +127,7 @@ class PerfModeFlowState extends State<PerfModeFlow> {
         {
           final args = routeSettings.arguments as OnboardingPerformanceArgs;
           page = OnboardingPerformance(
+            onOnboardingClose: _onOnboardingClose,
             listenAtHome: args.listenAtHome,
             onOnboardingComplete: _onOnboardingComplete,
           );
@@ -242,58 +245,5 @@ class PerfModeFlowState extends State<PerfModeFlow> {
     }
 
     return false;
-  }
-}
-
-class MyNavigatorObserver extends NavigatorObserver {
-  List<String> routeStack = [];
-
-  @override
-  void didPop(Route route, Route? previousRoute) {
-    routeStack.removeLast();
-    log(
-      'didppop: ${route.settings.name}- ${previousRoute!.settings.name}',
-      name: 'nest',
-    );
-    // log(routeStack.toString(), name: 'nest');
-
-    super.didPop(route, previousRoute);
-  }
-
-  @override
-  void didPush(Route route, Route? previousRoute) {
-    routeStack.add(route.settings.name!);
-    log(
-      'didPush: $route.settings.name- ${previousRoute?.settings.name}',
-      name: 'nest',
-    );
-    // log(routeStack.toString(), name: 'nest');
-    super.didPush(route, previousRoute);
-  }
-
-  @override
-  void didRemove(Route route, Route? previousRoute) {
-    routeStack.removeLast();
-    log(
-      'didRemove: ${route.settings.name}- ${previousRoute?.settings.name}',
-      name: 'nest',
-    );
-    // log(routeStack.toString(), name: 'nest');
-    super.didRemove(
-      route,
-      previousRoute,
-    );
-  }
-
-  @override
-  void didReplace({Route? newRoute, Route? oldRoute}) {
-    routeStack.removeLast();
-    routeStack.add(newRoute!.settings.name!);
-    log(
-      'didReplace: ${newRoute.settings.name}- ${oldRoute?.settings.name}',
-      name: 'nest',
-    );
-    // log(routeStack.toString(), name: 'nest');
-    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
   }
 }

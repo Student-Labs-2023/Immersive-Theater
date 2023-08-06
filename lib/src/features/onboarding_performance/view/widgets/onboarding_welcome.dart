@@ -6,20 +6,24 @@ import 'package:shebalin/src/features/onboarding_performance/view/widgets/animat
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
+import 'package:shebalin/src/theme/ui/app_bar_close.dart';
 
 const routePrefixPerfMode = '/perf/';
 
 class OnboardWelcome extends StatelessWidget {
   static const routeName = 'welcome';
   final void Function(bool listenAtHome) onOnboardWelcomeComplete;
+  final VoidCallback onOnboardingClose;
   const OnboardWelcome({
     super.key,
     required this.onOnboardWelcomeComplete,
+    required this.onOnboardingClose,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBarBtnClose(onPressed: onOnboardingClose),
       backgroundColor: AppColor.accentBackground,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),

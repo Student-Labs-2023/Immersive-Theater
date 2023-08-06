@@ -9,6 +9,7 @@ import 'package:shebalin/src/features/onboarding_performance/view/widgets/animat
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
+import 'package:shebalin/src/theme/ui/app_bar_close.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'widgets/page_indicator.dart';
@@ -18,9 +19,11 @@ class OnboardingPerformance extends StatefulWidget {
     super.key,
     required this.listenAtHome,
     required this.onOnboardingComplete,
+    required this.onOnboardingClose,
   });
 
   final void Function(bool listenAtHome) onOnboardingComplete;
+  final VoidCallback onOnboardingClose;
   final bool listenAtHome;
 
   static const routeName = 'rules';
@@ -46,6 +49,9 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBarBtnClose(
+        onPressed: widget.onOnboardingClose,
+      ),
       backgroundColor: AppColor.accentBackground,
       body: AnimatedImage(image: pages[currentIndex].image),
       bottomSheet: AnimatedBottomSheet(

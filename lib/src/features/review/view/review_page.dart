@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_title.dart';
@@ -10,7 +9,7 @@ import 'package:shebalin/src/features/review/view/widgets/emoji.dart';
 import 'package:shebalin/src/features/review/view/widgets/review_bottom_sheet.dart';
 import 'package:shebalin/src/features/review/view/widgets/review_field.dart';
 import 'package:shebalin/src/theme/app_color.dart';
-import 'package:shebalin/src/theme/images.dart';
+import 'package:shebalin/src/theme/ui/app_bar_close.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key, required this.onPerfModeComplete});
@@ -35,18 +34,7 @@ class _ReviewPageState extends State<ReviewPage> {
     return Builder(
       builder: (context) {
         return Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: IconButton(
-              icon: Image.asset(
-                ImagesSources.closePerformance,
-                color: AppColor.blackText,
-              ),
-              onPressed: widget.onPerfModeComplete,
-            ),
-          ),
+          appBar: AppBarBtnClose(onPressed: widget.onPerfModeComplete),
           backgroundColor: AppColor.whiteBackground,
           body: Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
