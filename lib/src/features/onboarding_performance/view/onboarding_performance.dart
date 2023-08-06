@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shebalin/src/features/mode_performance/view/performance_mode_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
 import 'package:shebalin/src/features/onboarding_performance/models/onboard_performance.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance_args.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_container.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_image.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
@@ -10,19 +10,20 @@ import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_ic
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 import 'widgets/page_indicator.dart';
 
 class OnboardingPerformance extends StatefulWidget {
   const OnboardingPerformance({
     super.key,
+    required this.listenAtHome,
+    required this.onOnboardingComplete,
   });
-  final Point startPoint = const Point(
-    latitude: 54.988707,
-    longitude: 73.368659,
-  );
-  static const routeName = '/onboarding-rules';
+
+  final void Function(bool listenAtHome) onOnboardingComplete;
+  final bool listenAtHome;
+
+  static const routeName = 'rules';
 
   @override
   State<OnboardingPerformance> createState() => _OnboardingPerformanceState();
@@ -32,15 +33,14 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   late List<OnboardPerformance> pages;
   int currentIndex = 0;
   bool get curIndexLessLastindex => currentIndex < pages.length - 1;
-  bool get showOneButtonAtHome => currentIndex != 0 || listenAtHome;
-  late bool listenAtHome;
+  bool get showOneButtonAtHome => currentIndex != 0 || widget.listenAtHome;
+
   @override
-  void didChangeDependencies() {
-    final OnboardingPerformanceArgs args =
-        ModalRoute.of(context)!.settings.arguments as OnboardingPerformanceArgs;
-    listenAtHome = args.listenAtHome;
-    pages = listenAtHome ? OnboardPerformance.home : OnboardPerformance.outside;
-    super.didChangeDependencies();
+  void initState() {
+    pages = widget.listenAtHome
+        ? OnboardPerformance.home
+        : OnboardPerformance.outside;
+    super.initState();
   }
 
   @override
@@ -59,7 +59,12 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              PageIndicator(count: pages.length, currentIndex: currentIndex),
+              PageIndicator(
+                count: pages.length,
+                currentIndex: currentIndex,
+                elementWidth: 8,
+                elementHeight: 8,
+              ),
               const SizedBox(
                 height: 40,
               ),
@@ -81,16 +86,19 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
                         title: pages[currentIndex].buttonTitle,
                         onTap: curIndexLessLastindex
                             ? _nextPage
-                            : _openPerfModeScreen,
+                            : () => widget
+                                .onOnboardingComplete(widget.listenAtHome),
                         icon: ImagesSources.right,
                       )
                     : OnboardControllButton(
                         titlePrimary: pages[currentIndex].buttonTitle,
-                        onTapPrimary: listenAtHome ? _nextPage : _launchUrl,
+                        onTapPrimary:
+                            widget.listenAtHome ? _nextPage : _launchUrl,
                         titleSecondary: 'Доберусь сам',
                         onTapSecondary: curIndexLessLastindex
                             ? _nextPage
-                            : _openPerfModeScreen,
+                            : () => widget
+                                .onOnboardingComplete(widget.listenAtHome),
                       ),
               ),
             ],
@@ -107,18 +115,23 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   }
 
   Future<void> _launchUrl() async {
-    final latitude = widget.startPoint.latitude;
-    final longitude = widget.startPoint.longitude;
+    final double latitude =
+        RepositoryProvider.of<CurrentPerformanceProvider>(context)
+            .performance
+            .info
+            .chapters[0]
+            .place
+            .latitude;
+    final double longitude =
+        RepositoryProvider.of<CurrentPerformanceProvider>(context)
+            .performance
+            .info
+            .chapters[0]
+            .place
+            .longitude;
     final linkYandexMap = "http://maps.yandex.ru/?text=$latitude,$longitude";
     if (!await launchUrl(Uri.parse(linkYandexMap))) {
       return;
     }
-  }
-
-  void _openPerfModeScreen() {
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      PerformanceModePage.routeName,
-      (route) => false,
-    );
   }
 }

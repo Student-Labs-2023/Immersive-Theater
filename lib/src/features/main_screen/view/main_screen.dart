@@ -1,20 +1,24 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/locations/view/location_description_panel_page.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/map/view/yandex_map_page.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/performances/view/performances_panel_page.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
-import 'package:shebalin/src/features/user/view/personal_panel_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
+import 'package:shebalin/src/theme/images.dart';
 
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
-  static const routeName = '/main-screen';
+  static const routeName = '/';
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -51,8 +55,8 @@ class _MainScreenState extends State<MainScreen> {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: const SizedBox(
-                            height: 3,
-                            width: 25,
+                            height: 4,
+                            width: 32,
                           ),
                         ),
                       )
@@ -112,25 +116,19 @@ class _MainScreenState extends State<MainScreen> {
             } else if (state is MapPinLoadingState || state is MapPinLoaded) {
               return Column(
                 children: [
-                  const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 8)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5 - 25,
+                  const Padding(padding: EdgeInsets.fromLTRB(0, 12, 0, 20)),
+                  Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.12),
+                        borderRadius: containerRadius,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.12),
-                          borderRadius: containerRadius,
-                        ),
-                        child: const SizedBox(
-                          height: 3,
-                          width: 25,
-                        ),
+                      child: const SizedBox(
+                        height: 4,
+                        width: 32,
                       ),
-                    ],
-                  ),
+                    ),
+                  )
                 ],
               );
             }
@@ -173,13 +171,49 @@ class _MainScreenState extends State<MainScreen> {
           child: BlocBuilder<PerformanceBloc, PerformanceState>(
             builder: (context, state) {
               if (state is PerformanceLoadInProgress) {
-                return const CircularProgressIndicator();
+                return const YandexMapPage(
+                  mapObjects: [],
+                );
               } else if (state is PerformanceLoadSuccess) {
-                var locations = state.perfomances[0].fullInfo!.chapters
-                    .map((e) => e.place)
-                    .toList();
+                List<PlacemarkMapObject> placeMarks = [];
+
+                for (var perf in state.perfomances) {
+                  List<Place> places =
+                      perf.info.chapters.map((e) => e.place).toList();
+                  for (var i = 0; i < places.length; i++) {
+                    placeMarks.add(
+                      PlacemarkMapObject(
+                        onTap: (mapObject, point) {
+                          _mapPinTapped(
+                            mapObject,
+                            perf.info.chapters.length,
+                            point,
+                            context,
+                          );
+                        },
+                        mapId: MapObjectId(
+                          '${perf.id}/$i',
+                        ),
+                        opacity: 1,
+                        point: Point(
+                          latitude: places[i].latitude,
+                          longitude: places[i].longitude,
+                        ),
+                        isDraggable: true,
+                        icon: PlacemarkIcon.single(
+                          PlacemarkIconStyle(
+                            image: BitmapDescriptor.fromAssetImage(
+                              ImagesSources.mark,
+                            ),
+                            scale: 0.3,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                }
                 return YandexMapPage(
-                  locations: locations,
+                  mapObjects: placeMarks,
                 );
               } else {
                 return const Text("error");
@@ -200,5 +234,24 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       isPerfomnceButtonPressed = flag;
     });
+  }
+
+  void _mapPinTapped(
+    MapObject mapObject,
+    int count,
+    Point point,
+    BuildContext context,
+  ) {
+    final String id = mapObject.mapId.value.toString();
+    log(id);
+    if (id.endsWith('0') && count == 1) {
+      context.read<PerformanceBloc>().add(
+            PerformanceLoadFullInfo(
+              int.parse(id.substring(0, id.indexOf('/'))),
+            ),
+          );
+    } else {
+      context.read<MapPinBloc>().add(UpdateMapPinLocation(mapObject, point));
+    }
   }
 }

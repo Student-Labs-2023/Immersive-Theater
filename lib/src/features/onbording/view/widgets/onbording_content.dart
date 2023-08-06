@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 
 import '../../../../theme/theme.dart';
 
@@ -7,82 +8,57 @@ class OnbordingContent extends StatelessWidget {
     Key? key,
     required this.imageName,
     required this.text,
-    required this.progress,
     required this.title,
   }) : super(key: key);
 
   final String imageName;
   final String text;
-  final double progress;
   final String title;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.06),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+    return Center(
+      child: Container(
+        alignment: Alignment.bottomCenter,
+        width: MediaQuery.of(context).size.width * 0.91,
+        height: MediaQuery.of(context).size.height * 0.604,
+        clipBehavior: Clip.none,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          color: AppColor.whiteBackground,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          child: Column(
             children: [
-              const SizedBox(),
-              Container(
-                alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width * 0.85,
-                height: MediaQuery.of(context).size.height * 0.55,
-                clipBehavior: Clip.none,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Colors.white,
-                ),
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Positioned(
-                      top: -MediaQuery.of(context).size.height * 0.23,
-                      left: MediaQuery.of(context).size.width * 0.07,
-                      right: MediaQuery.of(context).size.width * 0.07,
-                      child: Column(
-                        children: [
-                          Image(
-                            height: MediaQuery.of(context).size.height * 0.45,
-                            image: AssetImage(imageName),
-                          ),
-                          Text(
-                            'Дом Актера\n Представляет',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Text(
-                            text,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  fontSize: 15,
-                                  color: secondaryTextColor,
-                                ),
-                          ),
-                          const SizedBox(
-                            height: 36,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              Image(
+                height: MediaQuery.of(context).size.height * 0.34,
+                image: AssetImage(imageName),
               ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 32, bottom: 24),
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context)
+                          .textTheme
+                          .displaySmall
+                          ?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  Text(
+                    text,
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
+              )
             ],
           ),
-        ],
+        ),
       ),
     );
   }

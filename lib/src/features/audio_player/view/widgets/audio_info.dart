@@ -1,20 +1,19 @@
-import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 
 class AudioInfoWidget extends StatelessWidget {
   final String performanceTitle;
-  final String audioTitle;
   final String imageLink;
+  final int indexLocation;
+  final int countLocation;
   const AudioInfoWidget({
     super.key,
     required this.performanceTitle,
-    required this.audioTitle,
     required this.imageLink,
+    required this.indexLocation,
+    required this.countLocation,
   });
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class AudioInfoWidget extends StatelessWidget {
             height: 40,
             width: 40,
             placeholder: (context, url) => const AppProgressBar(),
-            imageUrl: ApiClient.baseUrl + imageLink,
+            imageUrl: imageLink,
             fit: BoxFit.cover,
           ),
         ),
@@ -36,22 +35,16 @@ class AudioInfoWidget extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BlocBuilder<PerfModeBloc, PerfModeState>(
-              builder: (context, state) {
-                return Text(
-                  'Глава ${state.indexLocation + 1}',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: AppColor.purplePrimary),
-                );
-              },
-            ),
             Text(
               performanceTitle,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontSize: 12,
-                  ),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            Text(
+              'Глава ${indexLocation + 1} / $countLocation',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(color: AppColor.greyText),
             ),
           ],
         ),

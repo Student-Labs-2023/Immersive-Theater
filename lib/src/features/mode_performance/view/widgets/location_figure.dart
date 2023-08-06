@@ -14,15 +14,15 @@ class LocationFigure extends CustomPainter {
     final strokeWidth = size.width / 13.0;
 
     final radius = (size.width / 5);
-    final center = Offset(size.width / 2, radius);
+    final center = Offset(size.width / 2, radius + 5);
     final painterRing = Paint()
       ..style = PaintingStyle.stroke
       ..color = color
       ..strokeWidth = strokeWidth;
 
     canvas.drawCircle(center, radius, painterRing);
-    final startPoint = Offset(center.dx, center.dy + radius + 2);
-    final endPoint = Offset(size.width / 2, size.height + bias);
+    final startPoint = Offset(center.dx, center.dy + radius + 1);
+    final endPoint = Offset(size.width / 2, size.height + bias + 4);
     final painterLine = Paint()
       ..color = color
       ..style = PaintingStyle.stroke

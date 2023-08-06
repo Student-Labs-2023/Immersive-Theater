@@ -4,11 +4,9 @@ part 'response_mapper.g.dart';
 
 @JsonSerializable()
 class ResponseMapper {
- 
   final List<Map<String, dynamic>> data;
 
   ResponseMapper({
-  
     required this.data,
   });
 

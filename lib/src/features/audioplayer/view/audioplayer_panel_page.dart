@@ -1,4 +1,3 @@
-import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -38,7 +37,7 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
     super.initState();
     playlist = ConcatenatingAudioSource(
       useLazyPreparation: true,
-      children: widget.performance.fullInfo!.chapters
+      children: widget.performance.info.chapters
           .map<AudioSource>(
             (chapter) => AudioSource.uri(Uri.parse(chapter.shortAudioLink)),
           )
@@ -142,7 +141,7 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
                       const CircularProgressIndicator(
                     color: AppColor.grey,
                   ),
-                  imageUrl: ApiClient.baseUrl + widget.performance.imageLink,
+                  imageUrl: widget.performance.imageLink,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -154,7 +153,7 @@ class _AudioPlayerPanelPageState extends State<AudioPlayerPanelPage>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.performance.fullInfo!
+                          widget.performance.info
                               .chapters[audioPlayer.currentIndex!].title,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),

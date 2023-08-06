@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_title.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
@@ -7,8 +6,10 @@ import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/ui/bar_indicator.dart';
 
 class ReviewBottomSheet extends StatelessWidget {
+  final VoidCallback onPerfModeComplete;
   const ReviewBottomSheet({
     super.key,
+    required this.onPerfModeComplete,
   });
 
   @override
@@ -51,10 +52,7 @@ class ReviewBottomSheet extends StatelessWidget {
             ),
             AppButton.primaryButton(
               title: 'Вернуться на главный экран',
-              onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                MainScreen.routeName,
-                (route) => false,
-              ),
+              onTap: onPerfModeComplete,
             )
           ],
         ),

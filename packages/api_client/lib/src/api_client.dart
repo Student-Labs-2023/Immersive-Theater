@@ -1,18 +1,14 @@
 import 'package:api_client/src/errors/network_error.dart';
 import 'package:dio/dio.dart';
-import 'dart:io' show Platform;
-
-const String baseUrlIos = "http://127.0.0.1:1337";
-const String baseUrlAndroid = "http://10.0.2.2:1337";
 
 class ApiClient implements Interceptor {
   late Dio _dio;
-  static String baseUrl = Platform.isAndroid ? baseUrlAndroid : baseUrlIos;
+  static const String baseUrl = 'http://2.59.41.159:5001/';
   Dio get dio => _dio;
   ApiClient() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: '$baseUrl/api/',
+        baseUrl: baseUrl,
         validateStatus: (status) {
           return status != null && status >= 200 && status < 300 ||
               status == 304;

@@ -7,7 +7,7 @@ part of 'creator.dart';
 // **************************************************************************
 
 Creator _$CreatorFromJson(Map<String, dynamic> json) => Creator(
-      id: json['id'] as String,
+      id: json['id'] as int,
       fullName: json['full_name'] as String,
       imageLink: json['image_link'] as String,
       role: json['role'] as String,

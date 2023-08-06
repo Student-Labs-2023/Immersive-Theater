@@ -27,7 +27,7 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     perfModeMapBloc = context.read<PerfModeBloc>();
-    countLocations = perfModeMapBloc.countLocations;
+    countLocations = widget.locations.length;
     super.initState();
   }
 

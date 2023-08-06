@@ -7,19 +7,20 @@ part of 'performance.dart';
 // **************************************************************************
 
 Performance _$PerformanceFromJson(Map<String, dynamic> json) => Performance(
-      id: json['strapi'] as String,
+      id: json['id'] as int,
       title: json['name'] as String,
       imageLink: json['image_link'] as String,
-      creators: (json['authors'] as List<dynamic>)
-          .map((e) => Creator.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    )..fullInfo = PerformanceFullInfo.fromJson(json);
+      tag: json['tag'] as String,
+      info: FullInfoPerformance.empty(chapters: [
+        Chapter.fromJson(json['first_place'] as Map<String, dynamic>)
+      ]),
+    );
 
 Map<String, dynamic> _$PerformanceToJson(Performance instance) =>
     <String, dynamic>{
-      'strapi': instance.id,
+      'id': instance.id,
+      'tag': instance.tag,
       'name': instance.title,
       'image_link': instance.imageLink,
-      'authors': instance.creators,
-      'fullInfo': instance.fullInfo,
+      'info': instance.info,
     };

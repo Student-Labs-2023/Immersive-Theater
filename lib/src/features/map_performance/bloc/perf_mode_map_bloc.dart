@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location_service/location_service.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/audio_player/bloc/audio_player_bloc.dart';
+import 'package:shebalin/src/features/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';

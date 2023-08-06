@@ -2,13 +2,14 @@ class ImagesSources {
   static const String barcode = 'assets/images/barcode.png';
   static const String card = 'assets/images/card.png';
   static const String image5 = 'assets/images/image5.png';
-  static const String loadingEmblem = 'assets/images/loadingEmblem.png';
+  static const String logo = 'assets/images/logo.svg';
   static const String markGift = 'assets/images/mark_gift.png';
   static const String markStar = 'assets/images/mark_star.png';
 
   static const String mark = 'assets/images/mark.png';
-  static const String onbording = 'assets/images/onbording.png';
-  static const String secondOnbording = 'assets/images/secondOnbording.png';
+  static const String onbording = 'assets/images/firstOnboarding.png';
+  static const String secondOnbording = 'assets/images/secondOnboarding.png';
+  static const String thirdOnbording = 'assets/images/thirdOnboarding.png';
   static const String photo1 = 'assets/images/photo1.png';
   static const String shebalinPortrait = 'assets/images/shebalin_portrait.png';
   static const String shebalinTicket = 'assets/images/shebalin_ticket.png';
@@ -44,6 +45,7 @@ class ImagesSources {
   static const String closePerformance = "assets/icons/close_performance.png";
   static const String currentLocationItem =
       "assets/icons/current_location_item.png";
+  static const String location = "assets/icons/Location.png";
   static const String locationItem = "assets/icons/location_item.png";
   static const String backIcon = "assets/icons/back_icon.png";
   static const String tipIcon = "assets/icons/tip_icon.png";
@@ -63,4 +65,6 @@ class ImagesSources {
   static const String goodSmile = "assets/images/happy_smile.svg";
   static const String perfectSmile = "assets/images/perfect_smile.svg";
   static const String time = 'assets/icons/time.png';
+  static const String timeGrey = 'assets/icons/time_grey.png';
+  static const String cross = 'assets/icons/Cross.png';
 }
