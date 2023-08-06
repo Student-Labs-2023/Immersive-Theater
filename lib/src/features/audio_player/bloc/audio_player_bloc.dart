@@ -9,6 +9,7 @@ part 'audio_player_state.dart';
 
 class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
   final AudioPlayer player;
+  bool _isClosed = false;
   AudioPlayerBloc(this.player)
       : super(
           const AudioPlayerInProgressState(
@@ -60,28 +61,36 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     player.setSpeed(1.0);
     player.setLoopMode(LoopMode.off);
     player.playerStateStream.listen((playerState) {
-      add(
-        AudioPlayerUpdatePlayerStateEvent(
-          playerState.playing,
-        ),
-      );
+      if (!_isClosed) {
+        add(
+          AudioPlayerUpdatePlayerStateEvent(
+            playerState.playing,
+          ),
+        );
+      }
     });
 
     player.durationStream.listen((newDuration) {
-      add(AudioPlayerUpdateDurationEvent(newDuration!));
+      if (!_isClosed) {
+        add(AudioPlayerUpdateDurationEvent(newDuration!));
+      }
     });
 
     player.positionStream.listen((newPosition) {
-      add(AudioPlayerUpdatePositionEvent(newPosition));
+      if (!_isClosed) {
+        add(AudioPlayerUpdatePositionEvent(newPosition));
+      }
     });
 
     player.processingStateStream.listen(
       (processingState) {
-        add(
-          AudioLocationFinishedEvent(
-            processingState != ProcessingState.completed,
-          ),
-        );
+        if (!_isClosed) {
+          add(
+            AudioLocationFinishedEvent(
+              processingState != ProcessingState.completed,
+            ),
+          );
+        }
       },
     );
     emit(
@@ -188,6 +197,7 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
 
   @override
   Future<void> close() async {
+    _isClosed = true;
     player.dispose();
     super.close();
   }
