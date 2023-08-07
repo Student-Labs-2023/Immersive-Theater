@@ -117,17 +117,25 @@ class _MainScreenState extends State<MainScreen> {
               return Column(
                 children: [
                   const Padding(padding: EdgeInsets.fromLTRB(0, 12, 0, 20)),
-                  Center(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.12),
-                        borderRadius: containerRadius,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5 - 16,
                       ),
-                      child: const SizedBox(
-                        height: 4,
-                        width: 32,
-                      ),
-                    ),
+                      Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.12),
+                            borderRadius: containerRadius,
+                          ),
+                          child: const SizedBox(
+                            height: 4,
+                            width: 32,
+                          ),
+                        ),
+                      )
+                    ],
                   )
                 ],
               );
@@ -157,9 +165,6 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               );
             } else if (state is MapPinClosingState) {
-              // Future.delayed(const Duration(seconds: 1), () {
-              //   panelController.close();
-              // });
               return isPerfomnceButtonPressed
                   ? const PerformancesPanelPage()
                   : const PromocodePanelPage();

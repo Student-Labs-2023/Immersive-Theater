@@ -7,6 +7,7 @@ class AppColor {
   static const yellowSecondary = Color(0xFFFFB800);
   static const grey = Color(0xFFA6A6A6);
   static const lightGray = Color(0xFFC5C5C5);
+  static const greySkeleton = Color(0xFFD2D1D4);
   static const whiteBackground = Color(0xFFFFFFFF);
   static const accentBackground = Color(0xFFF8F9FA);
   static const blackText = Color(0xFF212529);

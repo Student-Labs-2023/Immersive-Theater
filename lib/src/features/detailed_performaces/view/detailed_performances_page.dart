@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
+import 'package:shebalin/src/theme/ui/skeleton_loaders.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/images_location.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome_args.dart';
@@ -23,6 +24,7 @@ class PerfomanceDescriptionScreen extends StatefulWidget {
       : super(key: key);
   final Performance performance;
   static const routeName = '/perfomance-description-screen';
+
   @override
   State<PerfomanceDescriptionScreen> createState() =>
       _PerfomanceDescriptionScreenState();
@@ -56,307 +58,376 @@ class _PerfomanceDescriptionScreenState
     _isExpanded =
         _controller.hasClients && _controller.offset <= (kToolbarHeight) * 3;
     return Scaffold(
-      body: CustomScrollView(
-        controller: _controller,
-        scrollDirection: Axis.vertical,
-        slivers: [
-          SliverAppBar(
-            elevation: 0.7,
-            backgroundColor: AppColor.whiteBackground,
-            expandedHeight: MediaQuery.of(context).size.height * 0.32,
-            floating: false,
-            pinned: true,
-            flexibleSpace: LayoutBuilder(
-              builder: (context, constraints) {
-                top = constraints.biggest.height;
-                top == MediaQuery.of(context).padding.top + kToolbarHeight;
-                return FlexibleSpaceBar(
-                  centerTitle: !_isExpanded,
-                  background: CachedNetworkImage(
-                    imageUrl: widget.performance.imageLink,
-                    fit: BoxFit.fill,
-                    placeholder: (contxt, string) => const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColor.grey,
-                      ),
-                    ),
-                  ),
-                  title: Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Text(
-                      widget.performance.title,
-                      style: _isExpanded
-                          ? Theme.of(context).textTheme.displayMedium?.copyWith(
-                                color: _textColor,
-                              )
-                          : Theme.of(context)
-                              .textTheme
-                              .headlineMedium
-                              ?.copyWith(
-                                color: _textColor,
+      body: BlocBuilder<PerformanceBloc, PerformanceState>(
+        builder: (context, state) {
+          bool isLoading = state is PerformanceFullInfoLoadInProgress;
+          return CustomScrollView(
+            physics: isLoading ? const NeverScrollableScrollPhysics() : null,
+            controller: _controller,
+            scrollDirection: Axis.vertical,
+            slivers: [
+              SliverAppBar(
+                elevation: 0.7,
+                backgroundColor: AppColor.whiteBackground,
+                expandedHeight: MediaQuery.of(context).size.height * 0.32,
+                floating: false,
+                pinned: true,
+                flexibleSpace: isLoading
+                    ? FlexibleSpaceBar(
+                        background: Container(color: AppColor.greySkeleton),
+                      )
+                    : LayoutBuilder(
+                        builder: (context, constraints) {
+                          top = constraints.biggest.height;
+                          top ==
+                              MediaQuery.of(context).padding.top +
+                                  kToolbarHeight;
+                          return FlexibleSpaceBar(
+                            centerTitle: !_isExpanded,
+                            background: CachedNetworkImage(
+                              imageUrl: widget.performance.imageLink,
+                              fit: BoxFit.fill,
+                              placeholder: (contxt, string) => const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColor.grey,
+                                ),
                               ),
+                            ),
+                            title: Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Text(
+                                widget.performance.title,
+                                style: _isExpanded
+                                    ? Theme.of(context)
+                                        .textTheme
+                                        .displayMedium
+                                        ?.copyWith(
+                                          color: _textColor,
+                                        )
+                                    : Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium
+                                        ?.copyWith(
+                                          color: _textColor,
+                                        ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                leading: Row(
+                  children: [
+                    const SizedBox(
+                      width: 20,
                     ),
-                  ),
-                );
-              },
-
-            ),
-            leading: Row(
-              children: [
-                const SizedBox(
-                  width: 20,
-                ),
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color:
-                        _isExpanded ? AppColor.grey : AppColor.whiteBackground,
-                  ),
-                  child: Center(
-                    child: IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: Image.asset(
-                        ImagesSources.closePerformance,
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
                         color: _isExpanded
-                            ? AppColor.whiteText
-                            : AppColor.blackText,
+                            ? AppColor.grey
+                            : AppColor.whiteBackground,
                       ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          BlocBuilder<PerformanceBloc, PerformanceState>(
-            builder: (context, state) {
-              return SliverToBoxAdapter(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 4),
-                            child: Image.asset(ImagesSources.timeGrey),
-                          ),
-                          state is PerformanceFullInfoLoadInProgress
-                              ? const AppProgressBar()
-                              : Text(
-                                  durationToHoursMinutes(
-                                    state.perfomances[widget.performance.id]
-                                        .info.duration,
-                                  ).toString(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(color: AppColor.greyText),
-                                )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 4),
-                            child: Image.asset(ImagesSources.location),
-                          ),
-                          state is PerformanceFullInfoLoadInProgress ||
-                                  state.perfomances[widget.performance.id].info
-                                      .chapters.isEmpty
-                              ? const AppProgressBar()
-                              : Text(
-                                  state.perfomances[widget.performance.id].info
-                                      .chapters[0].place.address,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(color: AppColor.greyText),
-                                )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      state is PerformanceLoadInProgress
-                          ? const AppProgressBar()
-                          : Text(
-                              state.perfomances[widget.performance.id].info
-                                  .description,
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12, bottom: 32),
-                        child: CachedNetworkImage(
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          height: MediaQuery.of(context).size.height * 0.25,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          imageUrl:
-                              "https://sun9-39.userapi.com/impg/wvR1_YIXqeP3hgZUUELQ5U3bvq1kEvKgvRbycA/f8n1n84CfzQ.jpg?size=343x200&quality=95&sign=99b10e66c024f3b0f08b823e49b1e412&type=album",
-                          fit: BoxFit.cover,
-                          placeholder: (contxt, string) => const Center(
-                            child: AppProgressBar(),
+                      child: Center(
+                        child: IconButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: Image.asset(
+                            ImagesSources.closePerformance,
+                            color: _isExpanded
+                                ? AppColor.whiteText
+                                : AppColor.blackText,
                           ),
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                  ],
+                ),
+              ),
+              BlocBuilder<PerformanceBloc, PerformanceState>(
+                builder: (context, state) {
+                  return SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 16),
+                      child: Column(
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4),
+                                child: Image.asset(ImagesSources.timeGrey),
+                              ),
+                              isLoading
+                                  ? Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColor.greySkeleton,
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.18,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.02,
+                                    )
+                                  : Text(
+                                      durationToHoursMinutes(
+                                        state.perfomances[widget.performance.id]
+                                            .info.duration,
+                                      ).toString(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(color: AppColor.greyText),
+                                    )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4),
+                                child: Image.asset(ImagesSources.location),
+                              ),
+                              isLoading ||
+                                      state.perfomances[widget.performance.id]
+                                          .info.chapters.isEmpty
+                                  ? Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColor.greySkeleton,
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.27,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.02,
+                                    )
+                                  : Text(
+                                      state.perfomances[widget.performance.id]
+                                          .info.chapters[0].place.address,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(color: AppColor.greyText),
+                                    ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          isLoading
+                              ? const DescriptionSkeleton()
+                              : Text(
+                                  state.perfomances[widget.performance.id].info
+                                      .description,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Text(
-                              "Аудио отрывки",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .displaySmall
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
+                            padding: const EdgeInsets.only(top: 12, bottom: 32),
+                            child: isLoading
+                                ? Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.25,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    decoration: BoxDecoration(
+                                      color: AppColor.greySkeleton,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                  )
+                                : CachedNetworkImage(
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+                                    ),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.25,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    imageUrl:
+                                        "https://sun9-39.userapi.com/impg/wvR1_YIXqeP3hgZUUELQ5U3bvq1kEvKgvRbycA/f8n1n84CfzQ.jpg?size=343x200&quality=95&sign=99b10e66c024f3b0f08b823e49b1e412&type=album",
+                                    fit: BoxFit.cover,
+                                    placeholder: (contxt, string) =>
+                                        const Center(
+                                      child: AppProgressBar(),
+                                    ),
+                                  ),
                           ),
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Divider(height: 1, thickness: 1),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 20),
+                                child: Text(
+                                  "Аудио отрывки",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  const Divider(height: 1, thickness: 1),
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.2,
+                                    child: isLoading
+                                        ? const AudioDemoSkeleton()
+                                        : ListView.builder(
+                                            itemCount: widget.performance.info
+                                                .chapters.length,
+                                            scrollDirection: Axis.vertical,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return state
+                                                      is PerformanceLoadInProgress
+                                                  ? const AppProgressBar()
+                                                  : AudioDemo(
+                                                      isBought: isBought,
+                                                      performance:
+                                                          state.perfomances[
+                                                              widget.performance
+                                                                  .id],
+                                                      index: index,
+                                                    );
+                                            },
+                                          ),
+                                  ),
+                                  const Divider(height: 1, thickness: 1)
+                                ],
+                              )
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 20, bottom: 12),
+                                child: Text(
+                                  'Фотографии',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall
+                                      ?.copyWith(fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              isLoading
+                                  ? PhotosSkeleton(
+                                      photoHeight:
+                                          MediaQuery.of(context).size.height *
+                                              0.14,
+                                      photoWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.32,
+                                    )
+                                  : ImagesLocation(
+                                      imageLinks: state
+                                          .perfomances[widget.performance.id]
+                                          .info
+                                          .images,
+                                      onTap: _onImageTap,
+                                    )
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 32, bottom: 20),
+                                child: Text(
+                                  'Авторы',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall
+                                      ?.copyWith(fontWeight: FontWeight.w700),
+                                ),
+                              ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.2,
+                                    MediaQuery.of(context).size.height * 0.1,
                                 child: ListView.builder(
                                   itemCount:
-                                      widget.performance.info.chapters.length,
-                                  scrollDirection: Axis.vertical,
+                                      widget.performance.info.creators.length,
+                                  scrollDirection: Axis.horizontal,
+                                  cacheExtent: 1000,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return state is PerformanceLoadInProgress
-                                        ? const AppProgressBar()
-                                        : AudioDemo(
-                                            isBought: isBought,
-                                            performance: state.perfomances[
-                                                widget.performance.id],
+                                    return isLoading
+                                        ? const AuthorsSkeleton()
+                                        : AuthorCard(
+                                            performance: widget.performance,
                                             index: index,
                                           );
                                   },
                                 ),
                               ),
-                              const Divider(height: 1, thickness: 1)
                             ],
                           )
                         ],
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20, bottom: 12),
-                            child: Text(
-                              'Фотографии',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .displaySmall
-                                  ?.copyWith(fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                          state is PerformanceFullInfoLoadInProgress
-                              ? const AppProgressBar()
-                              : ImagesLocation(
-                                  imageLinks: state
-                                      .perfomances[widget.performance.id]
-                                      .info
-                                      .images,
-                                  onTap: _onImageTap,
-                                )
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 32, bottom: 20),
-                            child: Text(
-                              'Авторы',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .displaySmall
-                                  ?.copyWith(fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.1,
-                            child: ListView.builder(
-                              itemCount:
-                                  widget.performance.info.creators.length,
-                              scrollDirection: Axis.horizontal,
-                              cacheExtent: 1000,
-                              itemBuilder: (BuildContext context, int index) {
-                                return AuthorCard(
-                                  performance: widget.performance,
-                                  index: index,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+                    ),
+                  );
+                },
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: mediaQuerySize.width * 0.15,
                 ),
-              );
-            },
-          ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: mediaQuerySize.width * 0.15,
-            ),
-          )
-        ],
+              )
+            ],
+          );
+        },
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        child: BlocBuilder<PerformanceBloc, PerformanceState>(
-          builder: (context, state) {
-            return ElevatedButton(
-              onPressed: () => Navigator.of(context).pushNamed(
-                routePrefixPerfMode + OnboardWelcome.routeName,
-                arguments: OnboardingWelcomeArgs(
-                  performance: state.perfomances[widget.performance.id],
-                ),
-              ),
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(AppColor.purplePrimary),
-                elevation: MaterialStateProperty.all(5),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+      floatingActionButton: BlocBuilder<PerformanceBloc, PerformanceState>(
+        builder: (context, state) {
+          if (state is PerformanceLoadSuccess) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ElevatedButton(
+                onPressed: () => Navigator.of(context).pushNamed(
+                  routePrefixPerfMode + OnboardWelcome.routeName,
+                  arguments: OnboardingWelcomeArgs(
+                    performance: state.perfomances[widget.performance.id],
                   ),
                 ),
-                minimumSize: MaterialStateProperty.all(
-                  Size(
-                    mediaQuerySize.width - 32,
-                    mediaQuerySize.width * 0.13,
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(AppColor.purplePrimary),
+                  elevation: MaterialStateProperty.all(5),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  minimumSize: MaterialStateProperty.all(
+                    Size(
+                      mediaQuerySize.width - 32,
+                      mediaQuerySize.width * 0.13,
+                    ),
                   ),
                 ),
-              ),
-              child: Text(
-                'Перейти к спектаклю',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: AppColor.whiteText),
+                child: Text(
+                  'Перейти к спектаклю',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(color: AppColor.whiteText),
+                ),
               ),
             );
-          },
-        ),
+          }
+          return const SizedBox();
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

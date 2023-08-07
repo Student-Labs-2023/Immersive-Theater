@@ -50,7 +50,6 @@ class App extends StatelessWidget {
             page = const SplashScreen();
           } else if (routeSettings.name == OnbordingScreen.routeName) {
             page = const OnbordingScreen();
-
           } else if (routeSettings.name == PerformanceDoubleScreen.routeName) {
             page = const PerformanceDoubleScreen();
           } else if (routeSettings.name == VerticalSlidningScreen.routeName) {
