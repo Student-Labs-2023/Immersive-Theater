@@ -8,12 +8,15 @@ class FulScreenImageLocation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: imagePath,
-      fit: BoxFit.cover,
-      placeholder: (context, url) => Center(
-        child: CircularProgressIndicator(
-          color: accentTextColor,
+    return InteractiveViewer(
+      panEnabled: false,
+      child: CachedNetworkImage(
+        imageUrl: imagePath,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Center(
+          child: CircularProgressIndicator(
+            color: accentTextColor,
+          ),
         ),
       ),
     );
