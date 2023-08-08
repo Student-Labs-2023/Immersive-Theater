@@ -12,20 +12,20 @@ class CircleProgress extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final double strokeWidth = size.height / 10;
-    final Paint painter = Paint()
+    final double strokeWidth = size.height / 20;
+    final Paint painterArc = Paint()
       ..strokeWidth = strokeWidth
       ..color = color
       ..style = PaintingStyle.stroke;
 
     final Offset center = Offset(size.width / 2, size.height / 2);
-    final double radius = (size.width - strokeWidth) / 2;
+    final double radius = (size.width - strokeWidth) / 2.5;
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       -pi / 2,
       progress * 2 * pi,
       false,
-      painter,
+      painterArc,
     );
   }
 

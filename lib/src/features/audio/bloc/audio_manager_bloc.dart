@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:just_audio/just_audio.dart';
@@ -13,9 +10,10 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
   late final List<AudioSource> playlist;
   late final ConcatenatingAudioSource audioSource;
   final List<Duration> duration = [];
-  AudioManagerBloc() : super(const AudioManagerInitial(-1, Duration.zero)) {
+  AudioManagerBloc() : super(const AudioManagerInitial(-1, 0)) {
     on<AudioManagerAddAudio>(_onAudioManagerAddAudio);
     on<AudioManagerChangeCurrentAudio>(_onAudioManagerChangeCurrentAudio);
+    on<AudioManagerProgressChanged>(_onAudioManagerPositionChanged);
   }
 
   void _onAudioManagerAddAudio(
@@ -37,13 +35,25 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
     player.setVolume(1.0);
     player.setSpeed(1.0);
     player.setLoopMode(LoopMode.off);
-    emit(const AudioManagerLoaded(-1, Duration.zero));
+
+    player.positionStream.listen(
+      (position) {
+        if (player.duration != null) {
+          add(
+            AudioManagerProgressChanged(
+              progress: (position.inSeconds / player.duration!.inSeconds),
+            ),
+          );
+        }
+      },
+    );
+    emit(AudioManagerLoaded(-1, state.progress));
   }
 
-  FutureOr<void> _onAudioManagerChangeCurrentAudio(
+  void _onAudioManagerChangeCurrentAudio(
     AudioManagerChangeCurrentAudio event,
     Emitter<AudioManagerState> emit,
-  ) async {
+  ) {
     if (state.index != event.indexAudio) {
       player.seek(Duration.zero, index: event.indexAudio);
     }
@@ -57,14 +67,15 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
     emit(
       AudioManagerPlaying(
         event.indexAudio,
-        Duration.zero,
+        state.progress,
       ),
     );
   }
 
-  @override
-  Future<void> close() {
-    log('bloc close', name: 'it');
-    return super.close();
+  void _onAudioManagerPositionChanged(
+    AudioManagerProgressChanged event,
+    Emitter<AudioManagerState> emit,
+  ) {
+    emit(AudioManagerLoaded(state.index, event.progress));
   }
 }

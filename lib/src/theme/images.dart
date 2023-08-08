@@ -67,4 +67,5 @@ class ImagesSources {
   static const String time = 'assets/icons/time.png';
   static const String timeGrey = 'assets/icons/time_grey.png';
   static const String cross = 'assets/icons/Cross.png';
+  static const String rectangle = 'assets/icons/rectangle.png';
 }

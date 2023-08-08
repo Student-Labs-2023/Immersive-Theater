@@ -227,9 +227,13 @@ class _PerfomanceDescriptionScreenState
                           state is PerformanceLoadInProgress
                               ? const AppProgressBar()
                               : SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.2,
+                                  height: MediaQuery.of(context).size.height *
+                                          0.18 +
+                                      16 * 2,
                                   child: AudioManager(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    subtitle: widget.performance.title,
                                     chapters: state
                                         .perfomances[widget.performance.id]
                                         .info

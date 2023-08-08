@@ -15,6 +15,14 @@ class AudioManagerAddAudio extends AudioManagerEvent {
   List<Object> get props => [audioLinks];
 }
 
+class AudioManagerProgressChanged extends AudioManagerEvent {
+  final double progress;
+
+  const AudioManagerProgressChanged({required this.progress});
+  @override
+  List<Object> get props => [progress];
+}
+
 class AudioManagerChangeCurrentAudio extends AudioManagerEvent {
   final int indexAudio;
   final String url;

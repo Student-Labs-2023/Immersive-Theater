@@ -6,9 +6,17 @@ import 'package:shebalin/src/features/audio/view/widgets/audio_widget.dart';
 
 class AudioManager extends StatefulWidget {
   final List<Chapter> chapters;
+  final String subtitle;
   final AudioManagerBloc bloc;
+  final double width;
 
-  const AudioManager({super.key, required this.chapters, required this.bloc});
+  const AudioManager({
+    super.key,
+    required this.chapters,
+    required this.bloc,
+    required this.subtitle,
+    required this.width,
+  });
 
   @override
   State<AudioManager> createState() => _AudioManagerState();
@@ -32,21 +40,26 @@ class _AudioManagerState extends State<AudioManager> {
       builder: (BuildContext context, state) {
         return GridView(
           scrollDirection: Axis.horizontal,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            childAspectRatio: 0.2,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+            mainAxisExtent: widget.width,
           ),
           children: List.generate(
             widget.chapters.length,
-            (index) => AudioWidget(
-              onTap: () => _onTap(index),
-              isCurrent: index == state.index,
-              isPlaying: index == state.index,
-              title: widget.chapters[index].title,
-              subtitle: widget.chapters[index].title,
-              image: widget.chapters[index].images[0],
-              duration: '1: 02',
-              height: 40,
+            (index) => SizedBox(
+              width: widget.width,
+              child: AudioWidget(
+                onTap: () => _onTap(index),
+                isCurrent: index == state.index,
+                isPlaying: index == state.index,
+                title: 'Глава ${index + 1}',
+                subtitle: widget.subtitle,
+                image: widget.chapters[index].images[0],
+                duration: '1:04',
+                progress: index == state.index ? state.progress : 0,
+              ),
             ),
           ),
         );
