@@ -23,11 +23,11 @@ class AudioManagerProgressChanged extends AudioManagerEvent {
   List<Object> get props => [progress];
 }
 
-class AudioManagerChangeCurrentAudio extends AudioManagerEvent {
+class AudioManagerSetAudio extends AudioManagerEvent {
   final int indexAudio;
   final String url;
 
-  const AudioManagerChangeCurrentAudio({
+  const AudioManagerSetAudio({
     required this.indexAudio,
     required this.url,
   });

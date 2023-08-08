@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 
 part 'audio_manager_event.dart';
@@ -9,13 +8,11 @@ part 'audio_manager_state.dart';
 
 class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
   final AudioPlayer player = AudioPlayer();
-  late final List<AudioSource> playlist;
-  late final ConcatenatingAudioSource audioSource;
   final List<Duration> duration = [];
   AudioManagerBloc()
       : super(const AudioManagerNotSelected(index: -1, progress: 0)) {
     on<AudioManagerAddAudio>(_onAudioManagerAddAudio);
-    on<AudioManagerChangeCurrentAudio>(_onAudioManagerChangeCurrentAudio);
+    on<AudioManagerSetAudio>(_onAudioManagerSetAudio);
     on<AudioManagerProgressChanged>(_onAudioManagerPositionChanged);
     on<AudioManagerAudioCompleted>(_onAudioManagerAudioCompleted);
   }
@@ -23,51 +20,38 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
   void _onAudioManagerAddAudio(
     AudioManagerAddAudio event,
     Emitter<AudioManagerState> emit,
-  ) {
-    playlist = event.audioLinks
-        .map((audioLink) => AudioSource.uri(Uri.parse(audioLink)))
-        .toList();
-    audioSource = ConcatenatingAudioSource(
-      useLazyPreparation: true,
-      children: playlist,
-    );
-    player.setAudioSource(
-      audioSource,
-      initialIndex: 0,
-      initialPosition: Duration.zero,
-    );
-    player.setVolume(1.0);
-    player.setSpeed(1.0);
-    player.setLoopMode(LoopMode.off);
-    player.currentIndexStream.where((index) => index != null).listen((index) {
-      if (index! > state.index) {
-        add(const AudioManagerAudioCompleted());
-      }
-      log(index.toString(), name: 'audio');
-    });
-    player.setLoopMode(LoopMode.all);
-    player.positionStream.listen(
-      (position) {
-        if (player.duration != null) {
-          add(
-            AudioManagerProgressChanged(
-              progress: (position.inSeconds / player.duration!.inSeconds),
-            ),
-          );
-        }
-      },
-    );
+  ) async {
+    for (var element in event.audioLinks) {
+      duration.add(await player.setUrl(element) ?? Duration.zero);
+    }
 
     emit(AudioManagerNotSelected(index: -1, progress: state.progress));
   }
 
-  void _onAudioManagerChangeCurrentAudio(
-    AudioManagerChangeCurrentAudio event,
+  void _onAudioManagerSetAudio(
+    AudioManagerSetAudio event,
     Emitter<AudioManagerState> emit,
-  ) {
+  ) async {
     if (state.index != event.indexAudio) {
-      player.seek(Duration.zero, index: event.indexAudio);
+      player.setUrl(event.url);
     }
+
+    player.positionStream.listen(
+      (position) {
+        if (player.duration != null && player.playerState.playing) {
+          if (player.position == player.duration) {
+            player.pause();
+            add(const AudioManagerAudioCompleted());
+          } else {
+            add(
+              AudioManagerProgressChanged(
+                progress: (position.inSeconds / player.duration!.inSeconds),
+              ),
+            );
+          }
+        }
+      },
+    );
 
     if (state.index != event.indexAudio ||
         player.playerState == PlayerState(false, ProcessingState.ready)) {
@@ -79,7 +63,7 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
     emit(
       AudioManagerSelected(
         index: event.indexAudio,
-        progress: state.progress,
+        progress: 0,
       ),
     );
   }
@@ -95,4 +79,14 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
     player.pause();
     emit(const AudioManagerNotSelected(index: -1, progress: 0));
   }
+
+  String getDuration(int index) {
+    return _formatTime(duration[index]);
+  }
+}
+
+String _formatTime(Duration duration) {
+  return DateFormat.ms('ru')
+      .format(DateTime.fromMillisecondsSinceEpoch(duration.inMilliseconds))
+      .toString();
 }

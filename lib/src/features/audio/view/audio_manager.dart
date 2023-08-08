@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/audio/bloc/audio_manager_bloc.dart';
 import 'package:shebalin/src/features/audio/view/widgets/audio_widget.dart';
@@ -23,11 +24,14 @@ class AudioManager extends StatefulWidget {
 }
 
 class _AudioManagerState extends State<AudioManager> {
+  late final List<String> _audioLinks;
   @override
   void initState() {
+    initializeDateFormatting();
+    _audioLinks = widget.chapters.map((e) => e.shortAudioLink).toList();
     widget.bloc.add(
       AudioManagerAddAudio(
-        audioLinks: widget.chapters.map((e) => e.shortAudioLink).toList(),
+        audioLinks: _audioLinks,
       ),
     );
     super.initState();
@@ -57,7 +61,7 @@ class _AudioManagerState extends State<AudioManager> {
                 title: 'Глава ${index + 1}',
                 subtitle: widget.subtitle,
                 image: widget.chapters[index].images[0],
-                duration: '1:04',
+                duration: widget.bloc.getDuration(index),
                 progress: index == state.index ? state.progress : 0,
               ),
             ),
@@ -69,9 +73,9 @@ class _AudioManagerState extends State<AudioManager> {
 
   void _onTap(int index) {
     widget.bloc.add(
-      AudioManagerChangeCurrentAudio(
+      AudioManagerSetAudio(
         indexAudio: index,
-        url: '',
+        url: _audioLinks[index],
       ),
     );
   }
