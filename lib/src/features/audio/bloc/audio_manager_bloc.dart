@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:just_audio/just_audio.dart';
@@ -10,10 +12,12 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
   late final List<AudioSource> playlist;
   late final ConcatenatingAudioSource audioSource;
   final List<Duration> duration = [];
-  AudioManagerBloc() : super(const AudioManagerInitial(-1, 0)) {
+  AudioManagerBloc()
+      : super(const AudioManagerNotSelected(index: -1, progress: 0)) {
     on<AudioManagerAddAudio>(_onAudioManagerAddAudio);
     on<AudioManagerChangeCurrentAudio>(_onAudioManagerChangeCurrentAudio);
     on<AudioManagerProgressChanged>(_onAudioManagerPositionChanged);
+    on<AudioManagerAudioCompleted>(_onAudioManagerAudioCompleted);
   }
 
   void _onAudioManagerAddAudio(
@@ -35,7 +39,13 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
     player.setVolume(1.0);
     player.setSpeed(1.0);
     player.setLoopMode(LoopMode.off);
-
+    player.currentIndexStream.where((index) => index != null).listen((index) {
+      if (index! > state.index) {
+        add(const AudioManagerAudioCompleted());
+      }
+      log(index.toString(), name: 'audio');
+    });
+    player.setLoopMode(LoopMode.all);
     player.positionStream.listen(
       (position) {
         if (player.duration != null) {
@@ -47,7 +57,8 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
         }
       },
     );
-    emit(AudioManagerLoaded(-1, state.progress));
+
+    emit(AudioManagerNotSelected(index: -1, progress: state.progress));
   }
 
   void _onAudioManagerChangeCurrentAudio(
@@ -63,11 +74,12 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
       player.play();
     } else if (player.playerState == PlayerState(true, ProcessingState.ready)) {
       player.pause();
+      return emit(const AudioManagerNotSelected(index: -1, progress: 0));
     }
     emit(
-      AudioManagerPlaying(
-        event.indexAudio,
-        state.progress,
+      AudioManagerSelected(
+        index: event.indexAudio,
+        progress: state.progress,
       ),
     );
   }
@@ -76,6 +88,11 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
     AudioManagerProgressChanged event,
     Emitter<AudioManagerState> emit,
   ) {
-    emit(AudioManagerLoaded(state.index, event.progress));
+    emit(state.copyWith(progress: event.progress));
+  }
+
+  void _onAudioManagerAudioCompleted(event, Emitter<AudioManagerState> emit) {
+    player.pause();
+    emit(const AudioManagerNotSelected(index: -1, progress: 0));
   }
 }

@@ -34,3 +34,9 @@ class AudioManagerChangeCurrentAudio extends AudioManagerEvent {
   @override
   List<Object> get props => [indexAudio, url];
 }
+
+class AudioManagerAudioCompleted extends AudioManagerEvent {
+  const AudioManagerAudioCompleted();
+  @override
+  List<Object> get props => [];
+}

@@ -3,29 +3,46 @@ part of 'audio_manager_bloc.dart';
 abstract class AudioManagerState extends Equatable {
   final int index;
   final double progress;
-  const AudioManagerState(this.index, this.progress);
+  const AudioManagerState({required this.index, required this.progress});
 
   @override
   List<Object> get props => [index, progress];
+
+  AudioManagerState copyWith({
+    int? index,
+    double? progress,
+  });
 }
 
-class AudioManagerInitial extends AudioManagerState {
-  const AudioManagerInitial(super.index, super.duration);
+class AudioManagerSelected extends AudioManagerState {
+  const AudioManagerSelected({required super.index, required super.progress});
 
   @override
   List<Object> get props => [index, progress];
+
+  @override
+  AudioManagerSelected copyWith({int? index, double? progress}) {
+    return AudioManagerSelected(
+      index: index ?? this.index,
+      progress: progress ?? this.progress,
+    );
+  }
 }
 
-class AudioManagerPlaying extends AudioManagerState {
-  const AudioManagerPlaying(super.index, super.duration);
+class AudioManagerNotSelected extends AudioManagerState {
+  const AudioManagerNotSelected({
+    required super.index,
+    required super.progress,
+  });
 
   @override
   List<Object> get props => [index, progress];
-}
-
-class AudioManagerLoaded extends AudioManagerState {
-  const AudioManagerLoaded(super.index, super.duration);
 
   @override
-  List<Object> get props => [index, progress];
+  AudioManagerNotSelected copyWith({int? index, double? progress}) {
+    return AudioManagerNotSelected(
+      index: index ?? this.index,
+      progress: progress ?? this.progress,
+    );
+  }
 }
