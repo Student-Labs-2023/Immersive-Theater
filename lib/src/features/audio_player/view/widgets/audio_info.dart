@@ -1,7 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/theme/app_color.dart';
-import 'package:shebalin/src/theme/ui/app_placeholer.dart';
+import 'package:shebalin/src/theme/ui/audio_image.dart';
 
 class AudioInfoWidget extends StatelessWidget {
   final String performanceTitle;
@@ -19,15 +18,9 @@ class AudioInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: CachedNetworkImage(
-            height: 40,
-            width: 40,
-            placeholder: (context, url) => const AppProgressBar(),
-            imageUrl: imageLink,
-            fit: BoxFit.cover,
-          ),
+        AudioImage(
+          imageLink: imageLink,
+          size: 40,
         ),
         const SizedBox(
           width: 12,
