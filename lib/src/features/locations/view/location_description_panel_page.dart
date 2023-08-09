@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:performances_repository/performances_repository.dart';
+import 'package:shebalin/src/features/audio/bloc/audio_manager_bloc.dart';
 import 'package:shebalin/src/features/audio/view/widgets/audio_widget.dart';
 import 'package:shebalin/src/features/locations/view/widgets/historical_content_location_panel.dart';
 import 'package:shebalin/src/features/locations/view/widgets/images_content_location_panel.dart';
@@ -25,8 +27,11 @@ class LocationDescriptionPanelPage extends StatefulWidget {
 class _LocationDescriptionPanelPageState
     extends State<LocationDescriptionPanelPage> {
   late Chapter currentLocation;
+  late final AudioManagerBloc _bloc;
   @override
   void initState() {
+    _bloc = AudioManagerBloc();
+    initializeDateFormatting();
     super.initState();
   }
 
@@ -85,6 +90,11 @@ class _LocationDescriptionPanelPageState
 
                 currentLocation =
                     state.perfomances[index].info.chapters[indexPlace];
+                _bloc.add(
+                  AudioManagerAddAudio(
+                    audioLinks: [currentLocation.shortAudioLink],
+                  ),
+                );
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,15 +153,21 @@ class _LocationDescriptionPanelPageState
                           const SizedBox(
                             height: 12,
                           ),
-                          AudioWidget(
-                            title: currentLocation.title,
-                            subtitle: currentLocation.title,
-                            image: currentLocation.images[0],
-                            duration: '1:04',
-                            isCurrent: false,
-                            isPlaying: false,
-                            onTap: () => {},
-                            progress: 0,
+                          BlocBuilder<AudioManagerBloc, AudioManagerState>(
+                            bloc: _bloc,
+                            builder: (context, state) {
+                              return AudioWidget(
+                                title: currentLocation.title,
+                                subtitle: currentLocation.title,
+                                image: currentLocation.images[0],
+                                duration: state is AudioManagerInitial
+                                    ? ''
+                                    : _bloc.getDuration(0),
+                                isCurrent: state.index == 0,
+                                onTap: _onAudioTap,
+                                progress: state.progress,
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -169,5 +185,14 @@ class _LocationDescriptionPanelPageState
 
   void _closePanel() {
     context.read<MapPinBloc>().emit(MapPinClosingState());
+  }
+
+  void _onAudioTap() {
+    _bloc.add(
+      AudioManagerSetAudio(
+        indexAudio: 0,
+        url: currentLocation.shortAudioLink,
+      ),
+    );
   }
 }

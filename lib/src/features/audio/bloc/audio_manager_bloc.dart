@@ -10,7 +10,7 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
   final AudioPlayer player = AudioPlayer();
   final List<Duration> duration = [];
   AudioManagerBloc()
-      : super(const AudioManagerNotSelected(index: -1, progress: 0)) {
+      : super(const AudioManagerInitial(index: -1, progress: 0)) {
     on<AudioManagerAddAudio>(_onAudioManagerAddAudio);
     on<AudioManagerSetAudio>(_onAudioManagerSetAudio);
     on<AudioManagerProgressChanged>(_onAudioManagerPositionChanged);
@@ -21,6 +21,7 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
     AudioManagerAddAudio event,
     Emitter<AudioManagerState> emit,
   ) async {
+    player.pause();
     for (var element in event.audioLinks) {
       duration.add(await player.setUrl(element) ?? Duration.zero);
     }

@@ -14,6 +14,21 @@ abstract class AudioManagerState extends Equatable {
   });
 }
 
+class AudioManagerInitial extends AudioManagerState {
+  const AudioManagerInitial({required super.index, required super.progress});
+
+  @override
+  List<Object> get props => [index, progress];
+
+  @override
+  AudioManagerInitial copyWith({int? index, double? progress}) {
+    return AudioManagerInitial(
+      index: index ?? this.index,
+      progress: progress ?? this.progress,
+    );
+  }
+}
+
 class AudioManagerSelected extends AudioManagerState {
   const AudioManagerSelected({required super.index, required super.progress});
 

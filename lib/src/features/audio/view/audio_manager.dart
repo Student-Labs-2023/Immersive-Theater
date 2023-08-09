@@ -57,11 +57,12 @@ class _AudioManagerState extends State<AudioManager> {
               child: AudioWidget(
                 onTap: () => _onTap(index),
                 isCurrent: index == state.index,
-                isPlaying: index == state.index,
                 title: 'Глава ${index + 1}',
                 subtitle: widget.subtitle,
                 image: widget.chapters[index].images[0],
-                duration: widget.bloc.getDuration(index),
+                duration: state is AudioManagerInitial
+                    ? ''
+                    : widget.bloc.getDuration(index),
                 progress: index == state.index ? state.progress : 0,
               ),
             ),

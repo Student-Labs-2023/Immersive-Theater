@@ -11,7 +11,7 @@ class AudioWidget extends StatelessWidget {
   final String duration;
 
   final bool isCurrent;
-  final bool isPlaying;
+
   final double progress;
   final VoidCallback onTap;
   const AudioWidget({
@@ -21,7 +21,6 @@ class AudioWidget extends StatelessWidget {
     required this.image,
     required this.duration,
     required this.isCurrent,
-    required this.isPlaying,
     required this.onTap,
     required this.progress,
   });
