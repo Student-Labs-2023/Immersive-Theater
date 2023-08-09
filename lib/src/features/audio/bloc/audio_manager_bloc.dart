@@ -21,7 +21,10 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
     AudioManagerAddAudio event,
     Emitter<AudioManagerState> emit,
   ) async {
-    player.pause();
+    if (player.playing) {
+      player.pause();
+    }
+
     for (var element in event.audioLinks) {
       duration.add(await player.setUrl(element) ?? Duration.zero);
     }
@@ -39,7 +42,7 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
 
     player.positionStream.listen(
       (position) {
-        if (player.duration != null && player.playerState.playing) {
+        if (player.duration != null && player.playing) {
           if (player.position == player.duration) {
             player.pause();
             add(const AudioManagerAudioCompleted());
