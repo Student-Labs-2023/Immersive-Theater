@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:performances_repository/performances_repository.dart';
-import 'package:shebalin/src/features/locations/view/widgets/audio_content_location_panel.dart';
+import 'package:shebalin/src/features/audio/bloc/audio_manager_bloc.dart';
+import 'package:shebalin/src/features/audio/view/widgets/audio_widget.dart';
 import 'package:shebalin/src/features/locations/view/widgets/historical_content_location_panel.dart';
 import 'package:shebalin/src/features/locations/view/widgets/images_content_location_panel.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
@@ -10,7 +12,6 @@ import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
-import '../../../models/payment_model.dart';
 
 class LocationDescriptionPanelPage extends StatefulWidget {
   const LocationDescriptionPanelPage({
@@ -25,10 +26,12 @@ class LocationDescriptionPanelPage extends StatefulWidget {
 
 class _LocationDescriptionPanelPageState
     extends State<LocationDescriptionPanelPage> {
-  Payment paymentService = Payment();
   late Chapter currentLocation;
+  late final AudioManagerBloc _bloc;
   @override
   void initState() {
+    _bloc = AudioManagerBloc();
+    initializeDateFormatting();
     super.initState();
   }
 
@@ -40,9 +43,7 @@ class _LocationDescriptionPanelPageState
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
       floatingActionButton: ElevatedButton(
-        onPressed: () async {
-          _openYandexWidgetOnTap();
-        },
+        onPressed: () async {},
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(accentTextColor),
           elevation: MaterialStateProperty.all(5),
@@ -89,6 +90,11 @@ class _LocationDescriptionPanelPageState
 
                 currentLocation =
                     state.perfomances[index].info.chapters[indexPlace];
+                _bloc.add(
+                  AudioManagerAddAudio(
+                    audioLinks: [currentLocation.shortAudioLink],
+                  ),
+                );
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,7 +153,22 @@ class _LocationDescriptionPanelPageState
                           const SizedBox(
                             height: 12,
                           ),
-                          const AudioContentLocationPanel(),
+                          BlocBuilder<AudioManagerBloc, AudioManagerState>(
+                            bloc: _bloc,
+                            builder: (context, state) {
+                              return AudioWidget(
+                                title: currentLocation.title,
+                                subtitle: currentLocation.title,
+                                image: currentLocation.images[0],
+                                duration: state is AudioManagerInitial
+                                    ? ''
+                                    : _bloc.getDuration(0),
+                                isCurrent: state.index == 0,
+                                onTap: _onAudioTap,
+                                progress: state.progress,
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -162,11 +183,16 @@ class _LocationDescriptionPanelPageState
     );
   }
 
-  void _openYandexWidgetOnTap() async {
-    //ссылка на виджет
-  }
-
   void _closePanel() {
     context.read<MapPinBloc>().emit(MapPinClosingState());
+  }
+
+  void _onAudioTap() {
+    _bloc.add(
+      AudioManagerSetAudio(
+        indexAudio: 0,
+        url: currentLocation.shortAudioLink,
+      ),
+    );
   }
 }

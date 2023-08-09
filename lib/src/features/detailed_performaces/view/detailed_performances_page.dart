@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
+import 'package:shebalin/src/features/audio/bloc/audio_manager_bloc.dart';
+import 'package:shebalin/src/features/audio/view/audio_manager.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/images_location.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome_args.dart';
@@ -11,7 +13,6 @@ import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/view_images/models/image_view_args.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/models/payment_model.dart';
-import 'package:shebalin/src/features/detailed_performaces/view/widgets/audio_demo.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/author_card.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
@@ -32,9 +33,10 @@ class _PerfomanceDescriptionScreenState
     extends State<PerfomanceDescriptionScreen> {
   bool isBought = false;
   final paymentService = Payment();
+  final AudioManagerBloc audioManagerBloc = AudioManagerBloc();
   double top = 0.0;
   bool _isExpanded = true;
-  bool _isCollapsed = false;
+  final bool _isCollapsed = false;
   late final ScrollController _controller = ScrollController()
     ..addListener(() {
       setState(() {
@@ -99,7 +101,6 @@ class _PerfomanceDescriptionScreenState
                   ),
                 );
               },
-
             ),
             leading: Row(
               children: [
@@ -223,88 +224,83 @@ class _PerfomanceDescriptionScreenState
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
+                          state is PerformanceLoadInProgress
+                              ? const AppProgressBar()
+                              : SizedBox(
+                                  height: MediaQuery.of(context).size.height *
+                                          0.18 +
+                                      16 * 2,
+                                  child: AudioManager(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    subtitle: widget.performance.title,
+                                    chapters: state
+                                        .perfomances[widget.performance.id]
+                                        .info
+                                        .chapters,
+                                    bloc: audioManagerBloc,
+                                  ),
+                                ),
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Divider(height: 1, thickness: 1),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 20, bottom: 12),
+                                child: Text(
+                                  'Фотографии',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall
+                                      ?.copyWith(fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              state is PerformanceFullInfoLoadInProgress
+                                  ? const AppProgressBar()
+                                  : ImagesLocation(
+                                      imageLinks: state
+                                          .perfomances[widget.performance.id]
+                                          .info
+                                          .images,
+                                      onTap: _onImageTap,
+                                    )
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 32, bottom: 20),
+                                child: Text(
+                                  'Авторы',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall
+                                      ?.copyWith(fontWeight: FontWeight.w700),
+                                ),
+                              ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.2,
+                                    MediaQuery.of(context).size.height * 0.1,
                                 child: ListView.builder(
                                   itemCount:
-                                      widget.performance.info.chapters.length,
-                                  scrollDirection: Axis.vertical,
+                                      widget.performance.info.creators.length,
+                                  scrollDirection: Axis.horizontal,
+                                  cacheExtent: 1000,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return state is PerformanceLoadInProgress
-                                        ? const AppProgressBar()
-                                        : AudioDemo(
-                                            isBought: isBought,
-                                            performance: state.perfomances[
-                                                widget.performance.id],
-                                            index: index,
-                                          );
+                                    return AuthorCard(
+                                      performance: widget.performance,
+                                      index: index,
+                                    );
                                   },
                                 ),
                               ),
-                              const Divider(height: 1, thickness: 1)
                             ],
                           )
                         ],
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20, bottom: 12),
-                            child: Text(
-                              'Фотографии',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .displaySmall
-                                  ?.copyWith(fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                          state is PerformanceFullInfoLoadInProgress
-                              ? const AppProgressBar()
-                              : ImagesLocation(
-                                  imageLinks: state
-                                      .perfomances[widget.performance.id]
-                                      .info
-                                      .images,
-                                  onTap: _onImageTap,
-                                )
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 32, bottom: 20),
-                            child: Text(
-                              'Авторы',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .displaySmall
-                                  ?.copyWith(fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.1,
-                            child: ListView.builder(
-                              itemCount:
-                                  widget.performance.info.creators.length,
-                              scrollDirection: Axis.horizontal,
-                              cacheExtent: 1000,
-                              itemBuilder: (BuildContext context, int index) {
-                                return AuthorCard(
-                                  performance: widget.performance,
-                                  index: index,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      )
                     ],
                   ),
                 ),
@@ -325,12 +321,15 @@ class _PerfomanceDescriptionScreenState
         child: BlocBuilder<PerformanceBloc, PerformanceState>(
           builder: (context, state) {
             return ElevatedButton(
-              onPressed: () => Navigator.of(context).pushNamed(
-                routePrefixPerfMode + OnboardWelcome.routeName,
-                arguments: OnboardingWelcomeArgs(
-                  performance: state.perfomances[widget.performance.id],
-                ),
-              ),
+              onPressed: () {
+                audioManagerBloc.add(const AudioManagerAudioCompleted());
+                Navigator.of(context).pushNamed(
+                  routePrefixPerfMode + OnboardWelcome.routeName,
+                  arguments: OnboardingWelcomeArgs(
+                    performance: state.perfomances[widget.performance.id],
+                  ),
+                );
+              },
               style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all(AppColor.purplePrimary),

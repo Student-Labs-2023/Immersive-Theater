@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:api_client/api_client.dart';
+import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 
 import '../../../view_images/models/image_view_args.dart';
 import '../../../view_images/view/images_view_page.dart';
@@ -55,11 +56,7 @@ class ImagesContentLocationPanel extends StatelessWidget {
                   ),
                   imageUrl: imageLinks[index],
                   fit: BoxFit.fill,
-                  placeholder: (context, string) => const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColor.whiteText,
-                    ),
-                  ),
+                  placeholder: (context, string) => const AppProgressBar(),
                 ),
               ),
             );
