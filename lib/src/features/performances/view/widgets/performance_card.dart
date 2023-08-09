@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
-import 'package:shebalin/src/features/detailed_performaces/view/performance_double_screen.dart';
+import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_args.dart';
+import 'package:shebalin/src/features/detailed_performaces/view/detailed_performances_page.dart';
+
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
@@ -22,8 +24,8 @@ class PerformanceCard extends StatelessWidget {
               .read<PerformanceBloc>()
               .add(PerformanceLoadFullInfo(performance.id));
           Navigator.of(context).pushNamed(
-            PerformanceDoubleScreen.routeName,
-            arguments: performance,
+            PerfomanceDescriptionScreen.routeName,
+            arguments: DetailedPerformanceArgs(performance: performance),
           );
         },
         child: Container(

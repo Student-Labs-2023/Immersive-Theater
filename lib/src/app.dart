@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
-import 'package:shebalin/src/features/detailed_performaces/view/performance_double_screen.dart';
+import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_args.dart';
+import 'package:shebalin/src/features/detailed_performaces/view/detailed_performances_page.dart';
 import 'package:shebalin/src/features/splash_screen/view/splash_screen.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
@@ -50,8 +51,12 @@ class App extends StatelessWidget {
             page = const SplashScreen();
           } else if (routeSettings.name == OnbordingScreen.routeName) {
             page = const OnbordingScreen();
-          } else if (routeSettings.name == PerformanceDoubleScreen.routeName) {
-            page = const PerformanceDoubleScreen();
+          } else if (routeSettings.name ==
+              PerfomanceDescriptionScreen.routeName) {
+            final args = routeSettings.arguments as DetailedPerformanceArgs;
+            page = PerfomanceDescriptionScreen(
+              performance: args.performance,
+            );
           } else if (routeSettings.name == VerticalSlidningScreen.routeName) {
             page = const VerticalSlidningScreen();
           } else if (routeSettings.name == ImagesViewPage.routeName) {

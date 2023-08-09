@@ -321,12 +321,15 @@ class _PerfomanceDescriptionScreenState
         child: BlocBuilder<PerformanceBloc, PerformanceState>(
           builder: (context, state) {
             return ElevatedButton(
-              onPressed: () => Navigator.of(context).pushNamed(
-                routePrefixPerfMode + OnboardWelcome.routeName,
-                arguments: OnboardingWelcomeArgs(
-                  performance: state.perfomances[widget.performance.id],
-                ),
-              ),
+              onPressed: () {
+                audioManagerBloc.add(const AudioManagerAudioCompleted());
+                Navigator.of(context).pushNamed(
+                  routePrefixPerfMode + OnboardWelcome.routeName,
+                  arguments: OnboardingWelcomeArgs(
+                    performance: state.perfomances[widget.performance.id],
+                  ),
+                );
+              },
               style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all(AppColor.purplePrimary),
