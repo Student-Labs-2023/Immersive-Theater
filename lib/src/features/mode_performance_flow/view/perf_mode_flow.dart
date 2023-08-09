@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/audio_player/bloc/audio_player_bloc.dart';
+import 'package:shebalin/src/features/detailed_performaces/view/performance_double_screen.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/mode_perf_home/bloc/perf_home_mode_bloc.dart';
@@ -37,6 +38,8 @@ class PerfModeFlow extends StatefulWidget {
 class PerfModeFlowState extends State<PerfModeFlow> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
+  String currentRouteName = '';
+
   void _onOnboardWelcomeComplete(bool listenAtHome) {
     _navigatorKey.currentState!.pushNamed(
       OnboardingPerformance.routeName,
@@ -59,12 +62,11 @@ class PerfModeFlowState extends State<PerfModeFlow> {
   }
 
   void _onPerfModeComplete() {
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(MainScreen.routeName, (builder) => false);
+    Navigator.of(context).popUntil(ModalRoute.withName(MainScreen.routeName));
   }
 
   void _onImageOpen(List<String> imageLinks, int index) {
-    _navigatorKey.currentState!.pushNamed(
+    Navigator.of(context).pushNamed(
       ImagesViewPage.routeName,
       arguments: ImageViewArgs(imageLinks, index),
     );
@@ -95,7 +97,7 @@ class PerfModeFlowState extends State<PerfModeFlow> {
       create: (context) =>
           CurrentPerformanceProvider(performance: widget.performance),
       child: WillPopScope(
-        onWillPop: () async => false,
+        onWillPop: _onWillPop,
         child: Navigator(
           key: _navigatorKey,
           initialRoute: widget.perfModePageRoute,
@@ -107,11 +109,14 @@ class PerfModeFlowState extends State<PerfModeFlow> {
 
   Route _onGenerateRoute(RouteSettings routeSettings) {
     late Widget page;
-
+    currentRouteName = routeSettings.name ?? '';
     switch (routeSettings.name) {
       case OnboardWelcome.routeName:
         {
           page = OnboardWelcome(
+            onOnboardingClose: () => Navigator.of(context).popUntil(
+              (ModalRoute.withName(PerformanceDoubleScreen.routeName)),
+            ),
             onOnboardWelcomeComplete: _onOnboardWelcomeComplete,
           );
           break;
@@ -200,11 +205,7 @@ class PerfModeFlowState extends State<PerfModeFlow> {
           );
           break;
         }
-      case ImagesViewPage.routeName:
-        {
-          page = const ImagesViewPage();
-        }
-        break;
+
       case MainScreen.routeName:
         {
           page = const MainScreen();
@@ -212,21 +213,58 @@ class PerfModeFlowState extends State<PerfModeFlow> {
         break;
       case ReviewPage.routeName:
         {
-          page = WillPopScope(
-            onWillPop: () async => false,
-            child: ReviewPage(
-              onPerfModeComplete: _onPerfModeComplete,
-            ),
+          page = ReviewPage(
+            onPerfModeComplete: _onPerfModeComplete,
           );
         }
         break;
     }
 
-    return MaterialPageRoute<dynamic>(
+    return CustomMaterialPageRoute(
       builder: (context) {
         return page;
       },
       settings: routeSettings,
     );
   }
+
+  Future<bool> _onWillPop() async {
+    if (currentRouteName == PerformanceAtHomeModePage.routeName ||
+        currentRouteName == PerformanceModePage.routeName) {
+      return await _showDialogWindow();
+    } else if (currentRouteName == OnboardingPerformance.routeName) {
+      _navigatorKey.currentState!.pop();
+      currentRouteName = OnboardWelcome.routeName;
+      return false;
+    } else if (currentRouteName == OnboardWelcome.routeName) {
+      Navigator.of(context, rootNavigator: true).pop();
+    } else if (currentRouteName == ReviewPage.routeName) {
+      _onPerfModeComplete();
+
+      return true;
+    } else if (currentRouteName == ImagesViewPage.routeName) {
+      return true;
+    }
+
+    return false;
+  }
+}
+
+class CustomMaterialPageRoute extends MaterialPageRoute {
+  @override
+  bool get hasScopedWillPopCallback {
+    return false;
+  }
+
+  CustomMaterialPageRoute({
+    required WidgetBuilder builder,
+    required RouteSettings settings,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
+  }) : super(
+          builder: builder,
+          settings: settings,
+          maintainState: maintainState,
+          fullscreenDialog: fullscreenDialog,
+        );
 }

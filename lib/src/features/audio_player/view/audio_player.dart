@@ -44,7 +44,10 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
                 1;
         if (state is AudioPlayerFinishedState &&
             widget.indexLocation == indexLastLocation) {
-          Navigator.pushNamed(context, ReviewPage.routeName);
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            ReviewPage.routeName,
+            (route) => false,
+          );
         }
       },
       builder: (context, state) {

@@ -4,9 +4,11 @@ import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 
 class ImageCard extends StatelessWidget {
   final String imageUrl;
+  final double size;
   const ImageCard({
     super.key,
     required this.imageUrl,
+    required this.size,
   });
 
   @override
@@ -16,8 +18,8 @@ class ImageCard extends StatelessWidget {
       child: CachedNetworkImage(
         placeholder: (context, url) => const AppProgressBar(),
         imageUrl: imageUrl,
-        height: 90,
-        width: 90,
+        height: size,
+        width: size,
         fit: BoxFit.cover,
       ),
     );

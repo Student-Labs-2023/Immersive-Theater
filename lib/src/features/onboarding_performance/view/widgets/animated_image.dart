@@ -13,7 +13,7 @@ class AnimatedImage extends StatelessWidget {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 111, 8, 0),
+        padding: const EdgeInsets.fromLTRB(8, 28, 8, 0),
         key: Key(image),
         child: Image.asset(
           width: double.infinity,
