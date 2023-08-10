@@ -5,6 +5,7 @@ import 'package:shebalin/src/features/audio/bloc/audio_manager_bloc.dart';
 import 'package:shebalin/src/features/audio/view/audio_manager.dart';
 import 'package:shebalin/src/features/detailed_performaces/bloc/detailed_performance_bloc.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/author_card.dart';
+import 'package:shebalin/src/features/detailed_performaces/view/widgets/detailed_map.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/text_with_leading.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
@@ -15,6 +16,7 @@ import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 import 'package:shebalin/src/theme/ui/image_card.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class DetailedPerformancePage extends StatefulWidget {
   const DetailedPerformancePage({super.key});
@@ -159,11 +161,24 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                         const SizedBox(
                           height: 12,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(right: 16.0),
-                          child: Placeholder(
-                            fallbackHeight: 200,
-                            fallbackWidth: 343,
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.25,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(13),
+                              child: DetailedMap(
+                                initialCoords: Point(
+                                  latitude: state.performance.info.chapters[0]
+                                      .place.latitude,
+                                  longitude: state.performance.info.chapters[0]
+                                      .place.longitude,
+                                ),
+                                places: state.performance.info.chapters
+                                    .map((e) => e.place)
+                                    .toList(),
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(

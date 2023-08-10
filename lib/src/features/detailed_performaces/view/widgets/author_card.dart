@@ -34,6 +34,7 @@ class AuthorCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(50)),
                 child: CachedNetworkImage(
+                  height: 64,
                   imageUrl: image,
                   fit: BoxFit.cover,
                 ),

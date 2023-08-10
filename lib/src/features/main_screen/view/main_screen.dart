@@ -121,7 +121,7 @@ class _MainScreenState extends State<MainScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5 -16,
+                        width: MediaQuery.of(context).size.width * 0.5 - 16,
                       ),
                       Center(
                         child: Container(
