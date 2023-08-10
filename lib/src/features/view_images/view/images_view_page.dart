@@ -29,7 +29,7 @@ class ImagesViewPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: Image.asset(ImagesSources.backIcon),
+            icon: Image.asset(ImagesSources.cross),
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: BlocBuilder<ImageViewBloc, ImageViewState>(

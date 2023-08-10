@@ -50,43 +50,61 @@ class PerformanceCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: Container(
-                  clipBehavior: Clip.antiAlias,
-                  height: MediaQuery.of(context).size.height * 0.177,
-                  //not 0.18 because bottom overflow
-                  width: MediaQuery.of(context).size.width * 0.82,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: secondaryColor,
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl: performance.imageLink,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => const AppProgressBar(),
-                  ),
+                child: Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    Container(
+                      clipBehavior: Clip.antiAlias,
+                      height: MediaQuery.of(context).size.height * 0.177,
+                      //not 0.18 because bottom overflow
+                      width: MediaQuery.of(context).size.width * 0.82,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: secondaryColor,
+                      ),
+                      child: CachedNetworkImage(
+                        imageUrl: performance.imageLink,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => const AppProgressBar(),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8, right: 8),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(7),
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width * 0.168,
+                          height: MediaQuery.of(context).size.height * 0.033,
+                          decoration: BoxDecoration(
+                            color: AppColor.blackText,
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                          child: Text(
+                            "299Р",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: AppColor.whiteText),
+                            textHeightBehavior: const TextHeightBehavior(
+                              leadingDistribution: TextLeadingDistribution.even,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
               const SizedBox(height: 6),
               Padding(
                 padding: const EdgeInsets.fromLTRB(4, 0, 0, 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      performance.title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.w700),
-                    ),
-                    Text(
-                      "299P",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(color: AppColor.greyText),
-                    )
-                  ],
+                child: Text(
+                  performance.title,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.w700),
                 ),
               ),
               Row(
@@ -132,7 +150,8 @@ class PerformanceCard extends StatelessWidget {
                         .bodyMedium
                         ?.copyWith(color: AppColor.greyText),
                     textHeightBehavior: const TextHeightBehavior(
-                        leadingDistribution: TextLeadingDistribution.even),
+                      leadingDistribution: TextLeadingDistribution.even,
+                    ),
                   )
                 ],
               ),
