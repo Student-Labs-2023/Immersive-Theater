@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/audio_player/bloc/audio_player_bloc.dart';
-import 'package:shebalin/src/features/detailed_performaces/view/performance_double_screen.dart';
+import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_page.dart';
+
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/mode_perf_home/bloc/perf_home_mode_bloc.dart';
@@ -115,7 +116,7 @@ class PerfModeFlowState extends State<PerfModeFlow> {
         {
           page = OnboardWelcome(
             onOnboardingClose: () => Navigator.of(context).popUntil(
-              (ModalRoute.withName(PerformanceDoubleScreen.routeName)),
+              (ModalRoute.withName(DetailedPerformancePage.routeName)),
             ),
             onOnboardWelcomeComplete: _onOnboardWelcomeComplete,
           );
