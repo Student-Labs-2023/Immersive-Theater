@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_args.dart';
-import 'package:shebalin/src/features/detailed_performaces/view/detailed_performances_page.dart';
+import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_page.dart';
 
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
@@ -24,7 +24,7 @@ class PerformanceCard extends StatelessWidget {
               .read<PerformanceBloc>()
               .add(PerformanceLoadFullInfo(performance.id));
           Navigator.of(context).pushNamed(
-            PerfomanceDescriptionScreen.routeName,
+            DetailedPerformancePage.routeName,
             arguments: DetailedPerformanceArgs(performance: performance),
           );
         },

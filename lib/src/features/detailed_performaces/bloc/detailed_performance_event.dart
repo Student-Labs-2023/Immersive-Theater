@@ -6,3 +6,20 @@ abstract class DetailedPerformanceEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class DetailedPerformanceStarted extends DetailedPerformanceEvent {
+  const DetailedPerformanceStarted();
+}
+
+class DetailedPerformanceInfoLoaded extends DetailedPerformanceEvent {
+  final Performance performance;
+  const DetailedPerformanceInfoLoaded({required this.performance});
+}
+
+class DetailedPerformancePay extends DetailedPerformanceEvent {
+  const DetailedPerformancePay();
+}
+
+class DetailedPerformanceDownload extends DetailedPerformanceEvent {
+  const DetailedPerformanceDownload();
+}
