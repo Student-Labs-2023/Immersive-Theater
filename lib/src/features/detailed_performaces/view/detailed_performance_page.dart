@@ -120,55 +120,6 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                 ],
               ),
             );
-
-            // return CustomScrollView(
-            //   physics: const NeverScrollableScrollPhysics(),
-            //   controller: _controller,
-            //   scrollDirection: Axis.vertical,
-            //   slivers: [
-            //     SliverAppBar(
-            //       elevation: 0.7,
-            //       backgroundColor: AppColor.whiteBackground,
-            //       expandedHeight: MediaQuery.of(context).size.height * 0.32,
-            //       floating: false,
-            //       pinned: true,
-            //       flexibleSpace: FlexibleSpaceBar(
-            //         background: Container(color: AppColor.greySkeleton),
-            //       ),
-            //       leading: Row(
-            //         children: [
-            //           const SizedBox(
-            //             width: 20,
-            //           ),
-            //           Container(
-            //             width: 32,
-            //             height: 32,
-            //             decoration: BoxDecoration(
-            //               shape: BoxShape.circle,
-            //               color: _isExpended
-            //                   ? AppColor.grey
-            //                   : AppColor.whiteBackground,
-            //             ),
-            //             child: Center(
-            //               child: IconButton(
-            //                 onPressed: () => Navigator.of(context).pop(),
-            //                 icon: Image.asset(
-            //                   ImagesSources.closePerformance,
-            //                   color: _isExpended
-            //                       ? AppColor.whiteText
-            //                       : AppColor.blackText,
-            //                 ),
-            //               ),
-            //             ),
-            //           ),
-            //           SliverToBoxAdapter(
-            //             child:
-            //           )
-            //         ],
-            //       ),
-            //     )
-            //   ],
-            // );
           } else if (state is DetailedPerformanceUnPaid ||
               state is DetailedPerformanceDownLoaded ||
               state is DetailedPerformancePaid) {
