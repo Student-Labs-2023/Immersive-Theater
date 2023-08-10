@@ -23,9 +23,6 @@ class _DetailedMapState extends State<DetailedMap> {
   @override
   Widget build(BuildContext context) {
     return YandexMap(
-      zoomGesturesEnabled: false,
-      mode2DEnabled: true,
-      scrollGesturesEnabled: false,
       mapObjects: placemarks,
       onMapCreated: (controller) async {
         placemarks.addAll(
