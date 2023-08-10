@@ -45,7 +45,6 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
               state is DetailedPerformancePaid) {
             return CustomScrollView(
               controller: _controller,
-              scrollDirection: Axis.vertical,
               slivers: [
                 SliverAppBar(
                   elevation: 0.7,
@@ -60,33 +59,31 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                           MediaQuery.of(context).padding.top + kToolbarHeight;
                       return FlexibleSpaceBar(
                         centerTitle: !_isExpended,
+                        titlePadding:
+                            const EdgeInsets.only(left: 16, bottom: 12),
                         background: CachedNetworkImage(
                           imageUrl: state.performance.imageLink,
                           fit: BoxFit.fill,
-                          placeholder: (contxt, string) => const Center(
-                            child: CircularProgressIndicator(
-                              color: AppColor.grey,
-                            ),
-                          ),
+                          placeholder: (contxt, string) =>
+                              const AppProgressBar(),
                         ),
-                        title: Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Text(
-                            state.performance.title,
-                            style: _isExpended
-                                ? Theme.of(context)
-                                    .textTheme
-                                    .displayMedium
-                                    ?.copyWith(
-                                      color: AppColor.whiteText,
-                                    )
-                                : Theme.of(context)
-                                    .textTheme
-                                    .headlineMedium
-                                    ?.copyWith(
-                                      color: AppColor.blackText,
-                                    ),
-                          ),
+                        title: Text(
+                          state.performance.title,
+                          overflow: TextOverflow.fade,
+                          style: _isExpended
+                              ? Theme.of(context)
+                                  .textTheme
+                                  .displayMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColor.whiteText,
+                                  )
+                              : Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium
+                                  ?.copyWith(
+                                    color: AppColor.blackText,
+                                  ),
                         ),
                       );
                     },
