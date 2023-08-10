@@ -136,7 +136,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       )
                     ],
-                  ),
+                  )
                 ],
               );
             }
@@ -165,9 +165,6 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               );
             } else if (state is MapPinClosingState) {
-              // Future.delayed(const Duration(seconds: 1), () {
-              //   panelController.close();
-              // });
               return isPerfomnceButtonPressed
                   ? const PerformancesPanelPage()
                   : const PromocodePanelPage();

@@ -16,6 +16,7 @@ import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 import 'package:shebalin/src/theme/ui/image_card.dart';
+import 'package:shebalin/src/theme/ui/skeleton_loaders.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class DetailedPerformancePage extends StatefulWidget {
@@ -41,7 +42,133 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
         },
         builder: (context, state) {
           if (state is DetailedPerformanceLoadInProgress) {
-            return const AppProgressBar();
+            return SizedBox(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColor.greySkeleton,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        height: MediaQuery.of(context).size.height * 0.3,
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: AppColor.greySkeleton,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              width: MediaQuery.of(context).size.width * 0.18,
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: AppColor.greySkeleton,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              width: MediaQuery.of(context).size.width * 0.27,
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            const DescriptionSkeleton(),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.25,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                decoration: BoxDecoration(
+                                  color: AppColor.greySkeleton,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 32,
+                            ),
+                            const Header(
+                              title: 'Аудио отрывки',
+                            ),
+                            const AudioDemoSkeleton()
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
+
+            // return CustomScrollView(
+            //   physics: const NeverScrollableScrollPhysics(),
+            //   controller: _controller,
+            //   scrollDirection: Axis.vertical,
+            //   slivers: [
+            //     SliverAppBar(
+            //       elevation: 0.7,
+            //       backgroundColor: AppColor.whiteBackground,
+            //       expandedHeight: MediaQuery.of(context).size.height * 0.32,
+            //       floating: false,
+            //       pinned: true,
+            //       flexibleSpace: FlexibleSpaceBar(
+            //         background: Container(color: AppColor.greySkeleton),
+            //       ),
+            //       leading: Row(
+            //         children: [
+            //           const SizedBox(
+            //             width: 20,
+            //           ),
+            //           Container(
+            //             width: 32,
+            //             height: 32,
+            //             decoration: BoxDecoration(
+            //               shape: BoxShape.circle,
+            //               color: _isExpended
+            //                   ? AppColor.grey
+            //                   : AppColor.whiteBackground,
+            //             ),
+            //             child: Center(
+            //               child: IconButton(
+            //                 onPressed: () => Navigator.of(context).pop(),
+            //                 icon: Image.asset(
+            //                   ImagesSources.closePerformance,
+            //                   color: _isExpended
+            //                       ? AppColor.whiteText
+            //                       : AppColor.blackText,
+            //                 ),
+            //               ),
+            //             ),
+            //           ),
+            //           SliverToBoxAdapter(
+            //             child:
+            //           )
+            //         ],
+            //       ),
+            //     )
+            //   ],
+            // );
           } else if (state is DetailedPerformanceUnPaid ||
               state is DetailedPerformanceDownLoaded ||
               state is DetailedPerformancePaid) {
