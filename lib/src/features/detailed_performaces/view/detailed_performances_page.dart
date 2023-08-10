@@ -255,7 +255,7 @@ class _PerfomanceDescriptionScreenState
                                       ?.copyWith(fontWeight: FontWeight.w700),
                                 ),
                               ),
-                              state is PerformanceFullInfoLoadInProgress
+                              state is PerformanceLoadInProgress
                                   ? const AppProgressBar()
                                   : ImagesLocation(
                                       imageLinks: state
@@ -280,23 +280,27 @@ class _PerfomanceDescriptionScreenState
                                       ?.copyWith(fontWeight: FontWeight.w700),
                                 ),
                               ),
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.1,
-                                child: ListView.builder(
-                                  itemCount:
-                                      widget.performance.info.creators.length,
-                                  scrollDirection: Axis.horizontal,
-                                  cacheExtent: 1000,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return AuthorCard(
-                                      performance: widget.performance,
-                                      index: index,
-                                    );
-                                  },
-                                ),
-                              ),
+                              state is PerformanceLoadInProgress
+                                  ? const AppProgressBar()
+                                  : SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.1,
+                                      child: ListView.builder(
+                                        itemCount: widget
+                                            .performance.info.creators.length,
+                                        scrollDirection: Axis.horizontal,
+                                        cacheExtent: 1000,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return AuthorCard(
+                                            performance: state.perfomances[
+                                                widget.performance.id],
+                                            index: index,
+                                          );
+                                        },
+                                      ),
+                                    ),
                             ],
                           )
                         ],
