@@ -31,7 +31,7 @@ packages:
       path: "packages/api_client"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.0.0"
   archive:
     dependency: transitive
     description:
@@ -517,7 +517,7 @@ packages:
       path: "packages/location_service"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.0.0"
   logging:
     dependency: transitive
     description:
@@ -644,7 +644,7 @@ packages:
       path: "packages/performances_repository"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.0.0"
   petitparser:
     dependency: transitive
     description:

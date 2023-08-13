@@ -23,7 +23,7 @@ packages:
       path: "../api_client"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.0.0"
   args:
     dependency: transitive
     description:
