@@ -20,99 +20,102 @@ class _InputPromocodePanelPageState extends State<InputPromocodePanelPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PerformanceBloc, PerformanceState>(
-        builder: (context, state) {
-      if (state is PerformanceLoadSuccess) {
-        return Padding(
-          padding: const EdgeInsets.only(right: 16, left: 16, top: 32),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Промокод',
-                style: Theme.of(context)
-                    .textTheme
-                    .displayLarge
-                    ?.copyWith(fontWeight: FontWeight.w700),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.06,
-                width: MediaQuery.of(context).size.width * 0.914,
-                margin: const EdgeInsets.only(top: 16),
-                decoration: BoxDecoration(
-                  color: secondaryColor,
-                  borderRadius: searchBarRadius,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _inputTextController,
-                        style: TextStyle(
-                          color: secondaryTextColor,
-                          fontSize: bodySmallFontSize,
-                        ),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(
-                              width: 1,
-                            ),
-                          ),
-                          hintText: 'XXXX-XXXX-XXXX-XXXX',
-                          alignLabelWithHint: mounted,
-                          hintStyle:
-                              Theme.of(context).textTheme.titleSmall?.copyWith(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 32,
-              ),
-              ElevatedButton(
-                onPressed: () => widget.bloc.add(
-                  AddTicket(
-                    PerformanceCard(
-                      performance: state.perfomances.first,
-                    ),
-                  ),
-                ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(accentTextColor),
-                  elevation: MaterialStateProperty.all(0),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  minimumSize: MaterialStateProperty.all(
-                    Size(
-                      MediaQuery.of(context).size.width * 0.914,
-                      MediaQuery.of(context).size.height * 0.06,
-                    ),
-                  ),
-                ),
-                child: Text(
-                  'Применить промокод',
+      builder: (context, state) {
+        if (state is PerformanceLoadSuccess) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 16, left: 16, top: 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Промокод',
                   style: Theme.of(context)
                       .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: Colors.white),
+                      .displayLarge
+                      ?.copyWith(fontWeight: FontWeight.w700),
                 ),
-              )
-            ],
-          ),
-        );
-      } else {
-        return CircularProgressIndicator(
-          color: accentTextColor,
-        );
-      }
-    });
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.06,
+                  width: MediaQuery.of(context).size.width * 0.914,
+                  margin: const EdgeInsets.only(top: 16),
+                  decoration: BoxDecoration(
+                    color: secondaryColor,
+                    borderRadius: searchBarRadius,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _inputTextController,
+                          style: TextStyle(
+                            color: secondaryTextColor,
+                            fontSize: 10,
+                          ),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                width: 1,
+                              ),
+                            ),
+                            hintText: 'XXXX-XXXX-XXXX-XXXX',
+                            alignLabelWithHint: mounted,
+                            hintStyle: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                ElevatedButton(
+                  onPressed: () => widget.bloc.add(
+                    AddTicket(
+                      PerformanceCard(
+                        performance: state.perfomances.first,
+                      ),
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(accentTextColor),
+                    elevation: MaterialStateProperty.all(0),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    minimumSize: MaterialStateProperty.all(
+                      Size(
+                        MediaQuery.of(context).size.width * 0.914,
+                        MediaQuery.of(context).size.height * 0.06,
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    'Применить промокод',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: Colors.white),
+                  ),
+                )
+              ],
+            ),
+          );
+        } else {
+          return CircularProgressIndicator(
+            color: accentTextColor,
+          );
+        }
+      },
+    );
   }
 }
