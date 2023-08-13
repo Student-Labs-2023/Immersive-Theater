@@ -355,7 +355,10 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
             final String? title;
             final VoidCallback? onTap;
             if (state is DetailedPerformanceLoadInProgress) {
-              return const SizedBox.shrink();
+              return const SizedBox(
+                height: 0,
+                width: 0,
+              );
             } else if (state is DetailedPerformanceUnPaid) {
               title = 'Приобрести за 299 ₽';
               onTap = () => {bloc.add(const DetailedPerformancePay())};
