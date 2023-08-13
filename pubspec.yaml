@@ -63,6 +63,7 @@ dependencies:
     path: ./packages/api_client
   location_service:
     path: ./packages/location_service
+  sms_autofill: ^2.3.0
 
   
   

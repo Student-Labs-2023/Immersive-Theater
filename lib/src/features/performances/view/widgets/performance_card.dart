@@ -129,7 +129,7 @@ class PerformanceCard extends StatelessWidget {
                         .bodyMedium
                         ?.copyWith(color: AppColor.greyText),
                     textHeightBehavior: const TextHeightBehavior(
-                        leadingDistribution: TextLeadingDistribution.even),
+                        leadingDistribution: TextLeadingDistribution.even,),
                   )
                 ],
               ),

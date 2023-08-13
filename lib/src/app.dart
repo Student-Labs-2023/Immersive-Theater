@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
+import 'package:shebalin/src/features/authorization/auth_screen.dart';
+import 'package:shebalin/src/features/authorization/widgets/sms_code_input_page.dart';
 import 'package:shebalin/src/features/detailed_performaces/bloc/detailed_performance_bloc.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_args.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_page.dart';
@@ -54,7 +56,6 @@ class App extends StatelessWidget {
             page = const OnbordingScreen();
           } else if (routeSettings.name == DetailedPerformancePage.routeName) {
             final args = routeSettings.arguments as DetailedPerformanceArgs;
-
             page = BlocProvider(
               create: (context) => DetailedPerformanceBloc(
                 performance: args.performance,
@@ -67,6 +68,11 @@ class App extends StatelessWidget {
             page = const VerticalSlidningScreen();
           } else if (routeSettings.name == ImagesViewPage.routeName) {
             page = const ImagesViewPage();
+          } else if (routeSettings.name == AuthScreen.routeName) {
+            page = const AuthScreen();
+          } else if (routeSettings.name == SMSCodeInputPage.routeName) {
+            final args = routeSettings.arguments as String;
+            page = SMSCodeInputPage(phoneNumber: args);
           } else if (routeSettings.name!.startsWith(routePrefixPerfMode)) {
             final subRoute =
                 routeSettings.name!.substring(routePrefixPerfMode.length);
