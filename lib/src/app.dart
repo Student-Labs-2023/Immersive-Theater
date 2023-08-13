@@ -49,7 +49,7 @@ class App extends StatelessWidget {
         onGenerateRoute: (RouteSettings routeSettings) {
           late Widget page;
           if (routeSettings.name == MainScreen.routeName) {
-            page = const MainScreen();
+            page = AuthScreen();
           } else if (routeSettings.name == SplashScreen.routeName) {
             page = const SplashScreen();
           } else if (routeSettings.name == OnbordingScreen.routeName) {
@@ -69,7 +69,7 @@ class App extends StatelessWidget {
           } else if (routeSettings.name == ImagesViewPage.routeName) {
             page = const ImagesViewPage();
           } else if (routeSettings.name == AuthScreen.routeName) {
-            page = const AuthScreen();
+            page = AuthScreen();
           } else if (routeSettings.name == SMSCodeInputPage.routeName) {
             final args = routeSettings.arguments as String;
             page = SMSCodeInputPage(phoneNumber: args);

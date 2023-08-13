@@ -3,14 +3,31 @@ import 'package:shebalin/src/features/onbording/view/onbording_screen.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
-class SMSCodeInputPage extends StatelessWidget {
+class SMSCodeInputPage extends StatefulWidget {
   const SMSCodeInputPage({super.key, required this.phoneNumber});
   final String phoneNumber;
   static const String routeName = "/sms-page";
+  @override
+  State<SMSCodeInputPage> createState() => _SMSCodeInputPageState();
+}
+
+class _SMSCodeInputPageState extends State<SMSCodeInputPage> {
   static final controller = TextEditingController();
+  bool isValid = true;
+
+  @override
+  void initState() {
+    controller.addListener(() {
+      if (controller.text.isNotEmpty) {
+        isValid = controller.text == "0000";
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isActive = false;
+    controller.selection = const TextSelection.collapsed(offset: 0);
     return Scaffold(
       backgroundColor: AppColor.whiteBackground,
       appBar: AppBar(
@@ -27,18 +44,21 @@ class SMSCodeInputPage extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 20,left: 16,right: 16),
+        padding: const EdgeInsets.only(top: 20, left: 16, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "Код из SMS",
-              style: Theme.of(context).textTheme.displaySmall!.copyWith(fontWeight: FontWeight.w700),
+              style: Theme.of(context)
+                  .textTheme
+                  .displaySmall!
+                  .copyWith(fontWeight: FontWeight.w700),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 4, bottom: 20),
               child: Text(
-                "Он отправлен на номер $phoneNumber",
+                "Он отправлен на номер ${widget.phoneNumber}",
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium!
@@ -49,32 +69,43 @@ class SMSCodeInputPage extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.49,
               height: MediaQuery.of(context).size.height * 0.059,
               child: PinFieldAutoFill(
-                onCodeSubmitted: (code){
+                focusNode: FocusNode(),
+                autoFocus: true,
+                onCodeSubmitted: (code) {
                   //TODO: code checking
-                  Navigator.of(context).pushNamed(OnbordingScreen.routeName);
+                  if (isValid) {
+                    Navigator.of(context).pushNamed(OnbordingScreen.routeName);
+                  }
                 },
                 controller: controller,
                 codeLength: 4,
                 decoration: UnderlineDecoration(
-                  gapSpaces: [8.0,8.0,8.0],
+                  gapSpaces: [8.0, 8.0, 8.0],
                   lineStrokeCap: StrokeCap.round,
-                  textStyle: Theme.of(context).textTheme.displayLarge!.copyWith(fontSize: 24),
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .displayLarge!
+                      .copyWith(fontSize: 24),
                   lineHeight: 4,
                   gapSpace: 4,
-                  colorBuilder: const FixedColorBuilder(AppColor.grey),
+                  colorBuilder: isValid
+                      ? const FixedColorBuilder(AppColor.grey)
+                      : const FixedColorBuilder(AppColor.redAlert),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 20,),
+              padding: const EdgeInsets.only(
+                top: 20,
+              ),
               child: InkWell(
                 child: Text(
                   "Отправить код повторно",
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppColor.purplePrimary,
-                  ),
+                        color: AppColor.purplePrimary,
+                      ),
                 ),
-                onTap: (){
+                onTap: () {
                   //TODO: implement code re-send
                 },
               ),
