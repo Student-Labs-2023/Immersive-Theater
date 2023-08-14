@@ -64,10 +64,13 @@ dependencies:
     path: ./packages/api_client
   location_service:
     path: ./packages/location_service
+
   authentication_repository:
     path: packages/authentication_repository
   user_repository:
     path: packages/user_repository
+  sms_autofill: ^2.3.0
+
 
   
   
