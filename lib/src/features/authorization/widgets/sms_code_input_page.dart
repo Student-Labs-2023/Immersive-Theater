@@ -20,6 +20,7 @@ class _SMSCodeInputPageState extends State<SMSCodeInputPage> {
     controller.addListener(() {
       if (controller.text.isNotEmpty) {
         isValid = controller.text == "0000";
+        //TODO: add sms validation
       }
     });
     super.initState();

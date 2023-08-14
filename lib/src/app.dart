@@ -49,7 +49,7 @@ class App extends StatelessWidget {
         onGenerateRoute: (RouteSettings routeSettings) {
           late Widget page;
           if (routeSettings.name == MainScreen.routeName) {
-            page = AuthScreen();
+            page = const MainScreen();
           } else if (routeSettings.name == SplashScreen.routeName) {
             page = const SplashScreen();
           } else if (routeSettings.name == OnbordingScreen.routeName) {
