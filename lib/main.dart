@@ -7,11 +7,17 @@ import 'package:performances_repository/performances_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shebalin/src/app.dart';
 import 'package:shebalin/src/features/onbording/model/shared_preferences_model.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 bool? isFirstRun;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    name: "shebalin",
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   SharedPreferences preferences = await SharedPreferences.getInstance();
   isFirstRun = preferences.getBool(
     SharedPreferencesKeys.isFirstRunName,

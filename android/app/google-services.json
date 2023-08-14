@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "886313816389",
-    "project_id": "shebalinflutter",
-    "storage_bucket": "shebalinflutter.appspot.com"
+    "project_number": "461100876083",
+    "project_id": "immersive-theater-37c46",
+    "storage_bucket": "immersive-theater-37c46.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:886313816389:android:63bddb707eac24e78bae2c",
+        "mobilesdk_app_id": "1:461100876083:android:fe7232761c14f4fc9abe46",
         "android_client_info": {
           "package_name": "com.example.shebalin"
         }
       },
       "oauth_client": [
         {
-          "client_id": "886313816389-5camh1sm9h19ebo9esjk6n1097p02nq4.apps.googleusercontent.com",
+          "client_id": "461100876083-bpiefp3efn5tldgn8u2htje40pqrdpiv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCzSOBNRSv31NFs54YZhJff973imWCeUvY"
+          "current_key": "AIzaSyCfoUvKy8BOXwS2hkJBOep6GtbkTDCIAz4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "886313816389-5camh1sm9h19ebo9esjk6n1097p02nq4.apps.googleusercontent.com",
+              "client_id": "461100876083-bpiefp3efn5tldgn8u2htje40pqrdpiv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

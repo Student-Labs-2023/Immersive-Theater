@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/authorization/auth_screen.dart';
+import 'package:shebalin/src/features/authorization/sms_code_args.dart';
 import 'package:shebalin/src/features/authorization/widgets/sms_code_input_page.dart';
 import 'package:shebalin/src/features/detailed_performaces/bloc/detailed_performance_bloc.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_args.dart';
@@ -71,8 +72,11 @@ class App extends StatelessWidget {
           } else if (routeSettings.name == AuthScreen.routeName) {
             page = AuthScreen();
           } else if (routeSettings.name == SMSCodeInputPage.routeName) {
-            final args = routeSettings.arguments as String;
-            page = SMSCodeInputPage(phoneNumber: args);
+            final args = routeSettings.arguments as SMSCodeArgs;
+            page = SMSCodeInputPage(
+              phoneNumber: args.number,
+              auth: args.auth,
+            );
           } else if (routeSettings.name!.startsWith(routePrefixPerfMode)) {
             final subRoute =
                 routeSettings.name!.substring(routePrefixPerfMode.length);

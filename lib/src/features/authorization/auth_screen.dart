@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/authorization/widgets/sms_code_input_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
@@ -16,6 +17,8 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   bool isActive = false;
   bool isValid = true;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,10 +62,8 @@ class _AuthScreenState extends State<AuthScreen> {
               child: TextField(
                 controller: widget.controller,
                 keyboardType: TextInputType.number,
-                enabled: true, //TODO: implement login bloc
-                onChanged: (text) {
-                  //TODO: call Bloc.add function
-                },
+                enabled: true,
+                onChanged: (text) {},
                 onTap: () {
                   setState(() {
                     isActive = true;
@@ -121,20 +122,29 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
             ElevatedButton(
               onPressed: () async {
-                if (widget.controller.text.length < 12) {
-                  setState(() {
-                    isValid = false;
-                  });
-                } else if (widget.controller.text.length == 12 ||
-                    widget.controller.text.length == 2) {
-                  setState(() {
-                    isValid = true;
-                  });
-                  Navigator.of(context).pushNamed(
-                    SMSCodeInputPage.routeName,
-                    arguments: "+79509999999",
-                  );
-                }
+                await auth.verifyPhoneNumber(
+                  phoneNumber: widget.controller.text,
+                  verificationCompleted: (credential) {
+                    setState(() {
+                      isValid = true;
+                    });
+                    //This callback called for code autofill for android
+                  },
+                  verificationFailed: (e) {
+                    setState(() {
+                      isValid = false;
+                    });
+                  },
+                  codeSent: (verificationId, forceResendingToken) {
+                    Navigator.of(context).pushNamed(
+                      SMSCodeInputPage.routeName,
+                      arguments: [widget.controller.text, auth],
+                    );
+                  },
+                  codeAutoRetrievalTimeout: (verificationId) {
+                    //Handle a timeout of when automatic SMS code handling fails.
+                  },
+                );
               },
               style: ButtonStyle(
                 elevation: const MaterialStatePropertyAll(0),

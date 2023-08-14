@@ -1,10 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/onbording/view/onbording_screen.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
 class SMSCodeInputPage extends StatefulWidget {
-  const SMSCodeInputPage({super.key, required this.phoneNumber});
+  const SMSCodeInputPage(
+      {super.key, required this.phoneNumber, required FirebaseAuth auth});
   final String phoneNumber;
   static const String routeName = "/sms-page";
   @override
@@ -14,17 +16,6 @@ class SMSCodeInputPage extends StatefulWidget {
 class _SMSCodeInputPageState extends State<SMSCodeInputPage> {
   static final controller = TextEditingController();
   bool isValid = true;
-
-  @override
-  void initState() {
-    controller.addListener(() {
-      if (controller.text.isNotEmpty) {
-        isValid = controller.text == "0000";
-        //TODO: add sms validation
-      }
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

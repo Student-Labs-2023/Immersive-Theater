@@ -64,6 +64,7 @@ dependencies:
   location_service:
     path: ./packages/location_service
   sms_autofill: ^2.3.0
+  firebase_auth: ^4.7.2
 
   
   
