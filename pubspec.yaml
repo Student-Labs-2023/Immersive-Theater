@@ -58,6 +58,8 @@ dependencies:
   geolocator: ^9.0.2
   rxdart: ^0.27.7
   formz: ^0.6.0
+  firebase_core: ^2.15.0
+  flow_builder: ^0.0.9
   performances_repository:
     path: ./packages/performances_repository
   api_client:
@@ -67,8 +69,6 @@ dependencies:
 
   authentication_repository:
     path: packages/authentication_repository
-  user_repository:
-    path: packages/user_repository
   sms_autofill: ^2.3.0
 
 

@@ -103,6 +103,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  cache:
+    dependency: transitive
+    description:
+      path: "packages/cache"
+      relative: true
+    source: path
+    version: "0.0.0"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -271,8 +278,32 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
-  firebase_core:
+  firebase_auth:
     dependency: transitive
+    description:
+      name: firebase_auth
+      sha256: "49fd35ce06f2530dd460e5dc123235731cb61dd7c76b0af4b6e190404880d04d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.7.2"
+  firebase_auth_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_auth_platform_interface
+      sha256: "817f3ceb84ef5e9adaaf50cf7a19255f6ffcdd12c6f9e9aa4cf00fc7f2eb3cfb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.16.1"
+  firebase_auth_web:
+    dependency: transitive
+    description:
+      name: firebase_auth_web
+      sha256: e9044778287f1ff8f9f4cee7e247b03ec87bb8977e0e65ad27dc337e196132e8
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.6.2"
+  firebase_core:
+    dependency: "direct main"
     description:
       name: firebase_core
       sha256: "2e9324f719e90200dc7d3c4f5d2abc26052f9f2b995d3b6626c47a0dfe1c8192"
@@ -295,6 +326,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.6.0"
+  flow_builder:
+    dependency: "direct main"
+    description:
+      name: flow_builder
+      sha256: "212a5c6575e87bec2003fa3f31dd7d80f0d89f6152db54f43fb0b6f45943e955"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -969,13 +1008,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"
-  user_repository:
-    dependency: "direct main"
-    description:
-      path: "packages/user_repository"
-      relative: true
-    source: path
-    version: "0.0.0"
   uuid:
     dependency: transitive
     description:

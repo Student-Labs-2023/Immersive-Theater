@@ -9,4 +9,8 @@ class User extends Equatable {
   List<Object?> get props => [phoneNumber];
 
   static const empty = User(id: '');
+
+  bool get isEmpty => this == User.empty;
+
+  bool get isNotEmpty => this != User.empty;
 }

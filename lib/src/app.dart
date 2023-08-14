@@ -1,6 +1,8 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
+import 'package:shebalin/src/features/authentication/bloc/authentication_bloc.dart';
 import 'package:shebalin/src/features/authorization/auth_screen.dart';
 import 'package:shebalin/src/features/authorization/widgets/sms_code_input_page.dart';
 import 'package:shebalin/src/features/detailed_performaces/bloc/detailed_performance_bloc.dart';
@@ -21,9 +23,28 @@ import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
 class App extends StatelessWidget {
+  final AuthenticationRepositoryImpl _authenticationRepository;
   const App({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+    required AuthenticationRepositoryImpl authenticationRepository,
+  }) : _authenticationRepository = authenticationRepository;
+  @override
+  Widget build(BuildContext context) {
+    return RepositoryProvider.value(
+      value: _authenticationRepository,
+      child: BlocProvider(
+        create: (_) => AuthenticationBloc(
+          authRepository: _authenticationRepository,
+        ),
+        child: const AppView(),
+      ),
+    );
+  }
+}
+
+class AppView extends StatelessWidget {
+  const AppView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -51,7 +72,10 @@ class App extends StatelessWidget {
           if (routeSettings.name == MainScreen.routeName) {
             page = AuthScreen();
           } else if (routeSettings.name == SplashScreen.routeName) {
-            page = const SplashScreen();
+            page = SplashScreen(
+              status: context
+                  .select((AuthenticationBloc bloc) => bloc.state.status),
+            );
           } else if (routeSettings.name == OnbordingScreen.routeName) {
             page = const OnbordingScreen();
           } else if (routeSettings.name == DetailedPerformancePage.routeName) {
