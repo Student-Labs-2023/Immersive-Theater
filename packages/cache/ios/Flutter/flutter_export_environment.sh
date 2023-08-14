@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=/Users/max/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/max/Downloads/labs-shebalin-flutter-app-develop/packages/user_repository"
+export "FLUTTER_APPLICATION_PATH=/Users/max/projects/Immersive-Theater/packages/cache"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"

@@ -1,0 +1,1 @@
+class PhoneNumberFailure implements Exception {}

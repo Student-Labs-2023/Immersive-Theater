@@ -1,5 +1,5 @@
-name: user_repository
-description: Dart package which manages the user domain.
+name: cache
+description: A new Flutter package project.
 publish_to: none
 
 environment:
@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  equatable: ^2.0.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

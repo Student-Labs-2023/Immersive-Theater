@@ -1,5 +1,5 @@
-name: authentication_repository
-description: Dart package which manages the authentication domain.
+name: form_inputs
+description: A new Flutter package project.
 publish_to: none
 
 environment:
@@ -9,12 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cache:
-    path: ../cache
-  firebase_auth: ^4.7.2
-  firebase_core: ^2.15.0
-  equatable: ^2.0.3
-
+  formz: ^0.6.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
