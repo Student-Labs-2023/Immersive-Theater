@@ -23,6 +23,20 @@ ThemeData defaultTheme() => ThemeData(
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: Colors.transparent,
       ),
+      inputDecorationTheme: InputDecorationTheme(
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColor.redAlert),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColor.purplePrimary),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColor.grey),
+        ),
+      ),
       fontFamily: defaultFont,
       textTheme: TextTheme(
         displayLarge: TextStyle(

@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/authentication/bloc/authentication_bloc.dart';
-import 'package:shebalin/src/features/authorization/auth_screen.dart';
-import 'package:shebalin/src/features/authorization/widgets/sms_code_input_page.dart';
 import 'package:shebalin/src/features/detailed_performaces/bloc/detailed_performance_bloc.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_args.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_page.dart';
-import 'package:shebalin/src/features/splash_screen/view/splash_screen.dart';
+import 'package:shebalin/src/features/login/bloc/login_bloc.dart';
+import 'package:shebalin/src/features/login/view/login_page.dart';
+import 'package:shebalin/src/features/login/view/widgets/verification_page.dart';
+import 'package:shebalin/src/features/login/view/widgets/verification_page_args.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
+import 'package:shebalin/src/features/splash_screen/view/splash_screen.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/mode_performance_flow/view/perf_mode_flow.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
@@ -70,11 +72,10 @@ class AppView extends StatelessWidget {
         onGenerateRoute: (RouteSettings routeSettings) {
           late Widget page;
           if (routeSettings.name == MainScreen.routeName) {
-            page = AuthScreen();
+            page = const MainScreen();
           } else if (routeSettings.name == SplashScreen.routeName) {
             page = SplashScreen(
-              status: context
-                  .select((AuthenticationBloc bloc) => bloc.state.status),
+              status: context.read<AuthenticationBloc>().state.status,
             );
           } else if (routeSettings.name == OnbordingScreen.routeName) {
             page = const OnbordingScreen();
@@ -92,11 +93,17 @@ class AppView extends StatelessWidget {
             page = const VerticalSlidningScreen();
           } else if (routeSettings.name == ImagesViewPage.routeName) {
             page = const ImagesViewPage();
-          } else if (routeSettings.name == AuthScreen.routeName) {
-            page = AuthScreen();
-          } else if (routeSettings.name == SMSCodeInputPage.routeName) {
-            final args = routeSettings.arguments as String;
-            page = SMSCodeInputPage(phoneNumber: args);
+          } else if (routeSettings.name == LoginPage.routeName) {
+            page = BlocProvider(
+              create: (context) => LoginBloc(
+                authenticationRepository:
+                    context.read<AuthenticationRepositoryImpl>(),
+              ),
+              child: const LoginPage(),
+            );
+          } else if (routeSettings.name == VerificationPage.routeName) {
+            final args = routeSettings.arguments as VerificationPageArgs;
+            page = VerificationPage(phoneNumber: args.phoneNumber);
           } else if (routeSettings.name!.startsWith(routePrefixPerfMode)) {
             final subRoute =
                 routeSettings.name!.substring(routePrefixPerfMode.length);

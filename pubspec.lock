@@ -413,6 +413,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  form_inputs:
+    dependency: "direct main"
+    description:
+      path: "packages/form_inputs"
+      relative: true
+    source: path
+    version: "0.0.0"
   formz:
     dependency: "direct main"
     description:

@@ -18,14 +18,28 @@ class TextWithLeading extends StatelessWidget {
         const SizedBox(
           width: 4,
         ),
-        Text(
-          title,
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall
-              ?.copyWith(color: AppColor.greyText),
-        )
+        AppTextSubtitle(title: title)
       ],
+    );
+  }
+}
+
+class AppTextSubtitle extends StatelessWidget {
+  const AppTextSubtitle({
+    super.key,
+    required this.title,
+  });
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: Theme.of(context)
+          .textTheme
+          .bodyMedium
+          ?.copyWith(color: AppColor.greyText),
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shebalin/main.dart';
 import 'package:shebalin/src/features/authentication/bloc/authentication_bloc.dart';
-import 'package:shebalin/src/features/authorization/auth_screen.dart';
+import 'package:shebalin/src/features/login/view/login_page.dart';
 import 'package:shebalin/src/features/onbording/model/shared_preferences_model.dart';
 import 'package:shebalin/src/features/onbording/view/onbording_screen.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else if (widget.status == AuthenticationStatus.authenticated) {
         Navigator.of(context).popAndPushNamed(MainScreen.routeName);
       } else {
-        Navigator.of(context).popAndPushNamed(AuthScreen.routeName);
+        Navigator.of(context).popAndPushNamed(LoginPage.routeName);
       }
     });
   }

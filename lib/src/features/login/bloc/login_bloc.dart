@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
-import 'package:shebalin/src/features/login/models/phone_number.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';

@@ -66,7 +66,8 @@ dependencies:
     path: ./packages/api_client
   location_service:
     path: ./packages/location_service
-
+  form_inputs:
+    path: ./packages/form_inputs
   authentication_repository:
     path: packages/authentication_repository
   sms_autofill: ^2.3.0
