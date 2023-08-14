@@ -219,7 +219,7 @@ class _LocationDescriptionPanelPageState
   }
 
   void _closePanel() {
-    context.read<MapPinBloc>().emit(MapPinClosingState());
+    context.read<MapPinBloc>().add(CloseMapPin());
   }
 
   void _onAudioTap() {

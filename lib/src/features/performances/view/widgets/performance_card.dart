@@ -22,9 +22,6 @@ class PerformanceCard extends StatelessWidget {
       padding: const EdgeInsets.only(top: 0),
       child: InkWell(
         onTap: () {
-          context
-              .read<PerformanceBloc>()
-              .add(PerformanceLoadFullInfo(performance.id));
           Navigator.of(context).pushNamed(
             DetailedPerformancePage.routeName,
             arguments: DetailedPerformanceArgs(performance: performance),
@@ -129,7 +126,9 @@ class PerformanceCard extends StatelessWidget {
                         .bodyMedium
                         ?.copyWith(color: AppColor.greyText),
                     textHeightBehavior: const TextHeightBehavior(
-                        leadingDistribution: TextLeadingDistribution.even,),
+
+                      leadingDistribution: TextLeadingDistribution.even,
+                  
                   )
                 ],
               ),

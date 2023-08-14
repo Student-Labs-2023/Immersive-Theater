@@ -47,7 +47,9 @@ class _DetailedMapState extends State<DetailedMap> {
               )
               .toList(),
         );
-        placemarks.addAll(await _buildAllRoute(widget.places));
+        if (widget.places.length != 1) {
+          placemarks.addAll(await _buildAllRoute(widget.places));
+        }
 
         controller.moveCamera(
           CameraUpdate.newCameraPosition(
