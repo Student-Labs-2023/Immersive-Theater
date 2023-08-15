@@ -1,11 +1,17 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
+import 'package:shebalin/src/features/authentication/bloc/authentication_bloc.dart';
 import 'package:shebalin/src/features/detailed_performaces/bloc/detailed_performance_bloc.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_args.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_page.dart';
-import 'package:shebalin/src/features/splash_screen/view/splash_screen.dart';
+import 'package:shebalin/src/features/login/bloc/login_bloc.dart';
+import 'package:shebalin/src/features/login/view/login_page.dart';
+import 'package:shebalin/src/features/login/view/widgets/verification_page.dart';
+import 'package:shebalin/src/features/login/view/widgets/verification_page_args.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
+import 'package:shebalin/src/features/splash_screen/view/splash_screen.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/mode_performance_flow/view/perf_mode_flow.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
@@ -19,9 +25,28 @@ import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
 class App extends StatelessWidget {
+  final AuthenticationRepositoryImpl _authenticationRepository;
   const App({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+    required AuthenticationRepositoryImpl authenticationRepository,
+  }) : _authenticationRepository = authenticationRepository;
+  @override
+  Widget build(BuildContext context) {
+    return RepositoryProvider.value(
+      value: _authenticationRepository,
+      child: BlocProvider(
+        create: (_) => AuthenticationBloc(
+          authRepository: _authenticationRepository,
+        ),
+        child: const AppView(),
+      ),
+    );
+  }
+}
+
+class AppView extends StatelessWidget {
+  const AppView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -38,6 +63,12 @@ class App extends StatelessWidget {
         BlocProvider(
           create: (_) => ReviewPageBloc(Emoji.emotions),
         ),
+        BlocProvider(
+          create: (context) => LoginBloc(
+            authenticationRepository:
+                context.read<AuthenticationRepositoryImpl>(),
+          ),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -49,12 +80,13 @@ class App extends StatelessWidget {
           if (routeSettings.name == MainScreen.routeName) {
             page = const MainScreen();
           } else if (routeSettings.name == SplashScreen.routeName) {
-            page = const SplashScreen();
+            page = SplashScreen(
+              status: context.read<AuthenticationBloc>().state.status,
+            );
           } else if (routeSettings.name == OnbordingScreen.routeName) {
             page = const OnbordingScreen();
           } else if (routeSettings.name == DetailedPerformancePage.routeName) {
             final args = routeSettings.arguments as DetailedPerformanceArgs;
-
             page = BlocProvider(
               create: (context) => DetailedPerformanceBloc(
                 performance: args.performance,
@@ -67,6 +99,11 @@ class App extends StatelessWidget {
             page = const VerticalSlidningScreen();
           } else if (routeSettings.name == ImagesViewPage.routeName) {
             page = const ImagesViewPage();
+          } else if (routeSettings.name == LoginPage.routeName) {
+            page = const LoginPage();
+          } else if (routeSettings.name == VerificationPage.routeName) {
+            final args = routeSettings.arguments as VerificationPageArgs;
+            page = VerificationPage(phoneNumber: args.phoneNumber);
           } else if (routeSettings.name!.startsWith(routePrefixPerfMode)) {
             final subRoute =
                 routeSettings.name!.substring(routePrefixPerfMode.length);

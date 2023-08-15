@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppColor {
+  static const redAlert = Color(0xFFE64646);
+  static const alertTextFieldBg = Color(0xFFFFF1F1);
   static const purpleDarkPrimary = Color(0xFF614ED9);
   static const purplePrimary = Color(0xFF725BFF);
   static const purpleLightPrimary = Color(0xFFAA9DFF);
@@ -13,4 +15,6 @@ class AppColor {
   static const blackText = Color(0xFF212529);
   static const greyText = Color(0xFF7A8499);
   static const whiteText = Color(0xFFFFFFFF);
+
+  static const errorFillColor = Color(0xFFFFF1F1);
 }
