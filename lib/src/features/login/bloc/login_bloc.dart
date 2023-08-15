@@ -14,7 +14,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       : _authenticationRepository = authenticationRepository,
         super(const LoginState()) {
     on<LoginPhoneNumberChanged>(_onLoginPhoneNumberChanged);
-    on<LoginSubmitted>(_onSubmitted);
+    on<LoginVerifyPhoneNumber>(_onLoginVerifyPhoneNumber);
+    on<LoginVerifyOTP>(_onLoginVerifyOTP);
   }
   final AuthenticationRepositoryImpl _authenticationRepository;
 
@@ -31,14 +32,26 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     );
   }
 
-  FutureOr<void> _onSubmitted(LoginSubmitted event, Emitter<LoginState> emit) {
+  FutureOr<void> _onLoginVerifyPhoneNumber(
+    LoginVerifyPhoneNumber event,
+    Emitter<LoginState> emit,
+  ) {
     if (state.isValid) {
       try {
-        _authenticationRepository.logIn(phoneNumber: state.phoneNumber.value);
+        _authenticationRepository.verifyPhoneNumber(
+          phoneNumber: '+7${state.phoneNumber.value}',
+        );
         emit(state.copyWith(status: FormzSubmissionStatus.success));
       } catch (e) {
         emit(state.copyWith(status: FormzSubmissionStatus.failure));
       }
     }
+  }
+
+  FutureOr<void> _onLoginVerifyOTP(
+    LoginVerifyOTP event,
+    Emitter<LoginState> emit,
+  ) {
+    _authenticationRepository.verifyOTP(smsCode: event.smsCode);
   }
 }

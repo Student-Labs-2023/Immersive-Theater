@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>886313816389-qeta2jel20tadp4903ov1mfb7i5non6h.apps.googleusercontent.com</string>
+	<string>461100876083-8abeogdtpa9mi0j1tui0r8g543b7v5o9.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.886313816389-qeta2jel20tadp4903ov1mfb7i5non6h</string>
+	<string>com.googleusercontent.apps.461100876083-8abeogdtpa9mi0j1tui0r8g543b7v5o9</string>
 	<key>API_KEY</key>
-	<string>AIzaSyASjeeecAfef_m-YhBVPanjLiHrTtXHVkg</string>
+	<string>AIzaSyBb_G9yFHVIz1arCiWb4L8-MKqzqVpYIaA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>886313816389</string>
+	<string>461100876083</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.shebalin</string>
+	<string>com.handsome.immersivetheater</string>
 	<key>PROJECT_ID</key>
-	<string>shebalinflutter</string>
+	<string>immersive-theater-37c46</string>
 	<key>STORAGE_BUCKET</key>
-	<string>shebalinflutter.appspot.com</string>
+	<string>immersive-theater-37c46.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:886313816389:ios:a29eed70386c12da8bae2c</string>
+	<string>1:461100876083:ios:9f531c8e2adbfead9abe46</string>
 </dict>
 </plist>

@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
               BlocBuilder<LoginBloc, LoginState>(
                 builder: (context, state) {
                   return TextFormField(
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.phone,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
@@ -47,9 +47,8 @@ class _LoginPageState extends State<LoginPage> {
                       FocusScope.of(context).unfocus();
                     },
                     onChanged: (phoneNumber) {
-                      context
-                          .read<LoginBloc>()
-                          .add(LoginPhoneNumberChanged(phoneNumber));
+                      context.read<LoginBloc>().add(
+                          LoginPhoneNumberChanged(phoneNumber: phoneNumber));
                     },
                     decoration: InputDecoration(
                       prefix: Padding(
@@ -87,10 +86,12 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onPressed() {
     if (context.read<LoginBloc>().state.isValid) {
-      context.read<LoginBloc>().add(const LoginSubmitted());
+      context.read<LoginBloc>().add(const LoginVerifyPhoneNumber());
       Navigator.of(context).pushNamed(
         VerificationPage.routeName,
-        arguments: VerificationPageArgs('59450490'),
+        arguments: VerificationPageArgs(
+          '+7',
+        ),
       );
     }
   }

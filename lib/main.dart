@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shebalin/firebase_options.dart.dart';
 import 'package:shebalin/src/app.dart';
 import 'package:shebalin/src/features/onbording/model/shared_preferences_model.dart';
 
@@ -16,7 +17,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences preferences = await SharedPreferences.getInstance();
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   final authenticationRepository = AuthenticationRepositoryImpl();
   await authenticationRepository.user.first;
   isFirstRun = preferences.getBool(

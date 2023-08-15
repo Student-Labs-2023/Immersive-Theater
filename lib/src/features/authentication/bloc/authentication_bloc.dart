@@ -23,7 +23,7 @@ class AuthenticationBloc
       (user) => add(AuthenticationUserChanged(user: user)),
     );
   }
-  late final StreamSubscription<User> _userSubscription;
+  late final StreamSubscription<UserModel> _userSubscription;
   final AuthenticationRepositoryImpl _authRepository;
 
   FutureOr<void> _onAuthenticationUserChanged(

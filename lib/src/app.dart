@@ -63,6 +63,12 @@ class AppView extends StatelessWidget {
         BlocProvider(
           create: (_) => ReviewPageBloc(Emoji.emotions),
         ),
+        BlocProvider(
+          create: (context) => LoginBloc(
+            authenticationRepository:
+                context.read<AuthenticationRepositoryImpl>(),
+          ),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -94,13 +100,7 @@ class AppView extends StatelessWidget {
           } else if (routeSettings.name == ImagesViewPage.routeName) {
             page = const ImagesViewPage();
           } else if (routeSettings.name == LoginPage.routeName) {
-            page = BlocProvider(
-              create: (context) => LoginBloc(
-                authenticationRepository:
-                    context.read<AuthenticationRepositoryImpl>(),
-              ),
-              child: const LoginPage(),
-            );
+            page = const LoginPage();
           } else if (routeSettings.name == VerificationPage.routeName) {
             final args = routeSettings.arguments as VerificationPageArgs;
             page = VerificationPage(phoneNumber: args.phoneNumber);

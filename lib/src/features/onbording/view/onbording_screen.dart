@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shebalin/src/features/authentication/bloc/authentication_bloc.dart';
+import 'package:shebalin/src/features/login/view/login_page.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/page_indicator.dart';
 import 'package:shebalin/src/features/onbording/model/onboard.dart';
 
@@ -9,7 +11,6 @@ import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 
 import 'widgets/onbording_content.dart';
-import '../../../theme/theme.dart';
 
 class OnbordingScreen extends StatefulWidget {
   const OnbordingScreen({
@@ -22,7 +23,7 @@ class OnbordingScreen extends StatefulWidget {
 }
 
 class _OnbordingScreenState extends State<OnbordingScreen> {
-  PageController _pageController = PageController(initialPage: 0);
+  final PageController _pageController = PageController(initialPage: 0);
   CarouselController carController = CarouselController();
   double _pageIndex = 0;
   final List<Onboard> onbordingData = [
@@ -128,6 +129,7 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
+                    onTap: onOnboardingComplete,
                     child: Text(
                       "Пропустить",
                       style: Theme.of(context)
@@ -135,20 +137,11 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
                           .bodyLarge
                           ?.copyWith(color: AppColor.greyText),
                     ),
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const MainScreen(),
-                      ),
-                    ),
                   ),
                   FloatingActionButton(
                     elevation: 0,
                     onPressed: _pageIndex == 2
-                        ? () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => const MainScreen(),
-                              ),
-                            )
+                        ? onOnboardingComplete
                         : () => carController.nextPage(
                               duration: const Duration(
                                 milliseconds: 350,
@@ -165,5 +158,14 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
         ),
       ),
     );
+  }
+
+  void onOnboardingComplete() {
+    final status = context.read<AuthenticationBloc>().state.status;
+    if (status == AuthenticationStatus.authenticated) {
+      Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
+    } else {
+      Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
+    }
   }
 }

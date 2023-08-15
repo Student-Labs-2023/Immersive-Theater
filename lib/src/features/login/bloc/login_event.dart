@@ -10,12 +10,19 @@ abstract class LoginEvent extends Equatable {
 class LoginPhoneNumberChanged extends LoginEvent {
   final String phoneNumber;
 
-  const LoginPhoneNumberChanged(this.phoneNumber);
+  const LoginPhoneNumberChanged({required this.phoneNumber});
 
   @override
   List<Object> get props => [phoneNumber];
 }
 
-class LoginSubmitted extends LoginEvent {
-  const LoginSubmitted();
+class LoginVerifyPhoneNumber extends LoginEvent {
+  const LoginVerifyPhoneNumber();
+}
+
+class LoginVerifyOTP extends LoginEvent {
+  final String smsCode;
+  const LoginVerifyOTP({required this.smsCode});
+  @override
+  List<Object> get props => [smsCode];
 }
