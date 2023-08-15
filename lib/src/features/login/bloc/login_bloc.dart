@@ -27,7 +27,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(
       state.copyWith(
         phoneNumber: phoneNumber,
-        isValid: Formz.validate([state.phoneNumber, phoneNumber]),
+        isValid: Formz.validate([phoneNumber]),
+        status: FormzSubmissionStatus.inProgress,
       ),
     );
   }
@@ -36,15 +37,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginVerifyPhoneNumber event,
     Emitter<LoginState> emit,
   ) {
-    if (state.isValid) {
-      try {
-        _authenticationRepository.verifyPhoneNumber(
-          phoneNumber: '+7${state.phoneNumber.value}',
-        );
-        emit(state.copyWith(status: FormzSubmissionStatus.success));
-      } catch (e) {
-        emit(state.copyWith(status: FormzSubmissionStatus.failure));
-      }
+    try {
+      _authenticationRepository.verifyPhoneNumber(
+        phoneNumber: '+7${state.phoneNumber.value.trim()}',
+      );
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
+    } catch (e) {
+      emit(state.copyWith(status: FormzSubmissionStatus.failure));
     }
   }
 

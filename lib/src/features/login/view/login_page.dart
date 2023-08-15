@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:form_inputs/form_inputs.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shebalin/src/features/login/bloc/login_bloc.dart';
 import 'package:shebalin/src/features/login/view/widgets/verification_page.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/text_with_leading.dart';
@@ -17,6 +19,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _key = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,37 +41,47 @@ class _LoginPageState extends State<LoginPage> {
               ),
               BlocBuilder<LoginBloc, LoginState>(
                 builder: (context, state) {
-                  return TextFormField(
-                    keyboardType: TextInputType.phone,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    onTapOutside: (event) {
-                      FocusScope.of(context).unfocus();
-                    },
-                    onChanged: (phoneNumber) {
-                      context.read<LoginBloc>().add(
-                          LoginPhoneNumberChanged(phoneNumber: phoneNumber));
-                    },
-                    decoration: InputDecoration(
-                      prefix: Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: Text(
-                          "+7",
-                          style: Theme.of(context).textTheme.bodyLarge,
-                          textHeightBehavior: const TextHeightBehavior(
-                            leadingDistribution:
-                                TextLeadingDistribution.proportional,
-                          ),
+                  return Form(
+                    key: _key,
+                    child: TextFormField(
+                      keyboardType: TextInputType.phone,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        MaskTextInputFormatter(
+                          mask: ' ### ###-##-##',
+                          type: MaskAutoCompletionType.lazy,
+                        )
+                      ],
+                      onTapOutside: (event) {
+                        FocusScope.of(context).unfocus();
+                      },
+                      onChanged: (phoneNumber) {
+                        context.read<LoginBloc>().add(
+                              LoginPhoneNumberChanged(phoneNumber: phoneNumber),
+                            );
+                      },
+                      validator: (_) => state.phoneNumber.displayError?.text(),
+                      decoration: InputDecoration(
+                        prefixIcon: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '+7',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ],
                         ),
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 14.5),
+                        border: Theme.of(context).inputDecorationTheme.border,
+                        focusedBorder: Theme.of(context)
+                            .inputDecorationTheme
+                            .focusedBorder,
+                        errorBorder:
+                            Theme.of(context).inputDecorationTheme.errorBorder,
                       ),
-                      border: Theme.of(context).inputDecorationTheme.border,
-                      errorText:
-                          state.isValid ? null : 'Номер введён не полностью',
-                      focusedBorder:
-                          Theme.of(context).inputDecorationTheme.focusedBorder,
-                      errorBorder:
-                          Theme.of(context).inputDecorationTheme.errorBorder,
                     ),
                   );
                 },
@@ -85,14 +98,25 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onPressed() {
-    if (context.read<LoginBloc>().state.isValid) {
-      context.read<LoginBloc>().add(const LoginVerifyPhoneNumber());
-      Navigator.of(context).pushNamed(
-        VerificationPage.routeName,
-        arguments: VerificationPageArgs(
-          '+7',
-        ),
-      );
+    if (!_key.currentState!.validate()) return;
+
+    context.read<LoginBloc>().add(const LoginVerifyPhoneNumber());
+    Navigator.of(context).pushNamed(
+      VerificationPage.routeName,
+      arguments: VerificationPageArgs(
+        '+7',
+      ),
+    );
+  }
+}
+
+extension on PhoneNumberError {
+  String? text() {
+    switch (this) {
+      case PhoneNumberError.invalid:
+        return 'Номер введён не полностью';
+      case PhoneNumberError.empty:
+        return null;
     }
   }
 }
