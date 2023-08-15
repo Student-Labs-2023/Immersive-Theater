@@ -95,55 +95,11 @@ ThemeData defaultTheme() => ThemeData(
           fontWeight: FontWeight.w600,
           letterSpacing: letterSpacing,
         ),
-
-        // следующие нужно потихоньку заменять в коде
-        titleLarge: TextStyle(
-          height: baseTextHeight,
-          color: Colors.white,
-          fontSize: titleLargeFontSize,
-          fontFamily: defaultFont,
-          fontWeight: FontWeight.w600,
-          letterSpacing: letterSpacing,
-        ),
-        titleSmall: TextStyle(
-          height: baseTextHeight,
-          color: secondaryTextColor,
-          fontSize: titleSmallFontSize,
-          fontFamily: defaultFont,
-          fontWeight: FontWeight.w700,
-          letterSpacing: letterSpacing,
-        ),
-
-        labelLarge: TextStyle(
-          height: baseTextHeight,
-          color: accentTextColor,
-          fontSize: bodySmallFontSize,
-          fontFamily: defaultFont,
-          fontWeight: FontWeight.w700,
-          letterSpacing: letterSpacing,
-        ),
-        labelSmall: TextStyle(
-          height: baseTextHeight,
-          color: Colors.white,
-          fontSize: labelSmallFontSize,
-          fontFamily: defaultFont,
-          fontWeight: FontWeight.w700,
-          letterSpacing: letterSpacing,
-        ),
       ),
     );
 
 const double letterSpacing = -0.33;
-const double tinyFontSize = 11;
-const double labelSmallFontSize = 13;
-const double titleSmallFontSize = 12;
-const double titleMediumFontSize = 20;
-const double titleLargeFontSize = 24;
-const double bodySmallFontSize = 17;
-const double bodyMediumFontSize = 22;
-const double bodyLargeFontSize = 28;
 
-//new
 String defaultFont = 'RFDewi';
 const double baseTextHeight = 1.5;
 const double heading1FontSize = 28;

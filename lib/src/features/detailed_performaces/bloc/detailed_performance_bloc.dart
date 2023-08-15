@@ -30,7 +30,7 @@ class DetailedPerformanceBloc
     try {
       final info =
           await performanceRepository.fetchPerformanceById(performance.id);
-
+      await Future.delayed(const Duration(seconds: 3));
       add(
         DetailedPerformanceInfoLoaded(
           performance: state.performance.copyWith(info: info),
