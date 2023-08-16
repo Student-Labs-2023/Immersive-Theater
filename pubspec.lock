@@ -699,6 +699,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.7"
+  payment_service:
+    dependency: "direct main"
+    description:
+      path: "packages/payment_service"
+      relative: true
+    source: path
+    version: "0.0.0"
   performances_repository:
     dependency: "direct main"
     description:

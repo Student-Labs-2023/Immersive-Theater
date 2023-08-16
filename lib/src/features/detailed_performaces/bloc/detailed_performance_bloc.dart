@@ -53,8 +53,6 @@ class DetailedPerformanceBloc
     DetailedPerformancePay event,
     Emitter<DetailedPerformanceState> emit,
   ) async {
-//TODO: logic of payment
-
     try {
       emit(DetailedPerformancePaid(performance: state.performance));
     } catch (e) {

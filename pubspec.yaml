@@ -71,6 +71,8 @@ dependencies:
     path: ./packages/form_inputs
   authentication_repository:
     path: packages/authentication_repository
+  payment_service:
+    path: ./packages/payment_service
   sms_autofill: ^2.3.0
 
 
