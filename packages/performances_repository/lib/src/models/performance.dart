@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:performances_repository/src/models/full_info_performance.dart';
@@ -14,6 +13,8 @@ class Performance {
 
   @JsonKey(name: 'image_link')
   final String imageLink;
+  final int price;
+  final Duration duration;
 
   final FullInfoPerformance info;
 
@@ -22,7 +23,9 @@ class Performance {
       required this.title,
       required this.imageLink,
       required this.tag,
-      required this.info});
+      required this.info,
+      required this.price,
+      required this.duration});
 
   factory Performance.fromJson(Map<String, dynamic> json) =>
       _$PerformanceFromJson(json);
@@ -34,6 +37,8 @@ class Performance {
     String? title,
     String? imageLink,
     String? tag,
+    int? price,
+    Duration? duration,
     FullInfoPerformance? info,
   }) {
     return Performance(
@@ -41,6 +46,8 @@ class Performance {
       title: title ?? this.title,
       imageLink: imageLink ?? this.imageLink,
       tag: tag ?? this.tag,
+      price: price ?? this.price,
+      duration: duration ?? this.duration,
       info: info ?? this.info,
     );
   }

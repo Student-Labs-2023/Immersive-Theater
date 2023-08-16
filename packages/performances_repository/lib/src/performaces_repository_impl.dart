@@ -31,13 +31,10 @@ class PerformancesRepositoryImpl implements PerformancesRepository {
         _PerformancesEndpoint.everything.endpoint,
         options: Options(responseType: ResponseType.json));
     final result = ResponseMapper.fromJson(jsonDecode(response.data));
-    log(result.data.toString());
     final List<Performance> performances = [];
     for (final rawPerformance in result.data) {
       performances.add(Performance.fromJson(rawPerformance));
     }
-
-    log(performances[0].toJson().toString());
     return performances;
   }
 

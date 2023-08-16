@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shebalin/src/theme/theme.dart';
 
 class AppTextHeader extends StatelessWidget {
   const AppTextHeader({super.key, required this.title});
@@ -10,8 +9,8 @@ class AppTextHeader extends StatelessWidget {
       title,
       style: Theme.of(context)
           .textTheme
-          .bodyLarge
-          ?.copyWith(fontSize: 20, fontWeight: FontWeight.w700),
+          .displaySmall!
+          .copyWith(fontWeight: FontWeight.w700),
     );
   }
 }

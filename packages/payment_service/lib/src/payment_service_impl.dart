@@ -18,7 +18,9 @@ class PaymentServiceImpl implements PaymentService {
       {required String userId, required int performanceId}) async {
     final paymentLink = await _apiClient.dio.get(
         _PaymentEndpoint.payment.endpoint,
-        options: Options(responseType: ResponseType.json));
+        options: Options(responseType: ResponseType.json),
+        queryParameters: {'user_id': userId, 'performance_id': performanceId});
+
     return paymentLink.data;
   }
 }

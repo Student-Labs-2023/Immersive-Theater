@@ -11,7 +11,6 @@ import 'package:shebalin/src/features/detailed_performaces/view/detailed_perform
 import 'package:shebalin/src/features/login/bloc/login_bloc.dart';
 import 'package:shebalin/src/features/login/view/login_page.dart';
 import 'package:shebalin/src/features/login/view/widgets/verification_page.dart';
-import 'package:shebalin/src/features/login/view/widgets/verification_page_args.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/splash_screen/view/splash_screen.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
@@ -20,7 +19,6 @@ import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboar
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome_args.dart';
 import 'package:shebalin/src/features/onbording/view/onbording_screen.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
-import 'package:shebalin/src/features/photo_slider/view/vertical_sliding_screen.dart';
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
 import 'package:shebalin/src/features/review/models/emoji.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
@@ -100,19 +98,16 @@ class AppView extends StatelessWidget {
                   performanceRepository:
                       RepositoryProvider.of<PerformancesRepository>(context),
                   paymentService:
-                      RepositoryProvider.of<PaymentService>(context),
+                      RepositoryProvider.of<PaymentServiceImpl>(context),
                 )..add(const DetailedPerformanceStarted()),
                 child: const DetailedPerformancePage(),
               );
-            } else if (routeSettings.name == VerticalSlidningScreen.routeName) {
-              page = const VerticalSlidningScreen();
             } else if (routeSettings.name == ImagesViewPage.routeName) {
               page = const ImagesViewPage();
             } else if (routeSettings.name == LoginPage.routeName) {
               page = const LoginPage();
             } else if (routeSettings.name == VerificationPage.routeName) {
-              final args = routeSettings.arguments as VerificationPageArgs;
-              page = VerificationPage(phoneNumber: args.phoneNumber);
+              page = const VerificationPage();
             } else if (routeSettings.name!.startsWith(routePrefixPerfMode)) {
               final subRoute =
                   routeSettings.name!.substring(routePrefixPerfMode.length);

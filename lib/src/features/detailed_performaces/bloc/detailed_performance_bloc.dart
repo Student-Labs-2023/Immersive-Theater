@@ -34,7 +34,7 @@ class DetailedPerformanceBloc
     try {
       final info =
           await performanceRepository.fetchPerformanceById(performance.id);
-
+      await Future.delayed(const Duration(seconds: 2));
       add(
         DetailedPerformanceInfoLoaded(
           performance: state.performance.copyWith(info: info),
@@ -62,7 +62,7 @@ class DetailedPerformanceBloc
         performanceId: event.performanceId,
       );
 
-      if (!await launchUrl(Uri.parse(url))) {
+      if (!await launchUrl(Uri.parse(url), mode: LaunchMode.inAppWebView)) {
         return;
       }
       emit(DetailedPerformancePaid(performance: state.performance));

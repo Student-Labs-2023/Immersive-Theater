@@ -13,7 +13,6 @@ FullInfoPerformance _$FullInfoPerformanceFromJson(Map<String, dynamic> json) =>
               .toList() ??
           [],
       description: json['description'] as String? ?? '',
-      duration: Duration(seconds: json['duration'] as int),
       images: (json['images'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -29,7 +28,6 @@ Map<String, dynamic> _$FullInfoPerformanceToJson(
     <String, dynamic>{
       'authors': instance.creators,
       'description': instance.description,
-      'duration': instance.duration.inMicroseconds,
       'images': instance.images,
-      'audio': instance.chapters,
+      'audios': instance.chapters,
     };

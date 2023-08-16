@@ -48,7 +48,7 @@ class _YandexMapState extends State<YandexMapPage> {
     final controller = await _controller.future;
     controller.moveCamera(
       CameraUpdate.newCameraPosition(
-        CameraPosition(zoom: 15, target: coords),
+        CameraPosition(zoom: 11, target: coords),
       ),
     );
   }

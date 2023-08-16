@@ -9,8 +9,9 @@ import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
 
 class VerificationPage extends StatefulWidget {
-  const VerificationPage({super.key, required this.phoneNumber});
-  final String phoneNumber;
+  const VerificationPage({
+    super.key,
+  });
   static const routeName = '/verify';
   @override
   State<VerificationPage> createState() => _VerificationPageState();
@@ -67,7 +68,7 @@ class _VerificationPageState extends State<VerificationPage> {
                     width: 40,
                     decoration: const BoxDecoration(
                       border: Border(
-                        bottom: BorderSide(width: 4.0, color: Colors.black),
+                        bottom: BorderSide(width: 4.0, color: AppColor.grey),
                       ),
                     ),
                   ),
@@ -111,6 +112,9 @@ class _VerificationPageState extends State<VerificationPage> {
                           color: AppColor.purplePrimary,
                         ),
                   ),
+                  onTap: () => context.read<LoginBloc>().add(
+                        const LoginVerifyPhoneNumber(),
+                      ),
                 ),
               ],
             ),
