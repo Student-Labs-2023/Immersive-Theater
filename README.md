@@ -1,22 +1,22 @@
 # Immersive Theater
 
-Note: Project is in active development as part of internship at Student Labs & Effective.
+Note: Project is in active development as part of internship at Student Labs 2023 & Effective.
 
-A working platform in the form of a mobile application for the Omsk Actor's House. The application will implement the ability to listen to the performance in Omsk in open space, as well as outside it.
+A Flutter mobile application for the Omsk Actor's House. The application will implement the ability to listen to the performance in Omsk in open space, as well as outside it.
 
 ### How to Use
 
 **Step 1:**
 
-Download or clone this repo by using the link below:
+Download or clone this repo by using git link or run this command:
 
 ```
-https://github.com/effectivemade/labs-shebalin-flutter-app.git
+git clone https://github.com/Student-Labs-2023/Immersive-Theater.git
 ```
 
 **Step 2:**
 
-Go to project root and execute the following command in console to get the required dependencies: 
+Go to project root and execute the following command in console to get the required dependencies (you must have flutter installed): 
 
 ```
 flutter pub get 
