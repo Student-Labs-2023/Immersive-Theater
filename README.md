@@ -39,9 +39,13 @@ API_KEY=PASTE_API_KEY
 * [Just Audio](https://pub.dev/packages/just_audio)
 * [Sliding Up Panel](https://pub.dev/documentation/sliding_up_panel/latest/)
 * [Json Serialization](https://pub.dev/packages/json_serializable)
-
-
-
+* [Provider](https://pub.dev/packages/provider)
+* [Cloud firestore](https://pub.dev/packages/cloud_firestore)
+* [Flutter BLoC](https://pub.dev/packages/flutter_bloc)
+* [Carousel Slider](https://pub.dev/packages/carousel_slider)
+* [Geolocator](https://pub.dev/packages/geolocator)
+* [RxDart](https://pub.dev/packages/rxdart)
+* [Cached Network Image](https://pub.dev/packages/cached_network_image)
 # Features 
 
 ### Main Screen
