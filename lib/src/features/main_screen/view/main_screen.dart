@@ -214,7 +214,7 @@ class _MainScreenState extends State<MainScreen> {
                         icon: PlacemarkIcon.single(
                           PlacemarkIconStyle(
                             image: BitmapDescriptor.fromAssetImage(
-                              ImagesSources.mark,
+                              ImagesSources.currentPlacemark,
                             ),
                             scale: 0.3,
                           ),

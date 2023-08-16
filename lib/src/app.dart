@@ -18,7 +18,6 @@ import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboar
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome_args.dart';
 import 'package:shebalin/src/features/onbording/view/onbording_screen.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
-import 'package:shebalin/src/features/photo_slider/view/vertical_sliding_screen.dart';
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
 import 'package:shebalin/src/features/review/models/emoji.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
@@ -95,8 +94,6 @@ class AppView extends StatelessWidget {
               )..add(const DetailedPerformanceStarted()),
               child: const DetailedPerformancePage(),
             );
-          } else if (routeSettings.name == VerticalSlidningScreen.routeName) {
-            page = const VerticalSlidningScreen();
           } else if (routeSettings.name == ImagesViewPage.routeName) {
             page = const ImagesViewPage();
           } else if (routeSettings.name == LoginPage.routeName) {

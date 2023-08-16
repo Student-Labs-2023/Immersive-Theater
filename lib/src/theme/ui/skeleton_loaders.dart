@@ -39,7 +39,7 @@ class AudioCardSkeleton extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(6)),
                     child: Container(
-                      color: AppColor.greySkeleton,
+                      color: AppColor.whiteBackground,
                     ),
                   ),
                 ),
@@ -54,7 +54,7 @@ class AudioCardSkeleton extends StatelessWidget {
                       width: 73,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
-                        color: AppColor.greySkeleton,
+                        color: AppColor.whiteBackground,
                       ),
                     ),
                     const SizedBox(
@@ -65,7 +65,7 @@ class AudioCardSkeleton extends StatelessWidget {
                       width: 134,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
-                        color: AppColor.greySkeleton,
+                        color: AppColor.whiteBackground,
                       ),
                     )
                   ],
@@ -77,7 +77,7 @@ class AudioCardSkeleton extends StatelessWidget {
               width: 29,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
-                color: AppColor.greySkeleton,
+                color: AppColor.whiteBackground,
               ),
             )
           ],
@@ -91,8 +91,11 @@ class PhotosSkeleton extends StatelessWidget {
   final double photoHeight;
   final double photoWidth;
 
-  const PhotosSkeleton(
-      {super.key, required this.photoHeight, required this.photoWidth});
+  const PhotosSkeleton({
+    super.key,
+    required this.photoHeight,
+    required this.photoWidth,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +112,7 @@ class PhotosSkeleton extends StatelessWidget {
           width: photoWidth,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
-            color: AppColor.greySkeleton,
+            color: AppColor.whiteBackground,
           ),
         ),
       ),
@@ -139,7 +142,7 @@ class AuthorsSkeleton extends StatelessWidget {
               child: Container(
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                  color: AppColor.greySkeleton,
+                  color: AppColor.whiteBackground,
                 ),
                 padding: const EdgeInsets.all(12),
                 margin: const EdgeInsets.only(right: 12),
@@ -162,7 +165,7 @@ class DescriptionSkeleton extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: AppColor.greySkeleton,
+            color: AppColor.whiteBackground,
             borderRadius: BorderRadius.circular(6),
           ),
           width: MediaQuery.of(context).size.width * 0.91,
@@ -171,7 +174,7 @@ class DescriptionSkeleton extends StatelessWidget {
         const SizedBox(height: 5),
         Container(
           decoration: BoxDecoration(
-            color: AppColor.greySkeleton,
+            color: AppColor.whiteBackground,
             borderRadius: BorderRadius.circular(6),
           ),
           width: MediaQuery.of(context).size.width * 0.91,
@@ -180,7 +183,7 @@ class DescriptionSkeleton extends StatelessWidget {
         const SizedBox(height: 5),
         Container(
           decoration: BoxDecoration(
-            color: AppColor.greySkeleton,
+            color: AppColor.whiteBackground,
             borderRadius: BorderRadius.circular(6),
           ),
           width: MediaQuery.of(context).size.width * 0.3,
@@ -204,7 +207,7 @@ class HistoricalContentSkeleton extends StatelessWidget {
           height: mediaQuerySize.height * 0.037,
           width: mediaQuerySize.width * 0.91,
           decoration: BoxDecoration(
-            color: AppColor.greySkeleton,
+            color: AppColor.whiteBackground,
             borderRadius: BorderRadius.circular(6),
           ),
         ),
@@ -215,8 +218,9 @@ class HistoricalContentSkeleton extends StatelessWidget {
           height: mediaQuerySize.height * 0.037,
           width: mediaQuerySize.width * 0.91,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: AppColor.greySkeleton),
+            borderRadius: BorderRadius.circular(6),
+            color: AppColor.whiteBackground,
+          ),
         ),
         const SizedBox(
           height: 5,
@@ -226,7 +230,7 @@ class HistoricalContentSkeleton extends StatelessWidget {
           width: mediaQuerySize.width * 0.91,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
-            color: AppColor.greySkeleton,
+            color: AppColor.whiteBackground,
           ),
         ),
         const SizedBox(
@@ -237,7 +241,7 @@ class HistoricalContentSkeleton extends StatelessWidget {
           width: mediaQuerySize.width * 0.69,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
-            color: AppColor.greySkeleton,
+            color: AppColor.whiteBackground,
           ),
         ),
       ],
