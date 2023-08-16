@@ -7,6 +7,7 @@ import 'package:shebalin/src/features/audio/view/widgets/audio_widget.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_args.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_page.dart';
 import 'package:shebalin/src/features/locations/view/widgets/historical_content_location_panel.dart';
+import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/theme/ui/skeleton_loaders.dart';
 import 'package:shebalin/src/features/locations/view/widgets/images_content_location_panel.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
@@ -220,6 +221,7 @@ class _LocationDescriptionPanelPageState
 
   void _closePanel() {
     context.read<MapPinBloc>().emit(MapPinClosingState());
+    Navigator.of(context).popUntil(ModalRoute.withName(MainScreen.routeName));
   }
 
   void _onAudioTap() {
