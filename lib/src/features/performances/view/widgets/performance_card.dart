@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_args.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_page.dart';
+import 'package:shebalin/src/features/detailed_performaces/view/widgets/text_with_leading.dart';
 
-import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
@@ -33,7 +32,7 @@ class PerformanceCard extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: const Color.fromARGB(255, 248, 249, 251),
+            color: AppColor.accentBackground,
             boxShadow: const [
               BoxShadow(
                 color: Color.fromARGB(255, 239, 240, 242),
@@ -42,20 +41,18 @@ class PerformanceCard extends StatelessWidget {
               ),
             ],
           ),
-          height: MediaQuery.of(context).size.height * 0.34,
-          width: MediaQuery.of(context).size.width * 0.91,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 6),
               Center(
                 child: Stack(
                   alignment: Alignment.bottomRight,
                   children: [
                     Container(
                       clipBehavior: Clip.antiAlias,
-                      height: MediaQuery.of(context).size.height * 0.177,
-                      //not 0.18 because bottom overflow
+                      height: MediaQuery.of(context).size.height * 0.18,
                       width: MediaQuery.of(context).size.width * 0.82,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
@@ -69,25 +66,26 @@ class PerformanceCard extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8, right: 8),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(7),
+                      child: FittedBox(
                         child: Container(
+                          constraints: const BoxConstraints(
+                            minWidth: 70,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           alignment: Alignment.center,
-                          width: MediaQuery.of(context).size.width * 0.168,
-                          height: MediaQuery.of(context).size.height * 0.033,
                           decoration: BoxDecoration(
                             color: AppColor.blackText,
                             borderRadius: BorderRadius.circular(7),
                           ),
                           child: Text(
-                            "299Р",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(color: AppColor.whiteText),
-                            textHeightBehavior: const TextHeightBehavior(
-                              leadingDistribution: TextLeadingDistribution.even,
-                            ),
+                            '${performance.price} Р',
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      color: AppColor.whiteText,
+                                    ),
                           ),
                         ),
                       ),
@@ -95,65 +93,24 @@ class PerformanceCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 6),
               Padding(
                 padding: const EdgeInsets.fromLTRB(4, 0, 0, 4),
                 child: Text(
                   performance.title,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w700),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                 ),
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: Image.asset(
-                      ImagesSources.timeGrey,
-                    ),
-                  ),
-                  Text(
-                    durationToHoursMinutes(
-                      performance.info.duration,
-                    ).toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: AppColor.greyText),
-                    textHeightBehavior: const TextHeightBehavior(
-                      leadingDistribution: TextLeadingDistribution.even,
-                    ),
-                  )
-                ],
+              TextWithLeading(
+                title: durationToHoursMinutes(
+                  performance.duration,
+                ).toString(),
+                leading: ImagesSources.timeGrey,
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 0),
-                    child: Image.asset(
-                      ImagesSources.location,
-                      height: 18,
-                      width: 18,
-                    ),
-                  ),
-                  Text(
-                    performance.info.chapters[0].place.address,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: AppColor.greyText),
-                    textHeightBehavior: const TextHeightBehavior(
-                      leadingDistribution: TextLeadingDistribution.even,
-                    ),
-                  )
-                ],
+              TextWithLeading(
+                title: performance.info.chapters[0].place.address,
+                leading: ImagesSources.location,
               ),
             ],
           ),

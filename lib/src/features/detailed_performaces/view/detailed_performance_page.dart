@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,6 +39,7 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.whiteBackground,
       body: BlocBuilder<DetailedPerformanceBloc, DetailedPerformanceState>(
         buildWhen: (previous, current) {
           return previous is DetailedPerformanceLoadInProgress;
@@ -246,7 +248,7 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                               ),
                               TextWithLeading(
                                 title: durationToHoursMinutes(
-                                  state.performance.info.duration,
+                                  state.performance.duration,
                                 ).toString(),
                                 leading: ImagesSources.timeGrey,
                               ),
@@ -389,8 +391,18 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                 width: 0,
               );
             } else if (state is DetailedPerformanceUnPaid) {
-              title = 'Приобрести за 299 ₽';
-              onTap = () => {bloc.add(const DetailedPerformancePay())};
+              title = 'Приобрести за ${state.performance.price} ₽';
+              onTap = () => {
+                    bloc.add(
+                      DetailedPerformancePay(
+                        performanceId: state.performance.id,
+                        userId: context
+                            .read<AuthenticationRepositoryImpl>()
+                            .currentUser
+                            .id,
+                      ),
+                    )
+                  };
             } else if (state is DetailedPerformancePaid) {
               title = 'Загрузить спектакль';
               onTap = () => {bloc.add(const DetailedPerformanceDownload())};

@@ -1,6 +1,8 @@
+import 'package:api_client/api_client.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:payment_service/payment_service.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/authentication/bloc/authentication_bloc.dart';
 import 'package:shebalin/src/features/detailed_performaces/bloc/detailed_performance_bloc.dart';
@@ -9,7 +11,6 @@ import 'package:shebalin/src/features/detailed_performaces/view/detailed_perform
 import 'package:shebalin/src/features/login/bloc/login_bloc.dart';
 import 'package:shebalin/src/features/login/view/login_page.dart';
 import 'package:shebalin/src/features/login/view/widgets/verification_page.dart';
-import 'package:shebalin/src/features/login/view/widgets/verification_page_args.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
 import 'package:shebalin/src/features/splash_screen/view/splash_screen.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
@@ -69,54 +70,61 @@ class AppView extends StatelessWidget {
           ),
         )
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: "Shebalin",
-        theme: defaultTheme(),
-        initialRoute: SplashScreen.routeName,
-        onGenerateRoute: (RouteSettings routeSettings) {
-          late Widget page;
-          if (routeSettings.name == MainScreen.routeName) {
-            page = const MainScreen();
-          } else if (routeSettings.name == SplashScreen.routeName) {
-            page = SplashScreen(
-              status: context.read<AuthenticationBloc>().state.status,
-            );
-          } else if (routeSettings.name == OnbordingScreen.routeName) {
-            page = const OnbordingScreen();
-          } else if (routeSettings.name == DetailedPerformancePage.routeName) {
-            final args = routeSettings.arguments as DetailedPerformanceArgs;
-            page = BlocProvider(
-              create: (context) => DetailedPerformanceBloc(
+      child: RepositoryProvider.value(
+        value: PaymentServiceImpl(
+          apiClient: RepositoryProvider.of<ApiClient>(context),
+        ),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "Shebalin",
+          theme: defaultTheme(),
+          initialRoute: SplashScreen.routeName,
+          onGenerateRoute: (RouteSettings routeSettings) {
+            late Widget page;
+            if (routeSettings.name == MainScreen.routeName) {
+              page = const MainScreen();
+            } else if (routeSettings.name == SplashScreen.routeName) {
+              page = SplashScreen(
+                status: context.read<AuthenticationBloc>().state.status,
+              );
+            } else if (routeSettings.name == OnbordingScreen.routeName) {
+              page = const OnbordingScreen();
+            } else if (routeSettings.name ==
+                DetailedPerformancePage.routeName) {
+              final args = routeSettings.arguments as DetailedPerformanceArgs;
+              page = BlocProvider(
+                create: (context) => DetailedPerformanceBloc(
+                  performance: args.performance,
+                  performanceRepository:
+                      RepositoryProvider.of<PerformancesRepository>(context),
+                  paymentService:
+                      RepositoryProvider.of<PaymentServiceImpl>(context),
+                )..add(const DetailedPerformanceStarted()),
+                child: const DetailedPerformancePage(),
+              );
+            } else if (routeSettings.name == ImagesViewPage.routeName) {
+              page = const ImagesViewPage();
+            } else if (routeSettings.name == LoginPage.routeName) {
+              page = const LoginPage();
+            } else if (routeSettings.name == VerificationPage.routeName) {
+              page = const VerificationPage();
+            } else if (routeSettings.name!.startsWith(routePrefixPerfMode)) {
+              final subRoute =
+                  routeSettings.name!.substring(routePrefixPerfMode.length);
+              final args = routeSettings.arguments as OnboardingWelcomeArgs;
+              page = PerfModeFlow(
+                perfModePageRoute: subRoute,
                 performance: args.performance,
-                performanceRepository:
-                    RepositoryProvider.of<PerformancesRepository>(context),
-              )..add(const DetailedPerformanceStarted()),
-              child: const DetailedPerformancePage(),
+              );
+            } else {
+              throw Exception('Unknown route: ${routeSettings.name}');
+            }
+            return MaterialPageRoute<void>(
+              settings: routeSettings,
+              builder: (BuildContext context) => page,
             );
-          } else if (routeSettings.name == ImagesViewPage.routeName) {
-            page = const ImagesViewPage();
-          } else if (routeSettings.name == LoginPage.routeName) {
-            page = const LoginPage();
-          } else if (routeSettings.name == VerificationPage.routeName) {
-            final args = routeSettings.arguments as VerificationPageArgs;
-            page = VerificationPage(phoneNumber: args.phoneNumber);
-          } else if (routeSettings.name!.startsWith(routePrefixPerfMode)) {
-            final subRoute =
-                routeSettings.name!.substring(routePrefixPerfMode.length);
-            final args = routeSettings.arguments as OnboardingWelcomeArgs;
-            page = PerfModeFlow(
-              perfModePageRoute: subRoute,
-              performance: args.performance,
-            );
-          } else {
-            throw Exception('Unknown route: ${routeSettings.name}');
-          }
-          return MaterialPageRoute<void>(
-            settings: routeSettings,
-            builder: (BuildContext context) => page,
-          );
-        },
+          },
+        ),
       ),
     );
   }

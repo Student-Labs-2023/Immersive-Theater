@@ -6,7 +6,6 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shebalin/src/features/login/bloc/login_bloc.dart';
 import 'package:shebalin/src/features/login/view/widgets/verification_page.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/text_with_leading.dart';
-import 'package:shebalin/src/features/login/view/widgets/verification_page_args.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
 
@@ -103,9 +102,6 @@ class _LoginPageState extends State<LoginPage> {
     context.read<LoginBloc>().add(const LoginVerifyPhoneNumber());
     Navigator.of(context).pushNamed(
       VerificationPage.routeName,
-      arguments: VerificationPageArgs(
-        '+7',
-      ),
     );
   }
 }
