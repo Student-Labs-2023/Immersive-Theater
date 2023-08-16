@@ -15,8 +15,10 @@ import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/ui/app_placeholer.dart';
+import 'package:shebalin/src/theme/ui/app_text_header.dart';
 import 'package:shebalin/src/theme/ui/image_card.dart';
 import 'package:shebalin/src/theme/ui/skeleton_loaders.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class DetailedPerformancePage extends StatefulWidget {
@@ -42,81 +44,108 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
         },
         builder: (context, state) {
           if (state is DetailedPerformanceLoadInProgress) {
-            return SizedBox(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColor.greySkeleton,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        height: MediaQuery.of(context).size.height * 0.3,
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: Column(
+            return Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              enabled: true,
+              child: CustomScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                color: AppColor.greySkeleton,
+                                color: AppColor.whiteBackground,
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              width: MediaQuery.of(context).size.width * 0.18,
-                              height: MediaQuery.of(context).size.height * 0.02,
+                              height: MediaQuery.of(context).size.height * 0.3,
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: AppColor.greySkeleton,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              width: MediaQuery.of(context).size.width * 0.27,
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            const SizedBox(
-                              height: 12,
-                            ),
-                            const DescriptionSkeleton(),
                             const SizedBox(
                               height: 12,
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.25,
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                decoration: BoxDecoration(
-                                  color: AppColor.greySkeleton,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
+                              padding: const EdgeInsets.only(left: 16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColor.whiteBackground,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    width: MediaQuery.of(context).size.width *
+                                        0.18,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.02,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColor.whiteBackground,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    width: MediaQuery.of(context).size.width *
+                                        0.27,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.02,
+                                  ),
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
+                                  const DescriptionSkeleton(),
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 16.0),
+                                    child: Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.25,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      decoration: BoxDecoration(
+                                        color: AppColor.whiteBackground,
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 32,
+                                  ),
+                                  const DescriptionSkeleton(),
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColor.whiteBackground,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.1,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.02,
+                                  ),
+                                  const AudioDemoSkeleton()
+                                ],
                               ),
                             ),
                             const SizedBox(
-                              height: 32,
+                              height: 12,
                             ),
-                            const Header(
-                              title: 'Аудио отрывки',
-                            ),
-                            const AudioDemoSkeleton()
                           ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                    ],
-                  )
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             );
@@ -262,7 +291,7 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                         const SizedBox(
                           height: 32,
                         ),
-                        const Header(
+                        const AppTextHeader(
                           title: 'Аудио отрывки',
                         ),
                         const SizedBox(
@@ -281,7 +310,7 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                         const SizedBox(
                           height: 32,
                         ),
-                        const Header(title: 'Фотографии'),
+                        const AppTextHeader(title: 'Фотографии'),
                         const SizedBox(
                           height: 12,
                         ),
@@ -312,7 +341,7 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                         const SizedBox(
                           height: 32,
                         ),
-                        const Header(title: 'Авторы'),
+                        const AppTextHeader(title: 'Авторы'),
                         const SizedBox(
                           height: 12,
                         ),
@@ -355,7 +384,10 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
             final String? title;
             final VoidCallback? onTap;
             if (state is DetailedPerformanceLoadInProgress) {
-              return const SizedBox.shrink();
+              return const SizedBox(
+                height: 0,
+                width: 0,
+              );
             } else if (state is DetailedPerformanceUnPaid) {
               title = 'Приобрести за 299 ₽';
               onTap = () => {bloc.add(const DetailedPerformancePay())};
@@ -390,24 +422,5 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
     final int hours = duration.inHours;
     final int minutes = duration.inMinutes - hours * 60;
     return '$hours ч. $minutes мин.';
-  }
-}
-
-class Header extends StatelessWidget {
-  final String title;
-  const Header({
-    super.key,
-    required this.title,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: Theme.of(context)
-          .textTheme
-          .displaySmall
-          ?.copyWith(fontWeight: FontWeight.bold),
-    );
   }
 }

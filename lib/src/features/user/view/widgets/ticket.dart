@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
-import 'package:shebalin/src/features/ticket/view/ticket_page.dart';
 import 'package:shebalin/src/theme/images.dart';
-import 'package:shebalin/src/theme/theme.dart';
 
 class Ticket extends StatelessWidget {
   const Ticket({Key? key}) : super(key: key);
@@ -37,7 +35,7 @@ class Ticket extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .labelSmall
-                        ?.copyWith(fontSize: titleMediumFontSize),
+                        ?.copyWith(fontSize: 10),
                   )
                 ],
               ),

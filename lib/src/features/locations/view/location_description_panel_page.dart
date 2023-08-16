@@ -222,6 +222,7 @@ class _LocationDescriptionPanelPageState
   void _closePanel() {
     context.read<MapPinBloc>().emit(MapPinClosingState());
     Navigator.of(context).popUntil(ModalRoute.withName(MainScreen.routeName));
+
   }
 
   void _onAudioTap() {

@@ -53,16 +53,27 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_dotenv: ^5.0.2
+  shimmer: ^3.0.0
   intl: ^0.18.0
   flutter_svg: 
   geolocator: ^9.0.2
   rxdart: ^0.27.7
+  formz: ^0.6.0
+  firebase_core: ^2.15.0
+  pinput: ^3.0.0
+  mask_text_input_formatter: ^2.5.0
   performances_repository:
     path: ./packages/performances_repository
   api_client:
     path: ./packages/api_client
   location_service:
     path: ./packages/location_service
+  form_inputs:
+    path: ./packages/form_inputs
+  authentication_repository:
+    path: packages/authentication_repository
+  sms_autofill: ^2.3.0
+
 
   
   

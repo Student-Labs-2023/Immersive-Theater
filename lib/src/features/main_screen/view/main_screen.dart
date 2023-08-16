@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:performances_repository/performances_repository.dart';
+import 'package:shebalin/src/features/authentication/bloc/authentication_bloc.dart';
 import 'package:shebalin/src/features/locations/view/location_description_panel_page.dart';
+import 'package:shebalin/src/features/login/view/login_page.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/map/view/yandex_map_page.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
@@ -30,7 +32,11 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null,
+      floatingActionButton: IconButton(
+        icon: const Icon(Icons.logout),
+        onPressed: _logout,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       body: SlidingUpPanel(
         controller: panelController,
         defaultPanelState: PanelState.CLOSED,
@@ -222,7 +228,7 @@ class _MainScreenState extends State<MainScreen> {
                         icon: PlacemarkIcon.single(
                           PlacemarkIconStyle(
                             image: BitmapDescriptor.fromAssetImage(
-                              ImagesSources.mark,
+                              ImagesSources.currentPlacemark,
                             ),
                             scale: 0.3,
                           ),
@@ -272,5 +278,13 @@ class _MainScreenState extends State<MainScreen> {
     } else {
       context.read<MapPinBloc>().add(UpdateMapPinLocation(mapObject, point));
     }
+  }
+
+  void _logout() {
+    context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      LoginPage.routeName,
+      (Route<dynamic> route) => false,
+    );
   }
 }
