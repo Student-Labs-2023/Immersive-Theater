@@ -14,7 +14,8 @@ class PaymentServiceImpl implements PaymentService {
 
   PaymentServiceImpl({required ApiClient apiClient}) : _apiClient = apiClient;
   @override
-  Future<String> pay(String userId, int performanceId) async {
+  Future<String> pay(
+      {required String userId, required int performanceId}) async {
     final paymentLink = await _apiClient.dio.get(
         _PaymentEndpoint.payment.endpoint,
         options: Options(responseType: ResponseType.json));

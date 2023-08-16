@@ -361,7 +361,14 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
               );
             } else if (state is DetailedPerformanceUnPaid) {
               title = 'Приобрести за 299 ₽';
-              onTap = () => {bloc.add(const DetailedPerformancePay())};
+              onTap = () => {
+                    bloc.add(
+                      DetailedPerformancePay(
+                        performanceId: state.performance.id,
+                        userId: '1',
+                      ),
+                    )
+                  };
             } else if (state is DetailedPerformancePaid) {
               title = 'Загрузить спектакль';
               onTap = () => {bloc.add(const DetailedPerformanceDownload())};
