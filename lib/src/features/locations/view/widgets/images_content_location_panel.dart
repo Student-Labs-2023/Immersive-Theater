@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:api_client/api_client.dart';
+import 'package:shebalin/src/theme/ui/app_placeholer.dart';
+
+import '../../../view_images/models/image_view_args.dart';
+import '../../../view_images/view/images_view_page.dart';
 
 class ImagesContentLocationPanel extends StatelessWidget {
   const ImagesContentLocationPanel({super.key, required this.imageLinks});
   final List<String> imageLinks;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      height: MediaQuery.of(context).size.height * 0.17,
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.12,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: imageLinks.length,
@@ -26,17 +29,34 @@ class ImagesContentLocationPanel extends StatelessWidget {
             );
           } else {
             return Container(
-              margin: const EdgeInsets.only(right: 8, left: 8),
-              height: MediaQuery.of(context).size.height * 0.17,
-              width: MediaQuery.of(context).size.height * 0.17,
+              margin: const EdgeInsets.only(
+                right: 8,
+              ),
+              height: MediaQuery.of(context).size.height * 0.12,
+              width: MediaQuery.of(context).size.height * 0.12,
               clipBehavior: Clip.hardEdge,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(4)),
               ),
-              child: CachedNetworkImage(
-                placeholder: (context, string) =>
-                    CircularProgressIndicator(color: AppColor.grey),
-                imageUrl: ApiClient.baseUrl + imageLinks[index],
+              child: InkWell(
+                onTap: () => Navigator.of(context).pushNamed(
+                  ImagesViewPage.routeName,
+                  arguments: ImageViewArgs(imageLinks, index),
+                ),
+                child: CachedNetworkImage(
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                  imageUrl: imageLinks[index],
+                  fit: BoxFit.fill,
+                  placeholder: (context, string) => const AppProgressBar(),
+                ),
               ),
             );
           }

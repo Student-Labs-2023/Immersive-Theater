@@ -8,8 +8,8 @@ part of 'response_mapper.dart';
 
 ResponseMapper _$ResponseMapperFromJson(Map<String, dynamic> json) =>
     ResponseMapper(
-      data: (json['data'] as List<dynamic>)
-          .map((e) => e["attributes"] as Map<String, dynamic>)
+      data: (json["data"] as List<dynamic>)
+          .map((e) => e as Map<String, dynamic>)
           .toList(),
     );
 

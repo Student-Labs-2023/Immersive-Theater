@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 
 BorderRadiusGeometry panelRadius = const BorderRadius.only(
   topLeft: Radius.circular(24.0),
@@ -17,6 +18,25 @@ Color accentTextColor = const Color.fromARGB(255, 114, 91, 255);
 
 Color defaultTextColor = Colors.black;
 ThemeData defaultTheme() => ThemeData(
+      useMaterial3: false,
+      focusColor: AppColor.accentBackground,
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: Colors.transparent,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColor.redAlert),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColor.purplePrimary),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColor.grey),
+        ),
+      ),
       fontFamily: defaultFont,
       textTheme: TextTheme(
         displayLarge: TextStyle(
@@ -75,55 +95,11 @@ ThemeData defaultTheme() => ThemeData(
           fontWeight: FontWeight.w600,
           letterSpacing: letterSpacing,
         ),
-
-        // следующие нужно потихоньку заменять в коде
-        titleLarge: TextStyle(
-          height: baseTextHeight,
-          color: Colors.white,
-          fontSize: titleLargeFontSize,
-          fontFamily: defaultFont,
-          fontWeight: FontWeight.w600,
-          letterSpacing: letterSpacing,
-        ),
-        titleSmall: TextStyle(
-          height: baseTextHeight,
-          color: secondaryTextColor,
-          fontSize: titleSmallFontSize,
-          fontFamily: defaultFont,
-          fontWeight: FontWeight.w700,
-          letterSpacing: letterSpacing,
-        ),
-
-        labelLarge: TextStyle(
-          height: baseTextHeight,
-          color: accentTextColor,
-          fontSize: bodySmallFontSize,
-          fontFamily: defaultFont,
-          fontWeight: FontWeight.w700,
-          letterSpacing: letterSpacing,
-        ),
-        labelSmall: TextStyle(
-          height: baseTextHeight,
-          color: Colors.white,
-          fontSize: labelSmallFontSize,
-          fontFamily: defaultFont,
-          fontWeight: FontWeight.w700,
-          letterSpacing: letterSpacing,
-        ),
       ),
     );
 
 const double letterSpacing = -0.33;
-const double tinyFontSize = 11;
-const double labelSmallFontSize = 13;
-const double titleSmallFontSize = 12;
-const double titleMediumFontSize = 20;
-const double titleLargeFontSize = 24;
-const double bodySmallFontSize = 17;
-const double bodyMediumFontSize = 22;
-const double bodyLargeFontSize = 28;
 
-//new
 String defaultFont = 'RFDewi';
 const double baseTextHeight = 1.5;
 const double heading1FontSize = 28;
@@ -132,4 +108,4 @@ const double heading3FontSize = 20;
 const double heading4FontSize = 18;
 const double paragraph1FontSize = 16;
 const double paragraph2FontSize = 14;
-const double paragraph3FontSize = 11;
+const double paragraph3FontSize = 12;

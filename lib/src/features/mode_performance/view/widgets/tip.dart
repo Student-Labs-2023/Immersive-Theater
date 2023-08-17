@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:shebalin/src/theme/images.dart';
 
 class Tip extends StatelessWidget {
-  const Tip({super.key});
+  final String title;
+  final String icon;
+  const Tip({
+    super.key,
+    required this.title,
+    required this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,21 +23,14 @@ class Tip extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const ImageIcon(AssetImage(ImagesSources.tipIcon)),
+          ImageIcon(
+            AssetImage(icon),
+            size: 45,
+          ),
           Flexible(
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: "Если вы дошли до следующей точки нажмите ",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  TextSpan(
-                    text: "Продолжить",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  )
-                ],
-              ),
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
         ],

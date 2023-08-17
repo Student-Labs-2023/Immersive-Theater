@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/onboarding_performance_args.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_image.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
+import 'package:shebalin/src/theme/ui/app_bar_close.dart';
+
+const routePrefixPerfMode = '/perf/';
 
 class OnboardWelcome extends StatelessWidget {
-  static const routeName = '/onboarding-performance';
-  const OnboardWelcome({super.key});
+  static const routeName = 'welcome';
+  final void Function(bool listenAtHome) onOnboardWelcomeComplete;
+  final VoidCallback onOnboardingClose;
+  const OnboardWelcome({
+    super.key,
+    required this.onOnboardWelcomeComplete,
+    required this.onOnboardingClose,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBarBtnClose(
+        icon: ImagesSources.backIcon,
+        onPressed: onOnboardingClose,
+      ),
+      backgroundColor: AppColor.accentBackground,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         child: Column(
@@ -22,7 +37,7 @@ class OnboardWelcome extends StatelessWidget {
               height: 16,
             ),
             Text(
-              "«Шебалин в Омске»",
+              '«${RepositoryProvider.of<CurrentPerformanceProvider>(context).performance.title}»',
               style: Theme.of(context)
                   .textTheme
                   .displayMedium!
@@ -44,18 +59,8 @@ class OnboardWelcome extends StatelessWidget {
         child: OnboardControllButton(
           titlePrimary: 'Прослушивание в городе',
           titleSecondary: 'Свободное прослушивание',
-          onTapPrimary: () => Navigator.of(context).pushReplacementNamed(
-            OnboardingPerformance.routeName,
-            arguments: OnboardingPerformanceArgs(
-              listenAtHome: false,
-            ),
-          ),
-          onTapSecondary: () => Navigator.of(context).pushReplacementNamed(
-            OnboardingPerformance.routeName,
-            arguments: OnboardingPerformanceArgs(
-              listenAtHome: true,
-            ),
-          ),
+          onTapPrimary: () => onOnboardWelcomeComplete(false),
+          onTapSecondary: () => onOnboardWelcomeComplete(true),
         ),
       ),
     );

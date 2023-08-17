@@ -1,12 +1,14 @@
-import 'package:api_client/api_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 
 class ImageCard extends StatelessWidget {
   final String imageUrl;
+  final double size;
   const ImageCard({
     super.key,
     required this.imageUrl,
+    required this.size,
   });
 
   @override
@@ -14,9 +16,10 @@ class ImageCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: CachedNetworkImage(
-        imageUrl: ApiClient.baseUrl + imageUrl,
-        height: 90,
-        width: 90,
+        placeholder: (context, url) => const AppProgressBar(),
+        imageUrl: imageUrl,
+        height: size,
+        width: size,
         fit: BoxFit.cover,
       ),
     );

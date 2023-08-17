@@ -28,15 +28,16 @@ class OnboardPerformance {
       subtitle:
           'Чтобы уменьшить внешний шум и погрузиться в настроение спектакля',
       subtitleAccent: '',
-      buttonTitle: "Далее",
+      buttonTitle: 'Далее',
       image: ImagesSources.onboardHeadPhones,
     ),
     OnboardPerformance(
-      title: 'Переключайте трек при достижении новой локации',
-      subtitle: 'Чтобы переключить трек, нажмите кнопку ',
-      buttonTitle: "Начать спектакль",
+      title: 'Треки переключаются автоматически',
+      subtitle:
+          'Чтобы переключить трек, дойдите до контрольной точки и дослушайте главу ',
+      buttonTitle: 'Начать спектакль',
       image: ImagesSources.onboardNext,
-      subtitleAccent: 'Продолжить',
+      subtitleAccent: '',
     ),
   ];
 
@@ -46,15 +47,15 @@ class OnboardPerformance {
       subtitle:
           'Чтобы уменьшить внешний шум и погрузиться в настроение спектакля',
       subtitleAccent: '',
-      buttonTitle: "Далее",
+      buttonTitle: 'Далее',
       image: ImagesSources.onboardHeadPhones,
     ),
     OnboardPerformance(
-      title: 'Переключайте трек при достижении новой локации',
-      subtitle: 'Чтобы переключить трек, нажмите кнопку ',
-      buttonTitle: "Начать спектакль",
+      title: 'Треки переключаются автоматически',
+      subtitle: 'Весь спектакль будет воспроизводиться без пауз',
+      buttonTitle: 'Начать спектакль',
       image: ImagesSources.onboardNext,
-      subtitleAccent: 'Продолжить',
+      subtitleAccent: '',
     ),
   ];
 }

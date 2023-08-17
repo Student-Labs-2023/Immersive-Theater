@@ -23,33 +23,34 @@ class _PerformancesPanelPageState extends State<PerformancesPanelPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-             BlocBuilder<PerformanceBloc, PerformanceState>(
-                    builder: (context, state) {
-                      if (state is PerformanceLoadInProgress) {
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: accentTextColor,
-                          ),
+            BlocBuilder<PerformanceBloc, PerformanceState>(
+              builder: (context, state) {
+                if (state is PerformanceLoadInProgress) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: accentTextColor,
+                    ),
+                  );
+                }
+                if (state is PerformanceLoadSuccess) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.only(top: 15),
+                      itemCount: state.perfomances.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        return PerformanceCard(
+                          performance: state.perfomances[index],
                         );
-                      }
-                      if (state is PerformanceLoadSuccess) {
-                        return SizedBox(
-                          height: MediaQuery.of(context).size.height,
-                          child: ListView.builder(
-                            itemCount: state.perfomances.length,
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (BuildContext context, int index) {
-                              return PerformanceCard(
-                                performance: state.perfomances[index],
-                              );
-                            },
-                          ),
-                        );
-                      } else {
-                        return const Text('Oops...Something went wrong!');
-                      }
-                    },
-              )
+                      },
+                    ),
+                  );
+                } else {
+                  return const Text('Oops...Something went wrong!');
+                }
+              },
+            )
           ],
         ),
       ),

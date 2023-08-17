@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shebalin/src/features/mode_performance/bloc/mode_performance_bloc.dart';
-import 'package:shebalin/src/theme/theme.dart';
+import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 
 class ProgressLocationsBar extends StatelessWidget {
   final int countLocation;
@@ -24,26 +21,24 @@ class ProgressLocationsBar extends StatelessWidget {
       height: 63,
       width: 86,
       child: Center(
-        child: BlocBuilder<ModePerformanceBloc, ModePerformanceState>(
+        child: BlocBuilder<PerfModeBloc, PerfModeState>(
           builder: (context, state) {
             return RichText(
               text: TextSpan(
                 text: state.indexLocation.toString(),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: accentTextColor),
+                style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                 children: [
                   TextSpan(
                     text: " / ${countLocation.toString()}",
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                   ),
                   TextSpan(
                     text: "\n${durationPerformance.toString()} мин",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelSmall!
-                        .copyWith(color: Colors.black),
+                    style: Theme.of(context).textTheme.bodyMedium!,
                   )
                   //           ?.copyWith(color: Colors.black,)
                 ],
