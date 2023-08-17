@@ -55,7 +55,7 @@ class _VerificationPageState extends State<VerificationPage> {
                 ),
                 AppTextSubtitle(
                   title:
-                      'Он отправлен на  номер +7${context.watch<LoginBloc>().state.phoneNumber.value}',
+                      'Он отправлен на  номер ${context.watch<LoginBloc>().state.phoneNumber.value}',
                 ),
                 const SizedBox(
                   height: 10,

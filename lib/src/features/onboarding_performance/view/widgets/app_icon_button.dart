@@ -107,7 +107,7 @@ class AppButton extends StatelessWidget {
         ),
         minimumSize: MaterialStateProperty.all(
           Size(
-            MediaQuery.of(context).size.width * 0.85,
+            MediaQuery.of(context).size.width * 0.91,
             MediaQuery.of(context).size.height * 0.06,
           ),
         ),

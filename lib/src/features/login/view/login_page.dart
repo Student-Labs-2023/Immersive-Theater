@@ -43,12 +43,15 @@ class _LoginPageState extends State<LoginPage> {
                   return Form(
                     key: _key,
                     child: TextFormField(
+                      initialValue: "+7",
                       keyboardType: TextInputType.phone,
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            leadingDistribution: TextLeadingDistribution.even,
+                          ),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         MaskTextInputFormatter(
-                          mask: ' ### ###-##-##',
+                          mask: '+# ### ###-##-##',
                           type: MaskAutoCompletionType.lazy,
                         )
                       ],
@@ -62,18 +65,8 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       validator: (_) => state.phoneNumber.displayError?.text(),
                       decoration: InputDecoration(
-                        prefixIcon: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '+7',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                          ],
-                        ),
-                        contentPadding:
-                            const EdgeInsets.symmetric(vertical: 14.5),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 14.5, horizontal: 16),
                         border: Theme.of(context).inputDecorationTheme.border,
                         focusedBorder: Theme.of(context)
                             .inputDecorationTheme

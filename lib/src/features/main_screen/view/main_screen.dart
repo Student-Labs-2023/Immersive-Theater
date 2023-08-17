@@ -125,7 +125,7 @@ class _MainScreenState extends State<MainScreen> {
               showBottomSheet(
                 backgroundColor: AppColor.whiteBackground,
                 constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.56,
+                  maxHeight: MediaQuery.of(context).size.height * 0.565,
                 ),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -158,7 +158,7 @@ class _MainScreenState extends State<MainScreen> {
                         ],
                       ),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.515,
+                        height: MediaQuery.of(context).size.height * 0.518,
                         child: LocationDescriptionPanelPage(
                           mapObjectId: state.mapObject.mapId.value,
                         ),
