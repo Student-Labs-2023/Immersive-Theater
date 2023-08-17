@@ -41,7 +41,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) {
     try {
       _authenticationRepository.verifyPhoneNumber(
-        phoneNumber: '+7${state.phoneNumber.value.trim()}',
+        phoneNumber: state.phoneNumber.value.trim(),
       );
       emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (e) {

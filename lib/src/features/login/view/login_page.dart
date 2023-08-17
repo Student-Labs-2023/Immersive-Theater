@@ -67,7 +67,9 @@ class _LoginPageState extends State<LoginPage> {
                           state.isValid ? null : 'Номер введён не полностью',
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(
-                            vertical: 14.5, horizontal: 16),
+                          vertical: 14.5,
+                          horizontal: 16,
+                        ),
                         border: Theme.of(context).inputDecorationTheme.border,
                         focusedBorder: Theme.of(context)
                             .inputDecorationTheme
