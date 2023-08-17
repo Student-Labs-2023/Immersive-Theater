@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/theme/app_color.dart';
-import 'package:shebalin/src/theme/images.dart';
 
 class AppIconButton extends StatelessWidget {
   final String title;
@@ -147,18 +146,16 @@ class OnboardControllButton extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        AppIconButton.primaryButton(
+        AppButton.primaryButton(
           title: titlePrimary,
           onTap: onTapPrimary,
-          icon: ImagesSources.right,
         ),
         const SizedBox(
           height: 16,
         ),
-        AppIconButton(
+        AppButton(
           title: titleSecondary,
           onTap: onTapSecondary,
-          icon: ImagesSources.right,
           textColor: AppColor.blackText,
           backgroundColor: AppColor.whiteBackground,
           borderColor: AppColor.yellowSecondary,

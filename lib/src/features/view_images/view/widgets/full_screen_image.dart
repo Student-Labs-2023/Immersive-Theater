@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:shebalin/src/theme/theme.dart';
+import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 
 class FulScreenImageLocation extends StatelessWidget {
   final String imagePath;
@@ -8,13 +8,12 @@ class FulScreenImageLocation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: imagePath,
-      fit: BoxFit.cover,
-      placeholder: (context, url) => Center(
-        child: CircularProgressIndicator(
-          color: accentTextColor,
-        ),
+    return InteractiveViewer(
+      panEnabled: false,
+      child: CachedNetworkImage(
+        imageUrl: imagePath,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => const AppProgressBar(),
       ),
     );
   }

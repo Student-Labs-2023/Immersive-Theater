@@ -13,7 +13,7 @@ class ImagesLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.09,
+      height: MediaQuery.of(context).size.height * 0.12,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: imageLinks.length,
@@ -23,6 +23,7 @@ class ImagesLocation extends StatelessWidget {
         itemBuilder: (context, index) => GestureDetector(
           onTap: () => onTap(imageLinks, index),
           child: ImageCard(
+            size: MediaQuery.of(context).size.height * 0.12,
             imageUrl: imageLinks[index],
           ),
         ),

@@ -9,6 +9,7 @@ import 'package:shebalin/src/features/onboarding_performance/view/widgets/animat
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
+import 'package:shebalin/src/theme/ui/app_bar_close.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'widgets/page_indicator.dart';
@@ -46,6 +47,10 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBarBtnClose(
+        icon: ImagesSources.backIcon,
+        onPressed: () => Navigator.of(context).pop(),
+      ),
       backgroundColor: AppColor.accentBackground,
       body: AnimatedImage(image: pages[currentIndex].image),
       bottomSheet: AnimatedBottomSheet(
@@ -82,13 +87,12 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 34),
                 child: showOneButtonAtHome
-                    ? AppIconButton.primaryButton(
+                    ? AppButton.primaryButton(
                         title: pages[currentIndex].buttonTitle,
                         onTap: curIndexLessLastindex
                             ? _nextPage
                             : () => widget
                                 .onOnboardingComplete(widget.listenAtHome),
-                        icon: ImagesSources.right,
                       )
                     : OnboardControllButton(
                         titlePrimary: pages[currentIndex].buttonTitle,
