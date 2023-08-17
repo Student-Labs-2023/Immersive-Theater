@@ -17,13 +17,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginVerifyPhoneNumber>(_onLoginVerifyPhoneNumber);
     on<LoginVerifyOTP>(_onLoginVerifyOTP);
   }
+
+  static const String countryCode = '+7';
   final AuthenticationRepositoryImpl _authenticationRepository;
 
   void _onLoginPhoneNumberChanged(
     LoginPhoneNumberChanged event,
     Emitter<LoginState> emit,
   ) {
-    final phoneNumber = PhoneNumber.dirty(value: event.phoneNumber);
+    final phoneNumber = PhoneNumber.dirty(event.phoneNumber);
     emit(
       state.copyWith(
         phoneNumber: phoneNumber,

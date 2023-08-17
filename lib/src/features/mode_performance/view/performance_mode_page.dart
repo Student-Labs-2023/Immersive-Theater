@@ -32,8 +32,8 @@ class PerformanceModePage extends StatefulWidget {
 }
 
 class _PerformanceModePageState extends State<PerformanceModePage> {
-  late double heightButton = 3.0;
   final panelController = PanelController();
+  double _position = 0;
   late List<Chapter> chapters;
   @override
   void initState() {
@@ -41,6 +41,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
         .performance
         .info
         .chapters;
+
     super.initState();
   }
 
@@ -87,16 +88,15 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
             ),
             onPanelSlide: (position) {
               setState(() {
-                final double panelMaxScrollEffect =
-                    heightPanelOpened - heightPanelClosed;
-                heightButton = position * panelMaxScrollEffect;
+                _position = position;
               });
             },
           ),
           Positioned(
             right: 15,
             left: 15,
-            bottom: heightButton + 175,
+            bottom: ((heightPanelOpened - heightPanelClosed) * _position) +
+                MediaQuery.of(context).size.height * 0.21,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
@@ -142,6 +142,9 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                       },
                     );
                   },
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
               ],
             ),
