@@ -60,7 +60,8 @@ class _LoginPageState extends State<LoginPage> {
                               LoginPhoneNumberChanged(phoneNumber: phoneNumber),
                             );
                       },
-                      validator: (_) => state.phoneNumber.displayError?.text(),
+                      validator: (_) =>
+                          state.isValid ? null : 'Номер введён не полностью',
                       decoration: InputDecoration(
                         prefixIcon: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -106,13 +107,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-extension on PhoneNumberError {
+extension on PhoneNumberValidationError {
   String? text() {
     switch (this) {
-      case PhoneNumberError.invalid:
+      case PhoneNumberValidationError.invalid:
         return 'Номер введён не полностью';
-      case PhoneNumberError.empty:
-        return null;
     }
   }
 }
