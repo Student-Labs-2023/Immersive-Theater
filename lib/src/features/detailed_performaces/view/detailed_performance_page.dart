@@ -24,7 +24,7 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class DetailedPerformancePage extends StatefulWidget {
   const DetailedPerformancePage({super.key});
-  static const routeName = '/detailed-performance';
+  static const routeName = 'detailed-performance';
   @override
   State<DetailedPerformancePage> createState() =>
       _DetailedPerformancePageState();
@@ -216,8 +216,6 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                         child: Center(
                           child: IconButton(
                             onPressed: () {
-                              audioManagerBloc
-                                  .add(const AudioManagerAudioCompleted());
                               Navigator.of(context).pop();
                             },
                             icon: Image.asset(
@@ -428,6 +426,12 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  @override
+  void dispose() {
+    audioManagerBloc.add(const AudioManagerAudioCompleted());
+    super.dispose();
   }
 
   String durationToHoursMinutes(Duration duration) {

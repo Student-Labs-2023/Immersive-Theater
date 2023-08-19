@@ -16,7 +16,7 @@ class OnbordingScreen extends StatefulWidget {
   const OnbordingScreen({
     Key? key,
   }) : super(key: key);
-  static const routeName = '/onbording-screen';
+  static const routeName = 'onbording-screen';
 
   @override
   State<OnbordingScreen> createState() => _OnbordingScreenState();

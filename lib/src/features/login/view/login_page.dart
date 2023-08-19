@@ -11,7 +11,7 @@ import 'package:shebalin/src/theme/ui/app_text_header.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-  static const routeName = '/login';
+  static const routeName = 'login';
 
   @override
   State<LoginPage> createState() => _LoginPageState();

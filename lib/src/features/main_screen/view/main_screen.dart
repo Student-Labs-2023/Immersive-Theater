@@ -15,6 +15,7 @@ import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 
 import 'package:shebalin/src/theme/theme.dart';
+import 'package:shebalin/src/theme/ui/bar_indicator.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
@@ -47,23 +48,12 @@ class _MainScreenState extends State<MainScreen> {
           builder: (context, state) {
             return Column(
               children: [
-                const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 8)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.12),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const SizedBox(
-                          height: 4,
-                          width: 32,
-                        ),
-                      ),
-                    )
-                  ],
+                const SizedBox(
+                  height: 12,
+                ),
+                const Center(child: BarIndicator()),
+                const SizedBox(
+                  height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -125,7 +115,7 @@ class _MainScreenState extends State<MainScreen> {
               showBottomSheet(
                 backgroundColor: AppColor.whiteBackground,
                 constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.565,
+                  maxHeight: MediaQuery.of(context).size.height * 0.7,
                 ),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -137,28 +127,16 @@ class _MainScreenState extends State<MainScreen> {
                 builder: (context) {
                   return Column(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 12, 0, 20),
+                      const SizedBox(
+                        height: 12,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.12),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: const SizedBox(
-                                height: 4,
-                                width: 32,
-                              ),
-                            ),
-                          )
-                        ],
+                      const Center(
+                        child: BarIndicator(),
                       ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.518,
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Expanded(
                         child: LocationDescriptionPanelPage(
                           mapObjectId: state.mapObject.mapId.value,
                         ),

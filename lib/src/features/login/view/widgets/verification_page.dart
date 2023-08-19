@@ -12,7 +12,7 @@ class VerificationPage extends StatefulWidget {
   const VerificationPage({
     super.key,
   });
-  static const routeName = '/verify';
+  static const routeName = 'verify';
   @override
   State<VerificationPage> createState() => _VerificationPageState();
 }
@@ -26,7 +26,8 @@ class _VerificationPageState extends State<VerificationPage> {
             current.status == AuthenticationStatus.authenticated;
       },
       listener: (context, state) {
-        Navigator.of(context).popAndPushNamed(MainScreen.routeName);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            MainScreen.routeName, ModalRoute.withName(MainScreen.routeName));
       },
       child: Scaffold(
         backgroundColor: AppColor.whiteBackground,
