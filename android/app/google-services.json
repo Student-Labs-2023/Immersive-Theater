@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "461100876083-3rnfoolf4bfgm6gkmd9mjc5fdsgfuftr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shebalin",
+            "certificate_hash": "d5ab14d95265f88a97ecb62aef4686b205902356"
+          }
+        },
+        {
           "client_id": "461100876083-bpiefp3efn5tldgn8u2htje40pqrdpiv.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "461100876083-bpiefp3efn5tldgn8u2htje40pqrdpiv.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "461100876083-8abeogdtpa9mi0j1tui0r8g543b7v5o9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.handsome.immersivetheater"
+              }
             }
           ]
         }

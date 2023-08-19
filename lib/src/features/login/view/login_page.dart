@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                   return Form(
                     key: _key,
                     child: TextFormField(
-                      initialValue: "+7",
+                      initialValue: "+7 ",
                       keyboardType: TextInputType.phone,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             leadingDistribution: TextLeadingDistribution.even,

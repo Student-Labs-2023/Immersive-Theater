@@ -12,7 +12,7 @@ import 'package:shebalin/src/theme/images.dart';
 class SplashScreen extends StatefulWidget {
   final AuthenticationStatus status;
   const SplashScreen({Key? key, required this.status}) : super(key: key);
-  static const routeName = '/loading-screen';
+  static const routeName = 'loading-screen';
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
