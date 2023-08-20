@@ -14,6 +14,8 @@ Performance _$PerformanceFromJson(Map<String, dynamic> json) => Performance(
       info: FullInfoPerformance.empty(chapters: [
         Chapter.fromJson(json['first_place'] as Map<String, dynamic>)
       ]),
+      price: json['price'] as int,
+      duration: Duration(seconds: json['duration'] as int),
     );
 
 Map<String, dynamic> _$PerformanceToJson(Performance instance) =>
@@ -22,5 +24,7 @@ Map<String, dynamic> _$PerformanceToJson(Performance instance) =>
       'tag': instance.tag,
       'name': instance.title,
       'image_link': instance.imageLink,
+      'price': instance.price,
+      'duration': instance.duration.inSeconds,
       'info': instance.info,
     };

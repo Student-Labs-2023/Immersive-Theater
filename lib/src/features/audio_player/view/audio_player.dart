@@ -58,7 +58,10 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
               children: [
                 Text(
                   formatTime(state.position),
-                  style: Theme.of(context).textTheme.titleSmall,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(color: AppColor.greyText),
                 ),
                 Expanded(
                   child: Slider(
@@ -78,7 +81,10 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
                 ),
                 Text(
                   formatTime(state.duration),
-                  style: Theme.of(context).textTheme.titleSmall,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(color: AppColor.greyText),
                 ),
               ],
             ),

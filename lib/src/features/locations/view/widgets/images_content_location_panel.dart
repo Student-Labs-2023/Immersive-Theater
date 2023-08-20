@@ -13,8 +13,7 @@ class ImagesContentLocationPanel extends StatelessWidget {
   final List<String> imageLinks;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+    return SizedBox(
       height: MediaQuery.of(context).size.height * 0.12,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
