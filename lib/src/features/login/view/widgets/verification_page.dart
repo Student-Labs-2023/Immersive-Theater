@@ -27,7 +27,9 @@ class _VerificationPageState extends State<VerificationPage> {
       },
       listener: (context, state) {
         Navigator.of(context).pushNamedAndRemoveUntil(
-            MainScreen.routeName, ModalRoute.withName(MainScreen.routeName));
+          MainScreen.routeName,
+          ModalRoute.withName(MainScreen.routeName),
+        );
       },
       child: Scaffold(
         backgroundColor: AppColor.whiteBackground,
@@ -44,80 +46,94 @@ class _VerificationPageState extends State<VerificationPage> {
             },
           ),
         ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const AppTextHeader(title: 'Код из SMS'),
-                const SizedBox(
-                  height: 4,
-                ),
-                AppTextSubtitle(
-                  title:
-                      'Он отправлен на  номер ${context.watch<LoginBloc>().state.phoneNumber.value}',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Pinput(
-                  enabled: true,
-                  length: 6,
-                  defaultPinTheme: PinTheme(
-                    height: MediaQuery.of(context).size.width / 10,
-                    width: 40,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(width: 4.0, color: AppColor.grey),
-                      ),
-                    ),
+        body: BlocListener<LoginBloc, LoginState>(
+          listener: (context, state) {
+            if (!state.isValidCode) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  const SnackBar(
+                    backgroundColor: AppColor.purpleDarkPrimary,
+                    content: Text('Неверный код подтверждения'),
                   ),
-                  submittedPinTheme: PinTheme(
-                    height: MediaQuery.of(context).size.width / 10,
-                    width: 40,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 4.0,
-                          color: AppColor.yellowSecondary,
+                );
+            }
+          },
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const AppTextHeader(title: 'Код из SMS'),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  AppTextSubtitle(
+                    title:
+                        'Он отправлен на  номер ${context.watch<LoginBloc>().state.phoneNumber.value}',
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Pinput(
+                    enabled: true,
+                    length: 6,
+                    defaultPinTheme: PinTheme(
+                      height: MediaQuery.of(context).size.width / 10,
+                      width: 40,
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(width: 4.0, color: AppColor.grey),
                         ),
                       ),
                     ),
-                  ),
-                  focusedPinTheme: PinTheme(
-                    height: MediaQuery.of(context).size.width / 10,
-                    width: 40,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 4.0,
-                          color: AppColor.yellowSecondary,
+                    submittedPinTheme: PinTheme(
+                      height: MediaQuery.of(context).size.width / 10,
+                      width: 40,
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 4.0,
+                            color: AppColor.yellowSecondary,
+                          ),
                         ),
                       ),
                     ),
+                    focusedPinTheme: PinTheme(
+                      height: MediaQuery.of(context).size.width / 10,
+                      width: 40,
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 4.0,
+                            color: AppColor.yellowSecondary,
+                          ),
+                        ),
+                      ),
+                    ),
+                    onCompleted: (code) {
+                      context
+                          .read<LoginBloc>()
+                          .add(LoginVerifyOTP(smsCode: code));
+                    },
                   ),
-                  onCompleted: (code) {
-                    context
-                        .read<LoginBloc>()
-                        .add(LoginVerifyOTP(smsCode: code));
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                InkWell(
-                  child: Text(
-                    "Отправить код повторно",
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppColor.purplePrimary,
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  InkWell(
+                    child: Text(
+                      "Отправить код повторно",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: AppColor.purplePrimary,
+                          ),
+                    ),
+                    onTap: () => context.read<LoginBloc>().add(
+                          const LoginVerifyPhoneNumber(),
                         ),
                   ),
-                  onTap: () => context.read<LoginBloc>().add(
-                        const LoginVerifyPhoneNumber(),
-                      ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

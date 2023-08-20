@@ -63,8 +63,9 @@ class _LoginPageState extends State<LoginPage> {
                               LoginPhoneNumberChanged(phoneNumber: phoneNumber),
                             );
                       },
-                      validator: (_) =>
-                          state.isValid ? null : 'Номер введён не полностью',
+                      validator: (_) => state.isValidPassword
+                          ? null
+                          : 'Номер введён не полностью',
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 14.5,

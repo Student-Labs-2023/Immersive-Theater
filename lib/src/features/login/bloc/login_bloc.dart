@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -29,13 +27,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(
       state.copyWith(
         phoneNumber: phoneNumber,
-        isValid: Formz.validate([phoneNumber]),
+        isValidPassword: Formz.validate([phoneNumber]),
         status: FormzSubmissionStatus.inProgress,
       ),
     );
   }
 
-  FutureOr<void> _onLoginVerifyPhoneNumber(
+  void _onLoginVerifyPhoneNumber(
     LoginVerifyPhoneNumber event,
     Emitter<LoginState> emit,
   ) {
@@ -49,10 +47,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  FutureOr<void> _onLoginVerifyOTP(
+  void _onLoginVerifyOTP(
     LoginVerifyOTP event,
     Emitter<LoginState> emit,
-  ) {
-    _authenticationRepository.verifyOTP(smsCode: event.smsCode);
+  ) async {
+    try {
+      emit(state.copyWith(isValidCode: true));
+      await _authenticationRepository.verifyOTP(smsCode: event.smsCode);
+    } catch (e) {
+      emit(state.copyWith(isValidCode: false));
+    }
   }
 }
