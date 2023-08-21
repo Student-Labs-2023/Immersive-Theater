@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/theme/app_color.dart';
-import 'package:shebalin/src/theme/ui/audio_image.dart';
+import 'package:shebalin/src/theme/ui/app_audio_image.dart';
 
 class AudioInfoWidget extends StatelessWidget {
   final String performanceTitle;
@@ -18,7 +18,7 @@ class AudioInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        AudioImage(
+        AppAudioImage(
           imageLink: imageLink,
           size: 40,
         ),

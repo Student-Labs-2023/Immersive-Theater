@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_title.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
 import 'package:shebalin/src/features/review/view/widgets/emoji.dart';
 import 'package:shebalin/src/features/review/view/widgets/review_bottom_sheet.dart';
@@ -11,6 +9,8 @@ import 'package:shebalin/src/features/review/view/widgets/review_field.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/ui/app_bar_close.dart';
+import 'package:shebalin/src/theme/ui/app_button.dart';
+import 'package:shebalin/src/theme/ui/app_subtitle.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key, required this.onPerfModeComplete});

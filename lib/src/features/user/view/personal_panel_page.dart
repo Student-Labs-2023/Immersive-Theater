@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
 
 class PersonalPanelPage extends StatelessWidget {
-  PersonalPanelPage({Key? key}) : super(key: key);
+  const PersonalPanelPage({Key? key}) : super(key: key);
 
-  final _searchTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -17,7 +16,7 @@ class PersonalPanelPage extends StatelessWidget {
       child: SingleChildScrollView(
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
+          child: const SingleChildScrollView(
             child: PromocodePanelPage(),
           ),
         ),

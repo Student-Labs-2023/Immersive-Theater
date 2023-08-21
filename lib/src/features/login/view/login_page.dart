@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:form_inputs/form_inputs.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shebalin/src/features/login/bloc/login_bloc.dart';
 import 'package:shebalin/src/features/login/view/widgets/verification_page.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/text_with_leading.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
+import 'package:shebalin/src/theme/ui/app_button.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
 
 class LoginPage extends StatefulWidget {
@@ -95,19 +94,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onPressed() {
     if (!_key.currentState!.validate()) return;
-
     context.read<LoginBloc>().add(const LoginVerifyPhoneNumber());
     Navigator.of(context).pushNamed(
       VerificationPage.routeName,
     );
-  }
-}
-
-extension on PhoneNumberValidationError {
-  String? text() {
-    switch (this) {
-      case PhoneNumberValidationError.invalid:
-        return 'Номер введён не полностью';
-    }
   }
 }

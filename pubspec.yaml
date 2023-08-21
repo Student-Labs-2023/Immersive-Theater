@@ -62,6 +62,7 @@ dependencies:
   firebase_core: ^2.15.0
   pinput: ^3.0.0
   mask_text_input_formatter: ^2.5.0
+  just_audio_background: ^0.0.1-beta.10
   performances_repository:
     path: ./packages/performances_repository
   api_client:
@@ -74,7 +75,6 @@ dependencies:
     path: packages/authentication_repository
   payment_service:
     path: ./packages/payment_service
-  sms_autofill: ^2.3.0
 
 
   

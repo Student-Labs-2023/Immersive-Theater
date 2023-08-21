@@ -8,13 +8,13 @@ import 'package:shebalin/src/features/detailed_performaces/bloc/detailed_perform
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/author_card.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/detailed_map.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/text_with_leading.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome_args.dart';
 import 'package:shebalin/src/features/view_images/models/image_view_args.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
+import 'package:shebalin/src/theme/ui/app_button.dart';
 import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
 import 'package:shebalin/src/theme/ui/image_card.dart';

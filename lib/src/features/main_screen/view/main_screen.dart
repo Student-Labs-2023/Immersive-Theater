@@ -8,6 +8,7 @@ import 'package:shebalin/src/features/locations/view/location_description_panel_
 import 'package:shebalin/src/features/login/view/login_page.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/map/view/yandex_map_page.dart';
+import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/performances/view/performances_panel_page.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
@@ -15,7 +16,8 @@ import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 
 import 'package:shebalin/src/theme/theme.dart';
-import 'package:shebalin/src/theme/ui/bar_indicator.dart';
+import 'package:shebalin/src/theme/ui/app_circle_button.dart';
+import 'package:shebalin/src/theme/ui/app_resize_handler.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
@@ -33,9 +35,10 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: IconButton(
-        icon: const Icon(Icons.logout),
-        onPressed: _logout,
+      floatingActionButton: AppCircleButton(
+        tag: 'logout',
+        onPressed: _showDialogWindow,
+        image: ImagesSources.logout,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       body: SlidingUpPanel(
@@ -51,7 +54,7 @@ class _MainScreenState extends State<MainScreen> {
                 const SizedBox(
                   height: 12,
                 ),
-                const Center(child: BarIndicator()),
+                const Center(child: AppResizeHandler()),
                 const SizedBox(
                   height: 20,
                 ),
@@ -131,7 +134,7 @@ class _MainScreenState extends State<MainScreen> {
                         height: 12,
                       ),
                       const Center(
-                        child: BarIndicator(),
+                        child: AppResizeHandler(),
                       ),
                       const SizedBox(
                         height: 20,
@@ -259,10 +262,27 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _logout() {
+    _showDialogWindow();
+
     context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
     Navigator.of(context).pushNamedAndRemoveUntil(
       LoginPage.routeName,
       (Route<dynamic> route) => false,
     );
+  }
+
+  Future<bool> _showDialogWindow() async {
+    return await showDialog(
+          context: context,
+          builder: (_) => DialogWindow(
+            title: 'Выйти из аккаунта?',
+            subtitle: '',
+            onTapPrimary: _logout,
+            titlePrimary: 'Выйти',
+            titleSecondary: 'Отмена',
+            onTapSecondary: () => Navigator.of(context).pop(false),
+          ),
+        ) ??
+        false;
   }
 }

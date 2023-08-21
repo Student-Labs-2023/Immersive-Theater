@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 
-class BarIndicator extends StatelessWidget {
-  const BarIndicator({
+class AppResizeHandler extends StatelessWidget {
+  const AppResizeHandler({
     super.key,
   });
 

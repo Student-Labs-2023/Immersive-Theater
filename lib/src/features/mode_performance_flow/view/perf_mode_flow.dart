@@ -165,6 +165,7 @@ class PerfModeFlowState extends State<PerfModeFlow> {
             child: PerformanceModePage(
               onPerfModeComplete: _onPerfModeComplete,
               onPerfModeResume: _onPerfModeResume,
+              onClosePerformance: _showDialogWindow,
               onImageOpen: _onImageOpen,
             ),
           );

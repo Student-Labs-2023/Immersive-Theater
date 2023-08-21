@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 
-import '../../../../theme/theme.dart';
-
 class OnbordingContent extends StatelessWidget {
   const OnbordingContent({
     Key? key,

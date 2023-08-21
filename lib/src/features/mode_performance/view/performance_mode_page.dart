@@ -5,13 +5,13 @@ import 'package:shebalin/src/features/audio_player/view/audio_player.dart';
 import 'package:shebalin/src/features/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.dart';
 import 'package:shebalin/src/features/map_performance/view/map_page.dart';
-import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/panel_widget.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/tip.dart';
 import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
-import 'package:shebalin/src/theme/ui/animated_visibility.dart';
+import 'package:shebalin/src/theme/ui/app_animated_visibility.dart';
+import 'package:shebalin/src/theme/ui/app_circle_button.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
@@ -19,12 +19,14 @@ class PerformanceModePage extends StatefulWidget {
   static const routeName = 'mode';
   final VoidCallback onPerfModeComplete;
   final VoidCallback onPerfModeResume;
+  final VoidCallback onClosePerformance;
   final void Function(List<String>, int) onImageOpen;
   const PerformanceModePage({
     super.key,
     required this.onPerfModeComplete,
     required this.onPerfModeResume,
     required this.onImageOpen,
+    required this.onClosePerformance,
   });
 
   @override
@@ -54,13 +56,10 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      floatingActionButton: FloatingActionButton(
-        heroTag: "closePerformance",
-        backgroundColor: Colors.white,
-        onPressed: () => _closePerformance(),
-        child: const Image(
-          image: AssetImage(ImagesSources.closePerformance),
-        ),
+      floatingActionButton: AppCircleButton(
+        tag: 'closePerformance',
+        onPressed: widget.onClosePerformance,
+        image: ImagesSources.closePerformance,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       body: Stack(
@@ -101,17 +100,14 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
               children: [
-                FloatingActionButton(
-                  heroTag: "getUserLocation",
-                  backgroundColor: Colors.white,
+                AppCircleButton(
                   onPressed: () => context.read<PerfModeBloc>().add(
                         PerfModeGetUserLocationEvent(
                           chapters.map((e) => e.place).toList(),
                         ),
                       ),
-                  child: const Image(
-                    image: AssetImage(ImagesSources.locationIcon),
-                  ),
+                  tag: 'getUserLocation',
+                  image: ImagesSources.locationIcon,
                 ),
                 const SizedBox(
                   height: 10,
@@ -120,7 +116,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                   builder: (context, perfModeState) {
                     return BlocBuilder<AudioPlayerBloc, AudioPlayerState>(
                       builder: (context, audioPlayerState) {
-                        return AnimatedVisibility(
+                        return AppAnimatedVisibility(
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.easeIn,
                           isVisible:
@@ -174,24 +170,5 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
         },
       ),
     );
-  }
-
-  Future<bool> showDialogWindow() async {
-    return await showDialog(
-          context: context,
-          builder: (_) => DialogWindow(
-            title: "Завершить спектакль?",
-            subtitle: "Прогресс прохождения не будет\nсохранен.",
-            onTapPrimary: widget.onPerfModeComplete,
-            titlePrimary: "Завершить",
-            titleSecondary: "Отмена",
-            onTapSecondary: widget.onPerfModeResume,
-          ),
-        ) ??
-        false;
-  }
-
-  void _closePerformance() {
-    showDialogWindow();
   }
 }
