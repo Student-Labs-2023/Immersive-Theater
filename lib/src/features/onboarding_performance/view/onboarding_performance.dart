@@ -80,7 +80,14 @@ class _OnboardingPerformanceState extends State<OnboardingPerformance> {
               ),
               AnimatedSubtitle(
                 subtitle: pages[currentIndex].subtitle,
-                subtitleAccent: pages[currentIndex].subtitleAccent,
+                subtitleAccent: showOneButtonAtHome
+                    ? pages[currentIndex].subtitleAccent
+                    : RepositoryProvider.of<CurrentPerformanceProvider>(context)
+                        .performance
+                        .info
+                        .chapters[0]
+                        .place
+                        .address,
               ),
               const SizedBox(
                 height: 40,

@@ -122,20 +122,7 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                                   const SizedBox(
                                     height: 32,
                                   ),
-                                  const DescriptionSkeleton(),
-                                  const SizedBox(
-                                    height: 12,
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: AppColor.whiteBackground,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.1,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.02,
-                                  ),
+                                  const HeaderPlaceholder(),
                                   const AudioDemoSkeleton()
                                 ],
                               ),

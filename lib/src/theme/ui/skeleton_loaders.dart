@@ -193,6 +193,22 @@ class DescriptionSkeleton extends StatelessWidget {
   }
 }
 
+class HeaderPlaceholder extends StatelessWidget {
+  const HeaderPlaceholder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColor.whiteBackground,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      width: MediaQuery.of(context).size.width * 0.5,
+      height: 19,
+    );
+  }
+}
+
 class HistoricalContentSkeleton extends StatelessWidget {
   const HistoricalContentSkeleton({super.key});
 

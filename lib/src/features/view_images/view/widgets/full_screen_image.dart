@@ -12,7 +12,6 @@ class FulScreenImageLocation extends StatelessWidget {
       panEnabled: false,
       child: CachedNetworkImage(
         imageUrl: imagePath,
-        fit: BoxFit.cover,
         placeholder: (context, url) => const AppProgressBar(),
       ),
     );
