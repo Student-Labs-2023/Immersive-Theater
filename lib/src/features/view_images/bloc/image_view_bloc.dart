@@ -15,8 +15,10 @@ class ImageViewBloc extends Bloc<ImageViewEvent, ImageViewState> {
     ImageViewPageChanged event,
     Emitter<ImageViewState> emit,
   ) {
-    emit(state.copyWith(
-      index: event.index,
-    ));
+    emit(
+      state.copyWith(
+        index: event.index,
+      ),
+    );
   }
 }

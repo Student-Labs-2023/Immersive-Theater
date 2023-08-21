@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class AnimatedVisibility extends StatefulWidget {
+class AppAnimatedVisibility extends StatefulWidget {
   final Widget child;
   final bool isVisible;
   final Duration duration;
   final Curve curve;
-  const AnimatedVisibility({
+  const AppAnimatedVisibility({
     super.key,
     required this.child,
     required this.isVisible,
@@ -14,10 +14,10 @@ class AnimatedVisibility extends StatefulWidget {
   });
 
   @override
-  State<AnimatedVisibility> createState() => _AnimatedVisibilityState();
+  State<AppAnimatedVisibility> createState() => _AppAnimatedVisibilityState();
 }
 
-class _AnimatedVisibilityState extends State<AnimatedVisibility>
+class _AppAnimatedVisibilityState extends State<AppAnimatedVisibility>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late final Animation<double> animation;
@@ -38,7 +38,7 @@ class _AnimatedVisibilityState extends State<AnimatedVisibility>
   }
 
   @override
-  void didUpdateWidget(covariant AnimatedVisibility oldWidget) {
+  void didUpdateWidget(covariant AppAnimatedVisibility oldWidget) {
     if (oldWidget.isVisible != widget.isVisible) {
       if (isVisible) {
         controller.forward();

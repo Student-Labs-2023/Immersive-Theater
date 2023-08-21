@@ -6,7 +6,7 @@ import 'package:shebalin/src/features/view_images/view/widgets/full_screen_image
 import 'package:shebalin/src/theme/images.dart';
 
 class ImagesViewPage extends StatelessWidget {
-  static const routeName = '/images-view-page';
+  static const routeName = 'images-view-page';
 
   const ImagesViewPage({
     super.key,

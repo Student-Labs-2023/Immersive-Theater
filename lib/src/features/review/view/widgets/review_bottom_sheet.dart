@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_subtitle.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/animated_title.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/theme/app_color.dart';
-import 'package:shebalin/src/theme/ui/bar_indicator.dart';
+import 'package:shebalin/src/theme/ui/app_button.dart';
+import 'package:shebalin/src/theme/ui/app_resize_handler.dart';
+import 'package:shebalin/src/theme/ui/app_subtitle.dart';
 
 class ReviewBottomSheet extends StatelessWidget {
   final VoidCallback onPerfModeComplete;
@@ -35,7 +35,7 @@ class ReviewBottomSheet extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const BarIndicator(),
+            const AppResizeHandler(),
             const SizedBox(
               height: 20,
             ),

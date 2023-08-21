@@ -19,7 +19,7 @@ class OnboardPerformance {
     OnboardPerformance(
       title: 'Доберитесь до стартовой точки спектакля',
       subtitle: 'Стартовая точка спектакля находится по адресу: ',
-      subtitleAccent: 'улица Ленина, 4',
+      subtitleAccent: '',
       buttonTitle: "Составить маршрут",
       image: ImagesSources.onboardMap,
     ),

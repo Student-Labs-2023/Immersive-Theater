@@ -8,13 +8,13 @@ import 'package:shebalin/src/features/detailed_performaces/view/detailed_perform
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_page.dart';
 import 'package:shebalin/src/features/locations/view/widgets/historical_content_location_panel.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
+import 'package:shebalin/src/theme/ui/app_button.dart';
 import 'package:shebalin/src/theme/ui/skeleton_loaders.dart';
 import 'package:shebalin/src/features/locations/view/widgets/images_content_location_panel.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
-import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
 
 class LocationDescriptionPanelPage extends StatefulWidget {
@@ -49,40 +49,24 @@ class _LocationDescriptionPanelPageState
       floatingActionButton: BlocBuilder<PerformanceBloc, PerformanceState>(
         builder: (context, state) {
           if (state is PerformanceLoadSuccess) {
-            return ElevatedButton(
-              onPressed: () async {
-                final int index = int.parse(
-                  widget.mapObjectId
-                      .substring(0, widget.mapObjectId.indexOf('/')),
-                );
-                Navigator.of(context).pushNamed(
-                  DetailedPerformancePage.routeName,
-                  arguments: DetailedPerformanceArgs(
-                    performance: state.perfomances[index],
-                  ),
-                );
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(accentTextColor),
-                elevation: MaterialStateProperty.all(5),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                minimumSize: MaterialStateProperty.all(
-                  Size(
-                    mediaQuerySize.width - 32,
-                    48,
-                  ),
-                ),
-              ),
-              child: Text(
-                'Перейти к спектаклю',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: AppColor.whiteText),
+            return Padding(
+              padding:
+                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 20.0),
+              child: AppButton.primaryButton(
+                title: 'Перейти к спектаклю',
+                onTap: () async {
+                  final int index = int.parse(
+                    widget.mapObjectId
+                        .substring(0, widget.mapObjectId.indexOf('/')),
+                  );
+                  _bloc.add(const AudioManagerAudioCompleted());
+                  Navigator.of(context).pushNamed(
+                    DetailedPerformancePage.routeName,
+                    arguments: DetailedPerformanceArgs(
+                      performance: state.perfomances[index],
+                    ),
+                  );
+                },
               ),
             );
           }
@@ -179,7 +163,15 @@ class _LocationDescriptionPanelPageState
                       ? Padding(
                           padding: const EdgeInsets.only(right: 16.0),
                           child: HistoricalContentLocationPanel(
-                            locationDescription: currentLocation.title,
+                            locationDescription: state
+                                .perfomances[int.parse(
+                              widget.mapObjectId.substring(
+                                0,
+                                widget.mapObjectId.indexOf('/'),
+                              ),
+                            )]
+                                .info
+                                .description,
                           ),
                         )
                       : const HistoricalContentSkeleton(),
@@ -210,6 +202,9 @@ class _LocationDescriptionPanelPageState
                           },
                         )
                       : const AudioCardSkeleton(),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.1,
+                  )
                 ],
               );
             },
@@ -220,9 +215,8 @@ class _LocationDescriptionPanelPageState
   }
 
   void _closePanel() {
-    context.read<MapPinBloc>().emit(MapPinClosingState());
+    context.read<MapPinBloc>().add(CloseMapPin());
     Navigator.of(context).popUntil(ModalRoute.withName(MainScreen.routeName));
-
   }
 
   void _onAudioTap() {
@@ -232,5 +226,11 @@ class _LocationDescriptionPanelPageState
         url: currentLocation.shortAudioLink,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _bloc.add(const AudioManagerAudioCompleted());
+    super.dispose();
   }
 }

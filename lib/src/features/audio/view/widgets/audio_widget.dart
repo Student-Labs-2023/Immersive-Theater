@@ -27,11 +27,11 @@ class AudioWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        GestureDetector(
-          onTap: onTap,
-          child: AudioImageBack(
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        children: [
+          AudioImageBack(
             height: MediaQuery.of(context).size.height * 0.18 / 3,
             image: image,
             colorFilter: isCurrent
@@ -56,35 +56,35 @@ class AudioWidget extends StatelessWidget {
                   )
                 : null,
           ),
-        ),
-        const SizedBox(
-          width: 14,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            Text(
-              subtitle,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: AppColor.greyText),
-            ),
-          ],
-        ),
-        const Spacer(),
-        Text(
-          duration,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium!
-              .copyWith(color: AppColor.greyText),
-        )
-      ],
+          const SizedBox(
+            width: 14,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              Text(
+                subtitle,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: AppColor.greyText),
+              ),
+            ],
+          ),
+          const Spacer(),
+          Text(
+            duration,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: AppColor.greyText),
+          )
+        ],
+      ),
     );
   }
 }

@@ -8,13 +8,13 @@ import 'package:shebalin/src/features/detailed_performaces/bloc/detailed_perform
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/author_card.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/detailed_map.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/text_with_leading.dart';
-import 'package:shebalin/src/features/onboarding_performance/view/widgets/app_icon_button.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome_args.dart';
 import 'package:shebalin/src/features/view_images/models/image_view_args.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
+import 'package:shebalin/src/theme/ui/app_button.dart';
 import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
 import 'package:shebalin/src/theme/ui/image_card.dart';
@@ -24,7 +24,7 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class DetailedPerformancePage extends StatefulWidget {
   const DetailedPerformancePage({super.key});
-  static const routeName = '/detailed-performance';
+  static const routeName = 'detailed-performance';
   @override
   State<DetailedPerformancePage> createState() =>
       _DetailedPerformancePageState();
@@ -122,20 +122,7 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                                   const SizedBox(
                                     height: 32,
                                   ),
-                                  const DescriptionSkeleton(),
-                                  const SizedBox(
-                                    height: 12,
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: AppColor.whiteBackground,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.1,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.02,
-                                  ),
+                                  const HeaderPlaceholder(),
                                   const AudioDemoSkeleton()
                                 ],
                               ),
@@ -216,8 +203,6 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                         child: Center(
                           child: IconButton(
                             onPressed: () {
-                              audioManagerBloc
-                                  .add(const AudioManagerAudioCompleted());
                               Navigator.of(context).pop();
                             },
                             icon: Image.asset(
@@ -428,6 +413,12 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  @override
+  void dispose() {
+    audioManagerBloc.add(const AudioManagerAudioCompleted());
+    super.dispose();
   }
 
   String durationToHoursMinutes(Duration duration) {

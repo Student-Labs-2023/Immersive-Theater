@@ -9,6 +9,7 @@ import 'package:shebalin/src/features/mode_perf_home/view/widgets/panel_widget.d
 import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
+import 'package:shebalin/src/theme/ui/app_circle_button.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
@@ -48,13 +49,10 @@ class _PerformanceAtHomeModePageState extends State<PerformanceAtHomeModePage> {
     final double heightPanelClosed = height * 0.21;
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        heroTag: "closePerformance",
-        backgroundColor: Colors.white,
+      floatingActionButton: AppCircleButton(
+        tag: 'closePerformance',
         onPressed: widget.closePerformance,
-        child: const Image(
-          image: AssetImage(ImagesSources.closePerformance),
-        ),
+        image: ImagesSources.closePerformance,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       extendBodyBehindAppBar: true,

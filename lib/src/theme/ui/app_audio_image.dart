@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'app_placeholer.dart';
 
-class AudioImage extends StatelessWidget {
-  const AudioImage({
+class AppAudioImage extends StatelessWidget {
+  const AppAudioImage({
     super.key,
     required this.imageLink,
     required this.size,

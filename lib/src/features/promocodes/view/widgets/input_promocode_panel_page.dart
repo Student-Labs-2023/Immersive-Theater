@@ -8,8 +8,9 @@ import 'package:shebalin/src/features/promocodes/bloc/tickets_bloc.dart';
 import 'package:shebalin/src/features/promocodes/bloc/tickets_event.dart';
 
 class InputPromocodePanelPage extends StatefulWidget {
-  InputPromocodePanelPage({Key? key, required this.bloc}) : super(key: key);
-  TicketsBloc bloc;
+  const InputPromocodePanelPage({Key? key, required this.bloc})
+      : super(key: key);
+  final TicketsBloc bloc;
   @override
   State<InputPromocodePanelPage> createState() =>
       _InputPromocodePanelPageState();

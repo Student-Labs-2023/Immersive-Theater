@@ -87,6 +87,12 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
   String getDuration(int index) {
     return _formatTime(duration[index]);
   }
+
+  @override
+  Future<void> close() {
+    player.stop();
+    return super.close();
+  }
 }
 
 String _formatTime(Duration duration) {
