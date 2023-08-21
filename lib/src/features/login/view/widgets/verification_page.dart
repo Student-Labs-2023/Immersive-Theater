@@ -12,12 +12,17 @@ class VerificationPage extends StatefulWidget {
   const VerificationPage({
     super.key,
   });
+
   static const routeName = 'verify';
+
   @override
   State<VerificationPage> createState() => _VerificationPageState();
 }
 
 class _VerificationPageState extends State<VerificationPage> {
+  final _controller = TextEditingController();
+  bool isWrongCode = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
@@ -49,14 +54,10 @@ class _VerificationPageState extends State<VerificationPage> {
         body: BlocListener<LoginBloc, LoginState>(
           listener: (context, state) {
             if (!state.isValidCode) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(
-                    backgroundColor: AppColor.purpleDarkPrimary,
-                    content: Text('Неверный код подтверждения'),
-                  ),
-                );
+              setState(() {
+                _controller.clear();
+                isWrongCode = true;
+              });
             }
           },
           child: SafeArea(
@@ -77,29 +78,24 @@ class _VerificationPageState extends State<VerificationPage> {
                     height: 10,
                   ),
                   Pinput(
+                    controller: _controller,
                     enabled: true,
                     length: 6,
                     defaultPinTheme: PinTheme(
                       height: MediaQuery.of(context).size.width / 10,
                       width: 40,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         border: Border(
-                          bottom: BorderSide(width: 4.0, color: AppColor.grey),
+                          bottom: BorderSide(
+                              width: 4.0,
+                              color:
+                                  (_controller.text.isEmpty && isWrongCode)
+                                      ? AppColor.redAlert
+                                      : AppColor.grey,
+                          ),
                         ),
                       ),
                     ),
-                    // submittedPinTheme: PinTheme(
-                    //   height: MediaQuery.of(context).size.width / 10,
-                    //   width: 40,
-                    //   decoration: const BoxDecoration(
-                    //     border: Border(
-                    //       bottom: BorderSide(
-                    //         width: 4.0,
-                    //         color: AppColor.yellowSecondary,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     focusedPinTheme: PinTheme(
                       height: MediaQuery.of(context).size.width / 10,
                       width: 40,
@@ -118,9 +114,20 @@ class _VerificationPageState extends State<VerificationPage> {
                           .add(LoginVerifyOTP(smsCode: code));
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  isWrongCode
+                      ? Padding(
+                          padding: EdgeInsets.only(bottom: 20),
+                          child: Text(
+                            "Неверный код",
+                            style:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      color: AppColor.redAlert,
+                                    ),
+                          ),
+                        )
+                      : const SizedBox(
+                          height: 20,
+                        ),
                   InkWell(
                     child: Text(
                       "Отправить код повторно",
