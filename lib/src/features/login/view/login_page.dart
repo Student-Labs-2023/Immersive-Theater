@@ -5,6 +5,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shebalin/src/features/login/bloc/login_bloc.dart';
 import 'package:shebalin/src/features/login/view/widgets/verification_page.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/text_with_leading.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/ui/app_button.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
 
@@ -39,50 +40,80 @@ class _LoginPageState extends State<LoginPage> {
               ),
               BlocBuilder<LoginBloc, LoginState>(
                 builder: (context, state) {
-                  return Form(
-                    key: _key,
-                    child: TextFormField(
-                      initialValue: "+7 ",
-                      keyboardType: TextInputType.phone,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            leadingDistribution: TextLeadingDistribution.even,
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Form(
+                        key: _key,
+                        child: TextFormField(
+                          initialValue: "+7 ",
+                          keyboardType: TextInputType.phone,
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    leadingDistribution:
+                                        TextLeadingDistribution.even,
+                                  ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            MaskTextInputFormatter(
+                              mask: '+# ### ###-##-##',
+                              type: MaskAutoCompletionType.lazy,
+                            )
+                          ],
+                          onTapOutside: (event) {
+                            FocusScope.of(context).unfocus();
+                          },
+                          onChanged: (phoneNumber) {
+                            context.read<LoginBloc>().add(
+                                  LoginPhoneNumberChanged(
+                                    phoneNumber: phoneNumber,
+                                  ),
+                                );
+                          },
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: state.isValidPassword
+                                ? AppColor.whiteBackground
+                                : AppColor.alertTextFieldBg,
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 14.5,
+                              horizontal: 16,
+                            ),
+                            border:
+                                Theme.of(context).inputDecorationTheme.border,
+                            focusedBorder: state.isValidPassword
+                                ? Theme.of(context)
+                                    .inputDecorationTheme
+                                    .focusedBorder
+                                : Theme.of(context)
+                                    .inputDecorationTheme
+                                    .errorBorder,
+                            errorBorder: Theme.of(context)
+                                .inputDecorationTheme
+                                .errorBorder,
                           ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        MaskTextInputFormatter(
-                          mask: '+# ### ###-##-##',
-                          type: MaskAutoCompletionType.lazy,
-                        )
-                      ],
-                      onTapOutside: (event) {
-                        FocusScope.of(context).unfocus();
-                      },
-                      onChanged: (phoneNumber) {
-                        context.read<LoginBloc>().add(
-                              LoginPhoneNumberChanged(phoneNumber: phoneNumber),
-                            );
-                      },
-                      validator: (_) => state.isValidPassword
-                          ? null
-                          : 'Номер введён не полностью',
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 14.5,
-                          horizontal: 16,
                         ),
-                        border: Theme.of(context).inputDecorationTheme.border,
-                        focusedBorder: Theme.of(context)
-                            .inputDecorationTheme
-                            .focusedBorder,
-                        errorBorder:
-                            Theme.of(context).inputDecorationTheme.errorBorder,
                       ),
-                    ),
+                      state.isValidPassword
+                          ? const SizedBox(
+                              height: 31,
+                            )
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 4, bottom: 15),
+                              child: Text(
+                                "Номер введён не полностью",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                      color: AppColor.destructiveAlertDialog,
+                                    ),
+                              ),
+                            ),
+                    ],
                   );
                 },
-              ),
-              const SizedBox(
-                height: 31,
               ),
               AppButton.primaryButton(title: 'Далее', onTap: _onPressed)
             ],

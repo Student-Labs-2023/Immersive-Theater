@@ -88,18 +88,18 @@ class _VerificationPageState extends State<VerificationPage> {
                         ),
                       ),
                     ),
-                    submittedPinTheme: PinTheme(
-                      height: MediaQuery.of(context).size.width / 10,
-                      width: 40,
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            width: 4.0,
-                            color: AppColor.yellowSecondary,
-                          ),
-                        ),
-                      ),
-                    ),
+                    // submittedPinTheme: PinTheme(
+                    //   height: MediaQuery.of(context).size.width / 10,
+                    //   width: 40,
+                    //   decoration: const BoxDecoration(
+                    //     border: Border(
+                    //       bottom: BorderSide(
+                    //         width: 4.0,
+                    //         color: AppColor.yellowSecondary,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     focusedPinTheme: PinTheme(
                       height: MediaQuery.of(context).size.width / 10,
                       width: 40,

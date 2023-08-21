@@ -9,7 +9,7 @@ class LoginState extends Equatable {
     this.status = FormzSubmissionStatus.initial,
     this.phoneNumber = const PhoneNumber.pure(),
     this.isValidCode = true,
-    this.isValidPassword = false,
+    this.isValidPassword = true,
   });
 
   LoginState copyWith({
