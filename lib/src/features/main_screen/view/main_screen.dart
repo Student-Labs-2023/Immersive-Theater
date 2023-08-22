@@ -223,7 +223,7 @@ class _MainScreenState extends State<MainScreen> {
                   mapObjects: placeMarks,
                 );
               } else {
-                return const Text("error");
+                return const YandexMap();
               }
             },
           ),

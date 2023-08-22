@@ -35,6 +35,7 @@ class AuthorCard extends StatelessWidget {
                 borderRadius: const BorderRadius.all(Radius.circular(50)),
                 child: CachedNetworkImage(
                   height: 64,
+                  width: 64,
                   imageUrl: image,
                   fit: BoxFit.cover,
                 ),
