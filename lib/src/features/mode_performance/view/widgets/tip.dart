@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class Tip extends StatelessWidget {
   final String title;
   final String icon;
+  final Color backgroundColor;
   const Tip({
     super.key,
     required this.title,
     required this.icon,
+    required this.backgroundColor,
   });
 
   @override
@@ -14,7 +16,7 @@ class Tip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(10.0),
       ),
       constraints: BoxConstraints(

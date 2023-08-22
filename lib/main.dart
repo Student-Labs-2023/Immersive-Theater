@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shebalin/firebase_options.dart.dart';
@@ -25,6 +26,7 @@ void main() async {
   isFirstRun = preferences.getBool(
     SharedPreferencesKeys.isFirstRunName,
   );
+  final bool hasConnection = await InternetConnectionChecker().hasConnection;
   await dotenv.load();
   final apiKey = dotenv.env['API_KEY']!;
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -43,6 +45,7 @@ void main() async {
         ),
       ],
       child: App(
+        hasConnection: hasConnection,
         authenticationRepository: authenticationRepository,
       ),
     ),

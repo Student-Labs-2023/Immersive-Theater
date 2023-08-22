@@ -46,30 +46,71 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
         },
         builder: (context, state) {
           if (state is DetailedPerformanceLoadInProgress) {
-            return Shimmer.fromColors(
-              baseColor: Colors.grey.shade300,
-              highlightColor: Colors.grey.shade100,
-              enabled: true,
-              child: CustomScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                slivers: [
-                  SliverToBoxAdapter(
+            return CustomScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              slivers: [
+                SliverAppBar(
+                  elevation: 0.7,
+                  backgroundColor: AppColor.whiteBackground,
+                  expandedHeight: MediaQuery.of(context).size.height * 0.32,
+                  floating: false,
+                  pinned: true,
+                  flexibleSpace: LayoutBuilder(
+                    builder: (context, constraints) {
+                      top = constraints.biggest.height;
+                      top ==
+                          MediaQuery.of(context).padding.top + kToolbarHeight;
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColor.whiteBackground,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          height: MediaQuery.of(context).size.height * 0.32,
+                        ),
+                      );
+                    },
+                  ),
+                  leading: Row(
+                    children: [
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                        width: 32,
+                        height: 32,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColor.grey,
+                        ),
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            icon: Image.asset(
+                              ImagesSources.closePerformance,
+                              color: AppColor.whiteText,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: AppColor.whiteBackground,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              height: MediaQuery.of(context).size.height * 0.3,
-                            ),
-                            const SizedBox(
-                              height: 12,
-                            ),
                             Padding(
                               padding: const EdgeInsets.only(left: 16.0),
                               child: Column(
@@ -135,8 +176,8 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           } else if (state is DetailedPerformanceUnPaid ||
               state is DetailedPerformanceDownLoaded ||
@@ -359,7 +400,7 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
               ],
             );
           }
-          return const Text('error');
+          return const Center(child: Text('Ошибка загрузки данных'));
         },
       ),
       floatingActionButton: Padding(
@@ -368,9 +409,10 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
           builder: (context, state) {
             final DetailedPerformanceBloc bloc =
                 context.read<DetailedPerformanceBloc>();
-            final String? title;
+            String? title;
             final VoidCallback? onTap;
-            if (state is DetailedPerformanceLoadInProgress) {
+            if (state is DetailedPerformanceLoadInProgress ||
+                state is DetailedPerformanceFailure) {
               return const SizedBox(
                 height: 0,
                 width: 0,
