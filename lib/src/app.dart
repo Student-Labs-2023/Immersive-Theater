@@ -2,9 +2,11 @@ import 'package:api_client/api_client.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:payment_service/payment_service.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/authentication/bloc/authentication_bloc.dart';
+import 'package:shebalin/src/features/connectivity/bloc/connectivity_bloc.dart';
 import 'package:shebalin/src/features/detailed_performaces/bloc/detailed_performance_bloc.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_args.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_page.dart';
@@ -22,30 +24,41 @@ import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
 import 'package:shebalin/src/features/review/models/emoji.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
 class App extends StatelessWidget {
   final AuthenticationRepositoryImpl _authenticationRepository;
+  final bool hasConnection;
   const App({
     super.key,
     required AuthenticationRepositoryImpl authenticationRepository,
+    required this.hasConnection,
   }) : _authenticationRepository = authenticationRepository;
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: _authenticationRepository,
-      child: BlocProvider(
-        create: (_) => AuthenticationBloc(
-          authRepository: _authenticationRepository,
+    return BlocProvider(
+      create: (context) => InternetConnectionBloc(
+        hasConnection
+            ? InternetConnectionStatus.connected
+            : InternetConnectionStatus.disconnected,
+      ),
+      child: RepositoryProvider.value(
+        value: _authenticationRepository,
+        child: BlocProvider(
+          create: (_) => AuthenticationBloc(
+            authRepository: _authenticationRepository,
+          ),
+          child: AppView(),
         ),
-        child: const AppView(),
       ),
     );
   }
 }
 
 class AppView extends StatelessWidget {
-  const AppView({super.key});
+  AppView({super.key});
+  bool isShown = false;
 
   @override
   Widget build(BuildContext context) {
@@ -119,9 +132,34 @@ class AppView extends StatelessWidget {
             } else {
               throw Exception('Unknown route: ${routeSettings.name}');
             }
+
             return MaterialPageRoute<void>(
               settings: routeSettings,
-              builder: (BuildContext context) => page,
+              builder: (BuildContext context) =>
+                  BlocListener<InternetConnectionBloc, InternetConnectionState>(
+                listener: (context, state) {
+                  if (state.status == InternetConnectionStatus.disconnected &&
+                      !isShown) {
+                    isShown = true;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        duration: Duration(days: 1),
+                        backgroundColor: AppColor.destructiveAlertDialog,
+                        content: Text(
+                          'Нет соединения с интернетом',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  } else if (state.status ==
+                          InternetConnectionStatus.connected &&
+                      isShown) {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    isShown = false;
+                  }
+                },
+                child: page,
+              ),
             );
           },
         ),

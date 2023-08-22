@@ -20,7 +20,7 @@ class DetailedPerformanceBloc
     required this.performanceRepository,
   }) : super(DetailedPerformanceLoadInProgress(performance: performance)) {
     on<DetailedPerformanceStarted>(_onDetailedPerformanceStarted);
-
+    on<DetailedPerformanceRefreshed>(_onDetailedPerformanceRefreshed);
     on<DetailedPerformanceInfoLoaded>(_onDetailedPerformanceInfoLoaded);
 
     on<DetailedPerformancePay>(_onDetailedPerformancePay);
@@ -32,6 +32,7 @@ class DetailedPerformanceBloc
     Emitter<DetailedPerformanceState> emit,
   ) async {
     try {
+      emit(DetailedPerformanceLoadInProgress(performance: performance));
       final info =
           await performanceRepository.fetchPerformanceById(performance.id);
       await Future.delayed(const Duration(seconds: 2));
@@ -79,6 +80,25 @@ class DetailedPerformanceBloc
       emit(DetailedPerformanceDownLoaded(performance: state.performance));
     } catch (e) {
       emit(DetailedPerformancePaid(performance: state.performance));
+    }
+  }
+
+  Future<void> _onDetailedPerformanceRefreshed(
+    DetailedPerformanceRefreshed event,
+    Emitter<DetailedPerformanceState> emit,
+  ) async {
+    try {
+      emit(DetailedPerformanceLoadInProgress(performance: performance));
+      final info =
+          await performanceRepository.fetchPerformanceById(performance.id);
+      await Future.delayed(const Duration(seconds: 2));
+      add(
+        DetailedPerformanceInfoLoaded(
+          performance: state.performance.copyWith(info: info),
+        ),
+      );
+    } catch (_) {
+      emit(DetailedPerformanceFailure(performance: state.performance));
     }
   }
 }

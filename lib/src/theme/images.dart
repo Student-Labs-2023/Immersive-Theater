@@ -50,4 +50,5 @@ class ImagesSources {
   static const String startPlacemark = 'assets/images/start_mark.png';
   static const String currentPlacemark = 'assets/images/mark.png';
   static const String logout = 'assets/icons/logout.png';
+  static const String warning = 'assets/icons/warning.png';
 }

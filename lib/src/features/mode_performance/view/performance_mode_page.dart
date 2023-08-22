@@ -8,6 +8,7 @@ import 'package:shebalin/src/features/map_performance/view/map_page.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/panel_widget.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/tip.dart';
 import 'package:shebalin/src/features/mode_performance_flow/models/current_performance_provider.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/app_animated_visibility.dart';
@@ -133,6 +134,7 @@ class _PerformanceModePageState extends State<PerformanceModePage> {
                                         perfModeState is! PerfModeUserOnPlace
                                     ? ImagesSources.tipIcon
                                     : ImagesSources.time,
+                            backgroundColor: AppColor.whiteBackground,
                           ),
                         );
                       },
