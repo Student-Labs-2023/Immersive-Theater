@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/authentication/bloc/authentication_bloc.dart';
 import 'package:shebalin/src/features/locations/view/location_description_panel_page.dart';
@@ -14,7 +15,7 @@ import 'package:shebalin/src/features/performances/view/performances_panel_page.
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
-
+import 'package:lottie/lottie.dart';
 import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/app_circle_button.dart';
 import 'package:shebalin/src/theme/ui/app_resize_handler.dart';
@@ -34,6 +35,7 @@ class _MainScreenState extends State<MainScreen> {
   bool isPerfomnceButtonPressed = true;
   @override
   Widget build(BuildContext context) {
+    checkLocationPermission();
     return Scaffold(
       floatingActionButton: AppCircleButton(
         tag: 'logout',
@@ -159,9 +161,8 @@ class _MainScreenState extends State<MainScreen> {
                     : const PromocodePanelPage();
               } else if (state is MapPinLoadingState) {
                 return Center(
-                  child: CircularProgressIndicator(color: accentTextColor),
+                  child: Lottie.asset('assets/images/lottie.json'),
                 );
-              } else if (state is MapPinLoaded) {
               } else if (state is MapPinClosingState) {
                 return isPerfomnceButtonPressed
                     ? const PerformancesPanelPage()
@@ -233,6 +234,14 @@ class _MainScreenState extends State<MainScreen> {
         parallaxOffset: 0.05,
       ),
     );
+  }
+
+  void checkLocationPermission() async {
+    final permission = await Geolocator.checkPermission();
+    if (permission != LocationPermission.always ||
+        permission != LocationPermission.whileInUse) {
+      Geolocator.requestPermission();
+    }
   }
 
   void _isPerformancePanelShowed(bool flag) {
