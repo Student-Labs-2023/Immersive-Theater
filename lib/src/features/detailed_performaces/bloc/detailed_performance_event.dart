@@ -11,6 +11,10 @@ class DetailedPerformanceStarted extends DetailedPerformanceEvent {
   const DetailedPerformanceStarted();
 }
 
+class DetailedPerformanceRefreshed extends DetailedPerformanceEvent {
+  const DetailedPerformanceRefreshed();
+}
+
 class DetailedPerformanceInfoLoaded extends DetailedPerformanceEvent {
   final Performance performance;
   const DetailedPerformanceInfoLoaded({required this.performance});

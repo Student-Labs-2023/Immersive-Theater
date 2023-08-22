@@ -7,7 +7,6 @@ import 'package:payment_service/payment_service.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/authentication/bloc/authentication_bloc.dart';
 import 'package:shebalin/src/features/connectivity/bloc/connectivity_bloc.dart';
-import 'package:shebalin/src/features/connectivity/view/widgets/connection_status_overlay.dart';
 import 'package:shebalin/src/features/detailed_performaces/bloc/detailed_performance_bloc.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_args.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_page.dart';
@@ -25,6 +24,7 @@ import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
 import 'package:shebalin/src/features/review/models/emoji.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
 class App extends StatelessWidget {
@@ -49,7 +49,7 @@ class App extends StatelessWidget {
           create: (_) => AuthenticationBloc(
             authRepository: _authenticationRepository,
           ),
-          child: const AppView(),
+          child: AppView(),
         ),
       ),
     );
@@ -57,18 +57,11 @@ class App extends StatelessWidget {
 }
 
 class AppView extends StatelessWidget {
-  const AppView({super.key});
+  AppView({super.key});
+  bool isShown = false;
 
   @override
   Widget build(BuildContext context) {
-    final topPaddingHeight = (MediaQueryData.fromWindow(
-      WidgetsBinding.instance.window,
-    ).padding.top);
-    final OverlayEntry overlayEntry = OverlayEntry(
-      builder: (context) => ConnectionStatusOverlay(
-        topPaddingHeight: topPaddingHeight,
-      ),
-    );
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -145,14 +138,24 @@ class AppView extends StatelessWidget {
               builder: (BuildContext context) =>
                   BlocListener<InternetConnectionBloc, InternetConnectionState>(
                 listener: (context, state) {
-                  if (state.status == InternetConnectionStatus.connected &&
-                      overlayEntry.mounted) {
-                    overlayEntry.remove();
+                  if (state.status == InternetConnectionStatus.disconnected &&
+                      !isShown) {
+                    isShown = true;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        duration: Duration(days: 1),
+                        backgroundColor: AppColor.destructiveAlertDialog,
+                        content: Text(
+                          'Нет соединения с интернетом',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
                   } else if (state.status ==
-                      InternetConnectionStatus.disconnected) {
-                    Overlay.of(
-                      context,
-                    ).insert(overlayEntry);
+                          InternetConnectionStatus.connected &&
+                      isShown) {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    isShown = false;
                   }
                 },
                 child: page,
