@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:payment_service/payment_service.dart';
 import 'package:performances_repository/performances_repository.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 part 'detailed_performance_event.dart';
 part 'detailed_performance_state.dart';
@@ -22,19 +21,18 @@ class DetailedPerformanceBloc
     on<DetailedPerformanceStarted>(_onDetailedPerformanceStarted);
     on<DetailedPerformanceRefreshed>(_onDetailedPerformanceRefreshed);
     on<DetailedPerformanceInfoLoaded>(_onDetailedPerformanceInfoLoaded);
-
-    on<DetailedPerformancePay>(_onDetailedPerformancePay);
-    on<DetailedPerformanceDownload>(_onDetailedPerformanceDownload);
   }
 
   Future<void> _onDetailedPerformanceStarted(
-    DetailedPerformanceEvent event,
+    DetailedPerformanceStarted event,
     Emitter<DetailedPerformanceState> emit,
   ) async {
     try {
       emit(DetailedPerformanceLoadInProgress(performance: performance));
-      final info =
-          await performanceRepository.fetchPerformanceById(performance.id);
+      final info = await performanceRepository.fetchPerformanceById(
+        performance.id,
+        event.userId,
+      );
       await Future.delayed(const Duration(seconds: 2));
       add(
         DetailedPerformanceInfoLoaded(
@@ -50,37 +48,10 @@ class DetailedPerformanceBloc
     DetailedPerformanceInfoLoaded event,
     Emitter<DetailedPerformanceState> emit,
   ) {
+    if (event.performance.bought) {
+      return emit(DetailedPerformancePaid(performance: event.performance));
+    }
     emit(DetailedPerformanceUnPaid(performance: event.performance));
-  }
-
-  Future<void> _onDetailedPerformancePay(
-    DetailedPerformancePay event,
-    Emitter<DetailedPerformanceState> emit,
-  ) async {
-    try {
-      final url = await paymentService.pay(
-        userId: event.userId,
-        performanceId: event.performanceId,
-      );
-
-      if (!await launchUrl(Uri.parse(url), mode: LaunchMode.inAppWebView)) {
-        return;
-      }
-      emit(DetailedPerformancePaid(performance: state.performance));
-    } catch (e) {
-      emit(DetailedPerformanceUnPaid(performance: state.performance));
-    }
-  }
-
-  Future<void> _onDetailedPerformanceDownload(
-    DetailedPerformanceDownload event,
-    Emitter<DetailedPerformanceState> emit,
-  ) async {
-    try {
-      emit(DetailedPerformanceDownLoaded(performance: state.performance));
-    } catch (e) {
-      emit(DetailedPerformancePaid(performance: state.performance));
-    }
   }
 
   Future<void> _onDetailedPerformanceRefreshed(
@@ -89,8 +60,10 @@ class DetailedPerformanceBloc
   ) async {
     try {
       emit(DetailedPerformanceLoadInProgress(performance: performance));
-      final info =
-          await performanceRepository.fetchPerformanceById(performance.id);
+      final info = await performanceRepository.fetchPerformanceById(
+        performance.id,
+        event.userId,
+      );
       await Future.delayed(const Duration(seconds: 2));
       add(
         DetailedPerformanceInfoLoaded(

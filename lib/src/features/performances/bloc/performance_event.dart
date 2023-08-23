@@ -7,12 +7,17 @@ abstract class PerformanceEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class PerformancesStarted extends PerformanceEvent {}
+class PerformancesStarted extends PerformanceEvent {
+  final String userId;
+
+  const PerformancesStarted(this.userId);
+}
 
 class PerformancesRefreshed extends PerformanceEvent {
+  final String userId;
   final List<Performance> performances;
 
-  const PerformancesRefreshed(this.performances);
+  const PerformancesRefreshed(this.performances, this.userId);
 
   @override
   List<Object> get props => [performances];
@@ -20,8 +25,9 @@ class PerformancesRefreshed extends PerformanceEvent {
 
 class PerformanceLoadFullInfo extends PerformanceEvent {
   final int id;
+  final String userId;
 
-  const PerformanceLoadFullInfo(this.id);
+  const PerformanceLoadFullInfo(this.id, this.userId);
   @override
   List<Object> get props => [id];
 }

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -13,6 +14,7 @@ import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_windo
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/performances/view/performances_panel_page.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
+import 'package:shebalin/src/features/tickets/bloc/ticket_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
 import 'package:lottie/lottie.dart';
@@ -33,9 +35,15 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final panelController = PanelController();
   bool isPerfomnceButtonPressed = true;
+
+  @override
+  void initState() {
+    checkLocationPermission();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    checkLocationPermission();
     return Scaffold(
       floatingActionButton: AppCircleButton(
         tag: 'logout',
@@ -91,6 +99,14 @@ class _MainScreenState extends State<MainScreen> {
                         onPressed: () {
                           _isPerformancePanelShowed(false);
                           panelController.open();
+                          context.read<TicketBloc>().add(
+                                TicketRefreshed(
+                                  context
+                                      .read<AuthenticationRepositoryImpl>()
+                                      .currentUser
+                                      .id,
+                                ),
+                              );
                         },
                         child: Text(
                           "Мои билеты",
@@ -258,11 +274,15 @@ class _MainScreenState extends State<MainScreen> {
     BuildContext context,
   ) {
     final String id = mapObject.mapId.value.toString();
+
+    final String userId =
+        context.read<AuthenticationRepositoryImpl>().currentUser.id;
     log(id);
     if (id.endsWith('0') && count == 1) {
       context.read<PerformanceBloc>().add(
             PerformanceLoadFullInfo(
               int.parse(id.substring(0, id.indexOf('/'))),
+              userId,
             ),
           );
     } else {
