@@ -39,6 +39,14 @@ class OnboardPerformance {
       image: ImagesSources.onboardNext,
       subtitleAccent: '',
     ),
+    OnboardPerformance(
+      title: 'Спектакль можно прослушать 1 раз',
+      subtitle:
+          'Если вы готовы начать прослушивание, нажмите "Начать спектакль"',
+      subtitleAccent: '',
+      buttonTitle: 'Начать спектакль',
+      image: ImagesSources.fourthOnbording,
+    ),
   ];
 
   static List<OnboardPerformance> home = [
@@ -56,6 +64,14 @@ class OnboardPerformance {
       buttonTitle: 'Начать спектакль',
       image: ImagesSources.onboardNext,
       subtitleAccent: '',
+    ),
+    OnboardPerformance(
+      title: 'Спектакль можно прослушать 1 раз',
+      subtitle:
+          'Если вы готовы начать прослушивание, нажмите "Начать спектакль"',
+      subtitleAccent: '',
+      buttonTitle: 'Начать спектакль',
+      image: ImagesSources.fourthOnbording,
     ),
   ];
 }

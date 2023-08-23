@@ -5,6 +5,7 @@ class ImagesSources {
   static const String onbording = 'assets/images/firstOnboarding.png';
   static const String secondOnbording = 'assets/images/secondOnboarding.png';
   static const String thirdOnbording = 'assets/images/thirdOnboarding.png';
+  static const String fourthOnbording = 'assets/images/onboarding_one_time.png';
   static const String shebalinTicket = 'assets/images/shebalin_ticket.png';
   static const String shebalinPerfomanceCard =
       'assets/images/shebalin_perfomance_card.png';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shebalin/src/theme/theme.dart';
 
 import '../bloc/performance_bloc.dart';
@@ -27,9 +28,7 @@ class _PerformancesPanelPageState extends State<PerformancesPanelPage> {
               builder: (context, state) {
                 if (state is PerformanceLoadInProgress) {
                   return Center(
-                    child: CircularProgressIndicator(
-                      color: accentTextColor,
-                    ),
+                    child: Lottie.asset('assets/images/lottie.json'),
                   );
                 }
                 if (state is PerformanceLoadSuccess) {
@@ -47,6 +46,7 @@ class _PerformancesPanelPageState extends State<PerformancesPanelPage> {
                     ),
                   );
                 } else {
+                  print("---- $state ----");
                   return const Text('Oops...Something went wrong!');
                 }
               },
