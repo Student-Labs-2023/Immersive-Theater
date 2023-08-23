@@ -15,40 +15,43 @@ class Performance {
   final String imageLink;
   final int price;
   final Duration duration;
-
+  @JsonKey(name: 'access')
+  final bool bought;
   final FullInfoPerformance info;
 
-  Performance(
-      {required this.id,
-      required this.title,
-      required this.imageLink,
-      required this.tag,
-      required this.info,
-      required this.price,
-      required this.duration});
+  Performance({
+    required this.id,
+    required this.title,
+    required this.imageLink,
+    required this.tag,
+    required this.info,
+    required this.price,
+    required this.duration,
+    required this.bought,
+  });
 
   factory Performance.fromJson(Map<String, dynamic> json) =>
       _$PerformanceFromJson(json);
 
   Map<String, dynamic> toJson() => _$PerformanceToJson(this);
 
-  Performance copyWith({
-    int? id,
-    String? title,
-    String? imageLink,
-    String? tag,
-    int? price,
-    Duration? duration,
-    FullInfoPerformance? info,
-  }) {
+  Performance copyWith(
+      {int? id,
+      String? title,
+      String? imageLink,
+      String? tag,
+      int? price,
+      Duration? duration,
+      FullInfoPerformance? info,
+      bool? bought}) {
     return Performance(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      imageLink: imageLink ?? this.imageLink,
-      tag: tag ?? this.tag,
-      price: price ?? this.price,
-      duration: duration ?? this.duration,
-      info: info ?? this.info,
-    );
+        id: id ?? this.id,
+        title: title ?? this.title,
+        imageLink: imageLink ?? this.imageLink,
+        tag: tag ?? this.tag,
+        price: price ?? this.price,
+        duration: duration ?? this.duration,
+        info: info ?? this.info,
+        bought: bought ?? this.bought);
   }
 }

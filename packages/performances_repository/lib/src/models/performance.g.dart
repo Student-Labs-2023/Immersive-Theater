@@ -16,6 +16,7 @@ Performance _$PerformanceFromJson(Map<String, dynamic> json) => Performance(
       ]),
       price: json['price'] as int,
       duration: Duration(seconds: json['duration'] as int),
+      bought: json['access'] as bool,
     );
 
 Map<String, dynamic> _$PerformanceToJson(Performance instance) =>

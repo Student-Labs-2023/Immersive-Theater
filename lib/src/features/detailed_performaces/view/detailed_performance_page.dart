@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,8 @@ import 'package:shebalin/src/features/detailed_performaces/view/widgets/detailed
 import 'package:shebalin/src/features/detailed_performaces/view/widgets/text_with_leading.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome.dart';
 import 'package:shebalin/src/features/onboarding_performance/view/widgets/onboarding_welcome_args.dart';
+import 'package:shebalin/src/features/payment/view/payment_page.dart';
+import 'package:shebalin/src/features/payment/view/payment_page_args.dart';
 import 'package:shebalin/src/features/view_images/models/image_view_args.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
@@ -46,9 +50,11 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
             current.status == InternetConnectionStatus.connected;
       },
       listener: (context, state) {
+        final String userId =
+            context.read<AuthenticationRepositoryImpl>().currentUser.id;
         context
             .read<DetailedPerformanceBloc>()
-            .add(const DetailedPerformanceRefreshed());
+            .add(DetailedPerformanceRefreshed(userId));
       },
       child: Scaffold(
         backgroundColor: AppColor.whiteBackground,
@@ -438,20 +444,24 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                 );
               } else if (state is DetailedPerformanceUnPaid) {
                 title = 'Приобрести за ${state.performance.price} ₽';
-                onTap = () => {
-                      bloc.add(
-                        DetailedPerformancePay(
-                          performanceId: state.performance.id,
-                          userId: context
-                              .read<AuthenticationRepositoryImpl>()
-                              .currentUser
-                              .id,
-                        ),
-                      )
-                    };
-              } else if (state is DetailedPerformancePaid) {
-                title = 'Загрузить спектакль';
-                onTap = () => {bloc.add(const DetailedPerformanceDownload())};
+
+                onTap = () async {
+                  final userId = context
+                      .read<AuthenticationRepositoryImpl>()
+                      .currentUser
+                      .id;
+                  await Navigator.of(context).pushNamed(
+                    PaymentPage.routeName,
+                    arguments: PaymentPageArgs(state.performance.id),
+                  );
+
+                  log('refreshe');
+                  bloc.add(
+                    DetailedPerformanceRefreshed(
+                      userId,
+                    ),
+                  );
+                };
               } else {
                 title = 'Начать спектакль';
                 onTap = () {
