@@ -21,16 +21,3 @@ class DetailedPerformanceInfoLoaded extends DetailedPerformanceEvent {
   final Performance performance;
   const DetailedPerformanceInfoLoaded({required this.performance});
 }
-
-class DetailedPerformancePay extends DetailedPerformanceEvent {
-  final String userId;
-  final int performanceId;
-  const DetailedPerformancePay({
-    required this.userId,
-    required this.performanceId,
-  });
-}
-
-class DetailedPerformanceDownload extends DetailedPerformanceEvent {
-  const DetailedPerformanceDownload();
-}

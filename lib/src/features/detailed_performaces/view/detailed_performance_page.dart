@@ -462,9 +462,6 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                     ),
                   );
                 };
-              } else if (state is DetailedPerformancePaid) {
-                title = 'Загрузить спектакль';
-                onTap = () => {bloc.add(const DetailedPerformanceDownload())};
               } else {
                 title = 'Начать спектакль';
                 onTap = () {
