@@ -14,6 +14,8 @@ import 'package:shebalin/src/features/login/bloc/login_bloc.dart';
 import 'package:shebalin/src/features/login/view/login_page.dart';
 import 'package:shebalin/src/features/login/view/widgets/verification_page.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
+import 'package:shebalin/src/features/payment/view/payment_page.dart';
+import 'package:shebalin/src/features/payment/view/payment_page_args.dart';
 import 'package:shebalin/src/features/splash_screen/view/splash_screen.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/mode_performance_flow/view/perf_mode_flow.dart';
@@ -23,9 +25,12 @@ import 'package:shebalin/src/features/onbording/view/onbording_screen.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/review/bloc/review_page_bloc.dart';
 import 'package:shebalin/src/features/review/models/emoji.dart';
+import 'package:shebalin/src/features/tickets/bloc/ticket_bloc.dart';
 import 'package:shebalin/src/features/view_images/view/images_view_page.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/theme.dart';
+
+import 'features/payment/bloc/payment_bloc.dart';
 
 class App extends StatelessWidget {
   final AuthenticationRepositoryImpl _authenticationRepository;
@@ -49,15 +54,21 @@ class App extends StatelessWidget {
           create: (_) => AuthenticationBloc(
             authRepository: _authenticationRepository,
           ),
-          child: AppView(),
+          child: const AppView(),
         ),
       ),
     );
   }
 }
 
-class AppView extends StatelessWidget {
-  AppView({super.key});
+class AppView extends StatefulWidget {
+  const AppView({super.key});
+
+  @override
+  State<AppView> createState() => _AppViewState();
+}
+
+class _AppViewState extends State<AppView> {
   bool isShown = false;
 
   @override
@@ -71,7 +82,21 @@ class AppView extends StatelessWidget {
           create: (_) => PerformanceBloc(
             performanceRepository:
                 RepositoryProvider.of<PerformancesRepository>(context),
-          )..add(PerformancesStarted()),
+          )..add(
+              PerformancesStarted(
+                context.read<AuthenticationRepositoryImpl>().currentUser.id,
+              ),
+            ),
+        ),
+        BlocProvider(
+          create: (_) => TicketBloc(
+            performancesRepository:
+                RepositoryProvider.of<PerformancesRepository>(context),
+          )..add(
+              TicketStarted(
+                context.read<AuthenticationRepositoryImpl>().currentUser.id,
+              ),
+            ),
         ),
         BlocProvider(
           create: (_) => ReviewPageBloc(Emoji.emotions),
@@ -105,6 +130,8 @@ class AppView extends StatelessWidget {
             } else if (routeSettings.name ==
                 DetailedPerformancePage.routeName) {
               final args = routeSettings.arguments as DetailedPerformanceArgs;
+              final String userId =
+                  context.read<AuthenticationRepositoryImpl>().currentUser.id;
               page = BlocProvider(
                 create: (context) => DetailedPerformanceBloc(
                   performance: args.performance,
@@ -112,8 +139,25 @@ class AppView extends StatelessWidget {
                       RepositoryProvider.of<PerformancesRepository>(context),
                   paymentService:
                       RepositoryProvider.of<PaymentServiceImpl>(context),
-                )..add(const DetailedPerformanceStarted()),
+                )..add(DetailedPerformanceStarted(userId)),
                 child: const DetailedPerformancePage(),
+              );
+            } else if (routeSettings.name == PaymentPage.routeName) {
+              final args = routeSettings.arguments as PaymentPageArgs;
+              page = BlocProvider(
+                create: (context) => PaymentBloc(
+                  paymentService:
+                      RepositoryProvider.of<PaymentServiceImpl>(context),
+                )..add(
+                    PaymentGetLink(
+                      userId: context
+                          .read<AuthenticationRepositoryImpl>()
+                          .currentUser
+                          .id,
+                      perfId: args.perfid,
+                    ),
+                  ),
+                child: const PaymentPage(),
               );
             } else if (routeSettings.name == ImagesViewPage.routeName) {
               page = const ImagesViewPage();

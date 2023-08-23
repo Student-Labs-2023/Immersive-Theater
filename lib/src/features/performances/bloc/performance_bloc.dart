@@ -23,7 +23,8 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
     Emitter<PerformanceState> emit,
   ) async {
     try {
-      final performances = await _performanceRepository.fetchPerformances();
+      final performances =
+          await _performanceRepository.fetchPerformances(event.userId);
       emit(PerformanceLoadSuccess(perfomances: performances));
     } catch (_) {
       emit(const PerformanceLoadFailure(perfomances: []));
@@ -36,7 +37,8 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
     Emitter<PerformanceState> emit,
   ) async {
     try {
-      final performances = await _performanceRepository.fetchPerformances();
+      final performances =
+          await _performanceRepository.fetchPerformances(event.userId);
       log(performances[0].imageLink, name: 'imagelink');
       emit(PerformanceLoadSuccess(perfomances: performances));
     } catch (_) {
@@ -51,7 +53,10 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
   ) async {
     emit(PerformanceLoadInProgress(perfomances: state.perfomances));
     try {
-      final info = await _performanceRepository.fetchPerformanceById(event.id);
+      final info = await _performanceRepository.fetchPerformanceById(
+        event.id,
+        event.userId,
+      );
 
       emit(
         PerformanceLoadSuccess(

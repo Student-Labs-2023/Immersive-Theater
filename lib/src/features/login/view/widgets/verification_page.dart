@@ -87,11 +87,10 @@ class _VerificationPageState extends State<VerificationPage> {
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                              width: 4.0,
-                              color:
-                                  (_controller.text.isEmpty && isWrongCode)
-                                      ? AppColor.redAlert
-                                      : AppColor.grey,
+                            width: 4.0,
+                            color: (_controller.text.isEmpty && isWrongCode)
+                                ? AppColor.redAlert
+                                : AppColor.grey,
                           ),
                         ),
                       ),
@@ -116,7 +115,7 @@ class _VerificationPageState extends State<VerificationPage> {
                   ),
                   isWrongCode
                       ? Padding(
-                          padding: EdgeInsets.only(bottom: 20),
+                          padding: const EdgeInsets.only(bottom: 20),
                           child: Text(
                             "Неверный код",
                             style:

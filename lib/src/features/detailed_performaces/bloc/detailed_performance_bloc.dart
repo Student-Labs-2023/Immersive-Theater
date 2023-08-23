@@ -28,13 +28,15 @@ class DetailedPerformanceBloc
   }
 
   Future<void> _onDetailedPerformanceStarted(
-    DetailedPerformanceEvent event,
+    DetailedPerformanceStarted event,
     Emitter<DetailedPerformanceState> emit,
   ) async {
     try {
       emit(DetailedPerformanceLoadInProgress(performance: performance));
-      final info =
-          await performanceRepository.fetchPerformanceById(performance.id);
+      final info = await performanceRepository.fetchPerformanceById(
+        performance.id,
+        event.userId,
+      );
       await Future.delayed(const Duration(seconds: 2));
       add(
         DetailedPerformanceInfoLoaded(
@@ -50,6 +52,9 @@ class DetailedPerformanceBloc
     DetailedPerformanceInfoLoaded event,
     Emitter<DetailedPerformanceState> emit,
   ) {
+    if (event.performance.bought) {
+      return emit(DetailedPerformancePaid(performance: event.performance));
+    }
     emit(DetailedPerformanceUnPaid(performance: event.performance));
   }
 
@@ -66,6 +71,15 @@ class DetailedPerformanceBloc
       if (!await launchUrl(Uri.parse(url), mode: LaunchMode.inAppWebView)) {
         return;
       }
+      try {
+        paymentService.checkStatus(
+          userId: event.userId,
+          performanceId: event.performanceId,
+        );
+      } catch (e) {
+        return emit(DetailedPerformanceUnPaid(performance: state.performance));
+      }
+
       emit(DetailedPerformancePaid(performance: state.performance));
     } catch (e) {
       emit(DetailedPerformanceUnPaid(performance: state.performance));
@@ -89,8 +103,10 @@ class DetailedPerformanceBloc
   ) async {
     try {
       emit(DetailedPerformanceLoadInProgress(performance: performance));
-      final info =
-          await performanceRepository.fetchPerformanceById(performance.id);
+      final info = await performanceRepository.fetchPerformanceById(
+        performance.id,
+        event.userId,
+      );
       await Future.delayed(const Duration(seconds: 2));
       add(
         DetailedPerformanceInfoLoaded(
