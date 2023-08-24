@@ -5,8 +5,9 @@ import 'package:shebalin/src/features/mode_perf_home/bloc/perf_home_mode_bloc.da
 import 'package:shebalin/src/features/mode_performance/view/widgets/images_location.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/location_item.dart';
 import 'package:shebalin/src/theme/images.dart';
-import 'package:shebalin/src/theme/ui/animated_visibility.dart';
-import 'package:shebalin/src/theme/ui/bar_indicator.dart';
+import 'package:shebalin/src/theme/ui/app_animated_visibility.dart';
+import 'package:shebalin/src/theme/ui/app_resize_handler.dart';
+
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HomeModePanelWidget extends StatefulWidget {
@@ -34,11 +35,11 @@ class _HomeModePanelWidgetState extends State<HomeModePanelWidget> {
         const SizedBox(
           height: 12,
         ),
-        const BarIndicator(),
+        const AppResizeHandler(),
         const SizedBox(
           height: 20,
         ),
-        AnimatedVisibility(
+        AppAnimatedVisibility(
           isVisible: !widget.controller.isPanelOpen,
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeIn,

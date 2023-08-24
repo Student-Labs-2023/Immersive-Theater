@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/theme/app_color.dart';
-import 'dart:io' show Platform;
+import 'package:shebalin/src/theme/ui/app_button.dart';
+import 'package:shebalin/src/theme/ui/app_text_header.dart';
 
 class DialogWindow extends StatelessWidget {
   final String title;
@@ -23,57 +23,49 @@ class DialogWindow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
+      contentPadding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(14)),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            textAlign: TextAlign.center,
-            title,
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(fontWeight: FontWeight.w700),
-          ),
+          AppTextHeader(title: title),
           const SizedBox(
             height: 8,
           ),
-          Text(
-            subtitle,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: AppColor.greyText,
-                ),
-            maxLines: 2,
+          subtitle.isNotEmpty
+              ? Text(
+                  subtitle,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(color: AppColor.greyText),
+                )
+              : const SizedBox(),
+          const SizedBox(
+            height: 10,
+          ),
+          AppButton(
+            backgroundColor: AppColor.destructiveAlertDialog,
+            borderColor: AppColor.destructiveAlertDialog,
+            onTap: onTapPrimary,
+            textColor: AppColor.whiteText,
+            title: titlePrimary,
+            heightCoef: 0.045,
           ),
           const SizedBox(
-            height: 22,
+            height: 3,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: AlertDialogButton(
-                  isPrimary: true,
-                  onTap: onTapPrimary,
-                  title: titlePrimary,
-                ),
-              ),
-              const SizedBox(
-                width: 12,
-              ),
-              Expanded(
-                child: AlertDialogButton(
-                  isPrimary: false,
-                  onTap: onTapSecondary,
-                  title: titleSecondary,
-                ),
-              )
-            ],
-          )
+          AppButton(
+            backgroundColor: AppColor.whiteBackground,
+            borderColor: AppColor.lightGray,
+            onTap: onTapSecondary,
+            textColor: AppColor.blackText,
+            title: titleSecondary,
+            heightCoef: 0.045,
+          ),
         ],
       ),
     );
@@ -88,7 +80,7 @@ class AlertDialogButton extends StatelessWidget {
     required this.isPrimary,
   });
 
-  final void Function() onTap;
+  final VoidCallback onTap;
   final String title;
   final bool isPrimary;
 

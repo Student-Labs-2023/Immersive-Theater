@@ -1,20 +1,25 @@
 import 'dart:developer';
-
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/authentication/bloc/authentication_bloc.dart';
 import 'package:shebalin/src/features/locations/view/location_description_panel_page.dart';
 import 'package:shebalin/src/features/login/view/login_page.dart';
 import 'package:shebalin/src/features/map/bloc/map_pin_bloc.dart';
 import 'package:shebalin/src/features/map/view/yandex_map_page.dart';
+import 'package:shebalin/src/features/mode_performance/view/widgets/dialog_window.dart';
 import 'package:shebalin/src/features/performances/bloc/performance_bloc.dart';
 import 'package:shebalin/src/features/performances/view/performances_panel_page.dart';
 import 'package:shebalin/src/features/promocodes/view/widgets/promocode_panel_page.dart';
+import 'package:shebalin/src/features/tickets/bloc/ticket_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
-
+import 'package:lottie/lottie.dart';
 import 'package:shebalin/src/theme/theme.dart';
+import 'package:shebalin/src/theme/ui/app_circle_button.dart';
+import 'package:shebalin/src/theme/ui/app_resize_handler.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
@@ -30,11 +35,18 @@ class _MainScreenState extends State<MainScreen> {
   final panelController = PanelController();
   bool isPerfomnceButtonPressed = true;
   @override
+  void initState() {
+    checkLocationPermission();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: IconButton(
-        icon: const Icon(Icons.logout),
-        onPressed: _logout,
+      floatingActionButton: AppCircleButton(
+        tag: 'logout',
+        onPressed: _showDialogWindow,
+        image: ImagesSources.logout,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       body: SlidingUpPanel(
@@ -47,23 +59,12 @@ class _MainScreenState extends State<MainScreen> {
           builder: (context, state) {
             return Column(
               children: [
-                const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 8)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.12),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const SizedBox(
-                          height: 4,
-                          width: 32,
-                        ),
-                      ),
-                    )
-                  ],
+                const SizedBox(
+                  height: 12,
+                ),
+                const Center(child: AppResizeHandler()),
+                const SizedBox(
+                  height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -96,6 +97,14 @@ class _MainScreenState extends State<MainScreen> {
                         onPressed: () {
                           _isPerformancePanelShowed(false);
                           panelController.open();
+                          context.read<TicketBloc>().add(
+                                TicketRefreshed(
+                                  context
+                                      .read<AuthenticationRepositoryImpl>()
+                                      .currentUser
+                                      .id,
+                                ),
+                              );
                         },
                         child: Text(
                           "Мои билеты",
@@ -125,7 +134,7 @@ class _MainScreenState extends State<MainScreen> {
               showBottomSheet(
                 backgroundColor: AppColor.whiteBackground,
                 constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.565,
+                  maxHeight: MediaQuery.of(context).size.height * 0.7,
                 ),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -137,28 +146,16 @@ class _MainScreenState extends State<MainScreen> {
                 builder: (context) {
                   return Column(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 12, 0, 20),
+                      const SizedBox(
+                        height: 12,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.12),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: const SizedBox(
-                                height: 4,
-                                width: 32,
-                              ),
-                            ),
-                          )
-                        ],
+                      const Center(
+                        child: AppResizeHandler(),
                       ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.518,
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Expanded(
                         child: LocationDescriptionPanelPage(
                           mapObjectId: state.mapObject.mapId.value,
                         ),
@@ -178,9 +175,8 @@ class _MainScreenState extends State<MainScreen> {
                     : const PromocodePanelPage();
               } else if (state is MapPinLoadingState) {
                 return Center(
-                  child: CircularProgressIndicator(color: accentTextColor),
+                  child: Lottie.asset('assets/images/lottie.json'),
                 );
-              } else if (state is MapPinLoaded) {
               } else if (state is MapPinClosingState) {
                 return isPerfomnceButtonPressed
                     ? const PerformancesPanelPage()
@@ -201,7 +197,6 @@ class _MainScreenState extends State<MainScreen> {
                 );
               } else if (state is PerformanceLoadSuccess) {
                 List<PlacemarkMapObject> placeMarks = [];
-
                 for (var perf in state.perfomances) {
                   List<Place> places =
                       perf.info.chapters.map((e) => e.place).toList();
@@ -226,22 +221,30 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                         isDraggable: true,
                         icon: PlacemarkIcon.single(
-                          PlacemarkIconStyle(
-                            image: BitmapDescriptor.fromAssetImage(
-                              ImagesSources.currentPlacemark,
-                            ),
-                            scale: 0.3,
-                          ),
+                          i == 0
+                              ? PlacemarkIconStyle(
+                                  image: BitmapDescriptor.fromAssetImage(
+                                    ImagesSources.startPlacemark,
+                                  ),
+                                  scale: 3,
+                                )
+                              : PlacemarkIconStyle(
+                                  image: BitmapDescriptor.fromAssetImage(
+                                    ImagesSources.yellowPlacemark,
+                                  ),
+                                  scale: 3.5,
+                                ),
                         ),
                       ),
                     );
                   }
                 }
+
                 return YandexMapPage(
                   mapObjects: placeMarks,
                 );
               } else {
-                return const Text("error");
+                return const YandexMap();
               }
             },
           ),
@@ -252,6 +255,14 @@ class _MainScreenState extends State<MainScreen> {
         parallaxOffset: 0.05,
       ),
     );
+  }
+
+  void checkLocationPermission() async {
+    final permission = await Geolocator.checkPermission();
+    if (permission != LocationPermission.always ||
+        permission != LocationPermission.whileInUse) {
+      Geolocator.requestPermission();
+    }
   }
 
   void _isPerformancePanelShowed(bool flag) {
@@ -268,11 +279,15 @@ class _MainScreenState extends State<MainScreen> {
     BuildContext context,
   ) {
     final String id = mapObject.mapId.value.toString();
+
+    final String userId =
+        context.read<AuthenticationRepositoryImpl>().currentUser.id;
     log(id);
     if (id.endsWith('0') && count == 1) {
       context.read<PerformanceBloc>().add(
             PerformanceLoadFullInfo(
               int.parse(id.substring(0, id.indexOf('/'))),
+              userId,
             ),
           );
     } else {
@@ -281,10 +296,27 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _logout() {
+    _showDialogWindow();
+
     context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
     Navigator.of(context).pushNamedAndRemoveUntil(
       LoginPage.routeName,
       (Route<dynamic> route) => false,
     );
+  }
+
+  Future<bool> _showDialogWindow() async {
+    return await showDialog(
+          context: context,
+          builder: (_) => DialogWindow(
+            title: 'Выйти из аккаунта?',
+            subtitle: '',
+            onTapPrimary: _logout,
+            titlePrimary: 'Выйти',
+            titleSecondary: 'Отмена',
+            onTapSecondary: () => Navigator.of(context).pop(false),
+          ),
+        ) ??
+        false;
   }
 }

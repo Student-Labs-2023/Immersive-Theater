@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shebalin/src/features/onboarding_performance/models/onboard_performance.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 
 class PageIndicator extends StatelessWidget {
-  PageIndicator({
+  const PageIndicator({
     super.key,
     required this.count,
     required this.currentIndex,
@@ -13,8 +12,8 @@ class PageIndicator extends StatelessWidget {
 
   final int count;
   final int currentIndex;
-  double elementWidth = 4;
-  double elementHeight = 4;
+  final double elementWidth;
+  final double elementHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +36,14 @@ class PageIndicator extends StatelessWidget {
 
 class DotIndicator extends StatelessWidget {
   final bool isActive;
-  double width;
-  double height;
-  DotIndicator(
-      {super.key,
-      required this.isActive,
-      required this.width,
-      required this.height});
+  final double width;
+  final double height;
+  const DotIndicator({
+    super.key,
+    required this.isActive,
+    required this.width,
+    required this.height,
+  });
 
   @override
   Widget build(BuildContext context) {

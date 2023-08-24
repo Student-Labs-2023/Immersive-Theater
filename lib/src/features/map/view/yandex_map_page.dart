@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:shebalin/src/theme/images.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -25,7 +26,6 @@ class _YandexMapState extends State<YandexMapPage> {
         onMapCreated: (controller) {
           _controller = Completer<YandexMapController>();
           _controller.complete(controller);
-
           _moveCamera(coords: _initialCoords);
         },
       ),
@@ -35,7 +35,36 @@ class _YandexMapState extends State<YandexMapPage> {
         ),
         child: FloatingActionButton(
           backgroundColor: Colors.white,
-          onPressed: () => {},
+          onPressed: () async {
+            var position = await Geolocator.getCurrentPosition();
+            setState(() {
+              widget.mapObjects.add(
+                PlacemarkMapObject(
+                  mapId: const MapObjectId("user"),
+                  point: Point(
+                    latitude: position.latitude,
+                    longitude: position.longitude,
+                  ),
+                  icon: PlacemarkIcon.single(
+                    PlacemarkIconStyle(
+                      image: BitmapDescriptor.fromAssetImage(
+                        ImagesSources.userPlacemark,
+                      ),
+                      scale: 1.5,
+                      isFlat: true,
+                      rotationType: RotationType.rotate,
+                    ),
+                  ),
+                ),
+              );
+            });
+            _moveCamera(
+              coords: Point(
+                latitude: position.latitude,
+                longitude: position.longitude,
+              ),
+            );
+          },
           child: const Image(
             image: AssetImage(ImagesSources.locationIcon),
           ),

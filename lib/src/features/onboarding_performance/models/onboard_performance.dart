@@ -19,7 +19,7 @@ class OnboardPerformance {
     OnboardPerformance(
       title: 'Доберитесь до стартовой точки спектакля',
       subtitle: 'Стартовая точка спектакля находится по адресу: ',
-      subtitleAccent: 'улица Ленина, 4',
+      subtitleAccent: '',
       buttonTitle: "Составить маршрут",
       image: ImagesSources.onboardMap,
     ),
@@ -39,6 +39,14 @@ class OnboardPerformance {
       image: ImagesSources.onboardNext,
       subtitleAccent: '',
     ),
+    OnboardPerformance(
+      title: 'Спектакль можно прослушать\n1 раз',
+      subtitle:
+          'Если вы готовы начать прослушивание, нажмите "Начать спектакль"',
+      subtitleAccent: '',
+      buttonTitle: 'Начать спектакль',
+      image: ImagesSources.fourthOnbording,
+    ),
   ];
 
   static List<OnboardPerformance> home = [
@@ -52,10 +60,18 @@ class OnboardPerformance {
     ),
     OnboardPerformance(
       title: 'Треки переключаются автоматически',
-      subtitle: 'Весь спектакль будет воспроизводиться без пауз',
+      subtitle: 'Весь спектакль будет\nвоспроизводиться без пауз',
       buttonTitle: 'Начать спектакль',
       image: ImagesSources.onboardNext,
       subtitleAccent: '',
+    ),
+    OnboardPerformance(
+      title: 'Спектакль можно прослушать\n1 раз',
+      subtitle:
+          'Если вы готовы начать прослушивание, нажмите "Начать спектакль"',
+      subtitleAccent: '',
+      buttonTitle: 'Начать спектакль',
+      image: ImagesSources.fourthOnbording,
     ),
   ];
 }

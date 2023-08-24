@@ -1,3 +1,4 @@
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -54,39 +55,33 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Text(
-                  formatTime(state.position),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(color: AppColor.greyText),
-                ),
-                Expanded(
-                  child: Slider(
-                    thumbColor: AppColor.purplePrimary,
-                    activeColor: AppColor.purplePrimary,
-                    inactiveColor: AppColor.grey,
-                    min: 0,
-                    max: state.duration.inSeconds.toDouble(),
-                    value: state.position.inSeconds.toDouble(),
-                    onChanged: state is AudioPlayerFinishedState ||
-                            state is AudioPlayerFailureState
-                        ? null
-                        : (value) => context
-                            .read<AudioPlayerBloc>()
-                            .add(AudioPlayerChangeSliderEvent(value)),
-                  ),
-                ),
-                Text(
-                  formatTime(state.duration),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(color: AppColor.greyText),
-                ),
-              ],
+            ProgressBar(
+              thumbGlowRadius: 0,
+              thumbRadius: 8,
+              progress: state.position,
+              total: state.duration,
+              timeLabelLocation: TimeLabelLocation.sides,
+              thumbColor: state is AudioPlayerFinishedState ||
+                      state is AudioPlayerFailureState
+                  ? Colors.transparent
+                  : AppColor.purplePrimary,
+              progressBarColor: state is AudioPlayerFinishedState ||
+                      state is AudioPlayerFailureState
+                  ? AppColor.grey
+                  : AppColor.purplePrimary,
+              baseBarColor: AppColor.grey,
+              timeLabelTextStyle: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(color: AppColor.greyText),
+              onSeek: state is AudioPlayerFinishedState ||
+                      state is AudioPlayerFailureState
+                  ? null
+                  : (value) => context.read<AudioPlayerBloc>().add(
+                        AudioPlayerChangeSliderEvent(
+                          value.inSeconds.toDouble(),
+                        ),
+                      ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

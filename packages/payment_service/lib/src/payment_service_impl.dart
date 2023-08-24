@@ -3,7 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:payment_service/src/payment_service.dart';
 
 enum _PaymentEndpoint {
-  payment('payment');
+  payment('payment'),
+  activate('perfomance_used');
 
   const _PaymentEndpoint(this.endpoint);
   final String endpoint;
@@ -22,5 +23,13 @@ class PaymentServiceImpl implements PaymentService {
         queryParameters: {'user_id': userId, 'performance_id': performanceId});
 
     return paymentLink.data;
+  }
+
+  @override
+  Future<void> activate(
+      {required String userId, required int performanceId}) async {
+    await _apiClient.dio.post(_PaymentEndpoint.activate.endpoint,
+        options: Options(responseType: ResponseType.json),
+        queryParameters: {'user_id': userId, 'perfomance_id': performanceId});
   }
 }

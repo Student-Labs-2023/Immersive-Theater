@@ -12,12 +12,17 @@ class VerificationPage extends StatefulWidget {
   const VerificationPage({
     super.key,
   });
-  static const routeName = '/verify';
+
+  static const routeName = 'verify';
+
   @override
   State<VerificationPage> createState() => _VerificationPageState();
 }
 
 class _VerificationPageState extends State<VerificationPage> {
+  final _controller = TextEditingController();
+  bool isWrongCode = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
@@ -26,7 +31,10 @@ class _VerificationPageState extends State<VerificationPage> {
             current.status == AuthenticationStatus.authenticated;
       },
       listener: (context, state) {
-        Navigator.of(context).popAndPushNamed(MainScreen.routeName);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          MainScreen.routeName,
+          ModalRoute.withName(MainScreen.routeName),
+        );
       },
       child: Scaffold(
         backgroundColor: AppColor.whiteBackground,
@@ -43,80 +51,95 @@ class _VerificationPageState extends State<VerificationPage> {
             },
           ),
         ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const AppTextHeader(title: 'Код из SMS'),
-                const SizedBox(
-                  height: 4,
-                ),
-                AppTextSubtitle(
-                  title:
-                      'Он отправлен на  номер ${context.watch<LoginBloc>().state.phoneNumber.value}',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Pinput(
-                  enabled: true,
-                  length: 6,
-                  defaultPinTheme: PinTheme(
-                    height: MediaQuery.of(context).size.width / 10,
-                    width: 40,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(width: 4.0, color: AppColor.grey),
-                      ),
-                    ),
+        body: BlocListener<LoginBloc, LoginState>(
+          listener: (context, state) {
+            if (!state.isValidCode) {
+              setState(() {
+                _controller.clear();
+                isWrongCode = true;
+              });
+            }
+          },
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const AppTextHeader(title: 'Код из SMS'),
+                  const SizedBox(
+                    height: 4,
                   ),
-                  submittedPinTheme: PinTheme(
-                    height: MediaQuery.of(context).size.width / 10,
-                    width: 40,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 4.0,
-                          color: AppColor.yellowSecondary,
+                  AppTextSubtitle(
+                    title:
+                        'Он отправлен на  номер ${context.watch<LoginBloc>().state.phoneNumber.value}',
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Pinput(
+                    controller: _controller,
+                    enabled: true,
+                    length: 6,
+                    defaultPinTheme: PinTheme(
+                      height: MediaQuery.of(context).size.width / 10,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 4.0,
+                            color: (_controller.text.isEmpty && isWrongCode)
+                                ? AppColor.redAlert
+                                : AppColor.grey,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  focusedPinTheme: PinTheme(
-                    height: MediaQuery.of(context).size.width / 10,
-                    width: 40,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 4.0,
-                          color: AppColor.yellowSecondary,
+                    focusedPinTheme: PinTheme(
+                      height: MediaQuery.of(context).size.width / 10,
+                      width: 40,
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 4.0,
+                            color: AppColor.yellowSecondary,
+                          ),
                         ),
                       ),
                     ),
+                    onCompleted: (code) {
+                      context
+                          .read<LoginBloc>()
+                          .add(LoginVerifyOTP(smsCode: code));
+                    },
                   ),
-                  onCompleted: (code) {
-                    context
-                        .read<LoginBloc>()
-                        .add(LoginVerifyOTP(smsCode: code));
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                InkWell(
-                  child: Text(
-                    "Отправить код повторно",
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppColor.purplePrimary,
+                  isWrongCode
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Text(
+                            "Неверный код",
+                            style:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      color: AppColor.redAlert,
+                                    ),
+                          ),
+                        )
+                      : const SizedBox(
+                          height: 20,
+                        ),
+                  InkWell(
+                    child: Text(
+                      "Отправить код повторно",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: AppColor.purplePrimary,
+                          ),
+                    ),
+                    onTap: () => context.read<LoginBloc>().add(
+                          const LoginVerifyPhoneNumber(),
                         ),
                   ),
-                  onTap: () => context.read<LoginBloc>().add(
-                        const LoginVerifyPhoneNumber(),
-                      ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

@@ -5,6 +5,7 @@ class ImagesSources {
   static const String onbording = 'assets/images/firstOnboarding.png';
   static const String secondOnbording = 'assets/images/secondOnboarding.png';
   static const String thirdOnbording = 'assets/images/thirdOnboarding.png';
+  static const String fourthOnbording = 'assets/images/onboarding_one_time.png';
   static const String shebalinTicket = 'assets/images/shebalin_ticket.png';
   static const String shebalinPerfomanceCard =
       'assets/images/shebalin_perfomance_card.png';
@@ -35,6 +36,7 @@ class ImagesSources {
   static const String onboardNext = 'assets/images/onboard_next.png';
   static const String onboardWelcome = 'assets/images/onboard_welcome.png';
   static const String purplePlacemark = "assets/images/purple_placemark.png";
+  static const String yellowPlacemark = "assets/images/placemark.png";
   static const String grayPlacemark = "assets/images/gray_placemark.png";
   static const String userPlacemark = "assets/images/user_placemark.png";
   static const String opinion = "assets/images/opinion.png";
@@ -49,4 +51,7 @@ class ImagesSources {
   static const String rectangle = 'assets/icons/rectangle.png';
   static const String startPlacemark = 'assets/images/start_mark.png';
   static const String currentPlacemark = 'assets/images/mark.png';
+  static const String logout = 'assets/icons/logout.png';
+  static const String warning = 'assets/icons/warning.png';
+  static const String errorPhoto = 'assets/images/error_photo.svg';
 }

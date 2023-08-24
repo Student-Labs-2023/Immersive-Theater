@@ -5,8 +5,8 @@ import 'package:shebalin/src/features/map_performance/bloc/perf_mode_map_bloc.da
 import 'package:shebalin/src/features/mode_performance/view/widgets/images_location.dart';
 import 'package:shebalin/src/features/mode_performance/view/widgets/location_item.dart';
 import 'package:shebalin/src/theme/images.dart';
-import 'package:shebalin/src/theme/ui/animated_visibility.dart';
-import 'package:shebalin/src/theme/ui/bar_indicator.dart';
+import 'package:shebalin/src/theme/ui/app_animated_visibility.dart';
+import 'package:shebalin/src/theme/ui/app_resize_handler.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class PanelWidget extends StatefulWidget {
@@ -34,11 +34,11 @@ class _PanelWidgetState extends State<PanelWidget> {
         const SizedBox(
           height: 12,
         ),
-        const BarIndicator(),
+        const AppResizeHandler(),
         const SizedBox(
           height: 20,
         ),
-        AnimatedVisibility(
+        AppAnimatedVisibility(
           isVisible: !widget.controller.isPanelOpen,
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeIn,

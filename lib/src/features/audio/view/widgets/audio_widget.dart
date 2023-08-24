@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/audio/view/widgets/circle_progress.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
+import 'package:shebalin/src/theme/theme.dart';
 
 class AudioWidget extends StatelessWidget {
   final String title;
@@ -27,11 +28,11 @@ class AudioWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        GestureDetector(
-          onTap: onTap,
-          child: AudioImageBack(
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        children: [
+          AudioImageBack(
             height: MediaQuery.of(context).size.height * 0.18 / 3,
             image: image,
             colorFilter: isCurrent
@@ -56,35 +57,37 @@ class AudioWidget extends StatelessWidget {
                   )
                 : null,
           ),
-        ),
-        const SizedBox(
-          width: 14,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            Text(
-              subtitle,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: AppColor.greyText),
-            ),
-          ],
-        ),
-        const Spacer(),
-        Text(
-          duration,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium!
-              .copyWith(color: AppColor.greyText),
-        )
-      ],
+          const SizedBox(
+            width: 14,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontFamily: secondaryFont),
+              ),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: AppColor.greyText,
+                    ),
+              ),
+            ],
+          ),
+          const Spacer(),
+          Text(
+            duration,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: AppColor.greyText, fontFamily: secondaryFont),
+          )
+        ],
+      ),
     );
   }
 }
@@ -109,7 +112,7 @@ class AudioImageBack extends StatelessWidget {
       height: height,
       width: height,
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.4),
+        color: AppColor.lightGray.withOpacity(0.3),
         borderRadius: BorderRadius.circular(8),
         image: DecorationImage(
           image: CachedNetworkImageProvider(image),

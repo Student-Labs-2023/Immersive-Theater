@@ -8,23 +8,16 @@ abstract class DetailedPerformanceEvent extends Equatable {
 }
 
 class DetailedPerformanceStarted extends DetailedPerformanceEvent {
-  const DetailedPerformanceStarted();
+  final String userId;
+  const DetailedPerformanceStarted(this.userId);
+}
+
+class DetailedPerformanceRefreshed extends DetailedPerformanceEvent {
+  final String userId;
+  const DetailedPerformanceRefreshed(this.userId);
 }
 
 class DetailedPerformanceInfoLoaded extends DetailedPerformanceEvent {
   final Performance performance;
   const DetailedPerformanceInfoLoaded({required this.performance});
-}
-
-class DetailedPerformancePay extends DetailedPerformanceEvent {
-  final String userId;
-  final int performanceId;
-  const DetailedPerformancePay({
-    required this.userId,
-    required this.performanceId,
-  });
-}
-
-class DetailedPerformanceDownload extends DetailedPerformanceEvent {
-  const DetailedPerformanceDownload();
 }

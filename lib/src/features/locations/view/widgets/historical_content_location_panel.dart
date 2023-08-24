@@ -10,14 +10,13 @@ class HistoricalContentLocationPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Text(
         locationDescription,
         style: Theme.of(context)
             .textTheme
-            .labelSmall
-            ?.copyWith(color: primaryTextColor, fontSize: 14),
-            
+            .bodyMedium
+            ?.copyWith(color: primaryTextColor),
       ),
     );
   }
