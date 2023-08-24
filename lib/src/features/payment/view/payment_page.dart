@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shebalin/src/features/payment/bloc/payment_bloc.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
@@ -30,9 +31,17 @@ class _PaymentPageState extends State<PaymentPage> {
           ),
           backgroundColor: AppColor.whiteBackground,
           body: SafeArea(
-            child: WebViewWidget(
-              controller: context.watch<PaymentBloc>().controller,
-            ),
+            child: state is PaymentInitial
+                ? Center(
+                    child: Lottie.asset(
+                      'assets/images/lottie.json',
+                      width: 80,
+                      height: 80,
+                    ),
+                  )
+                : WebViewWidget(
+                    controller: context.watch<PaymentBloc>().controller,
+                  ),
           ),
         );
       },

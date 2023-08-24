@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,6 +44,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _getCurrentLocation();
     return BlocListener<InternetConnectionBloc, InternetConnectionState>(
       listenWhen: (previous, current) {
         return previous.status == InternetConnectionStatus.disconnected &&
@@ -55,7 +55,6 @@ class _MainScreenState extends State<MainScreen> {
             context.read<AuthenticationRepositoryImpl>().currentUser.id;
         context.read<PerformanceBloc>().add(PerformancesRefreshed(userId));
       },
-  _getCurrentLocation();
       child: Scaffold(
         floatingActionButton: AppCircleButton(
           tag: 'logout',
@@ -65,7 +64,7 @@ class _MainScreenState extends State<MainScreen> {
         floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
         body: SlidingUpPanel(
           controller: panelController,
-          defaultPanelState: PanelState.OPEN,
+          defaultPanelState: PanelState.CLOSED,
           minHeight: MediaQuery.of(context).size.height * 0.12,
           maxHeight: MediaQuery.of(context).size.height * 0.85,
           header: BlocConsumer<MapPinBloc, MapPinState>(
@@ -103,6 +102,7 @@ class _MainScreenState extends State<MainScreen> {
                                       : AppColor.greyText,
                                 ),
                           ),
+                        ),
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.45,
@@ -147,7 +147,7 @@ class _MainScreenState extends State<MainScreen> {
                 showBottomSheet(
                   backgroundColor: AppColor.whiteBackground,
                   constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.77,
+                    maxHeight: MediaQuery.of(context).size.height * 0.7,
                   ),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
@@ -197,62 +197,80 @@ class _MainScreenState extends State<MainScreen> {
               },
             ),
           ),
-    
-        body: Center(
-          child: BlocBuilder<PerformanceBloc, PerformanceState>(
-            builder: (context, state) {
-              if (state is PerformanceLoadInProgress) {
-                return const YandexMapPage(
-                  mapObjects: [],
-                );
-              } else if (state is PerformanceLoadSuccess) {
-                List<PlacemarkMapObject> placeMarks = [];
-                for (var perf in state.perfomances) {
-                  List<Place> places =
-                      perf.info.chapters.map((e) => e.place).toList();
-                  for (var i = 0; i < places.length; i++) {
-                    placeMarks.add(
-                      PlacemarkMapObject(
-                        onTap: (mapObject, point) {
-                          _mapPinTapped(
-                            mapObject,
-                            perf.info.chapters.length,
-                            point,
-                            context,
-                          );
-                        },
-                        mapId: MapObjectId(
-                          '${perf.id}/$i',
-                        ),
-                        opacity: 1,
-                        point: Point(
-                          latitude: places[i].latitude,
-                          longitude: places[i].longitude,
-                        ),
-                        isDraggable: true,
-                        icon: PlacemarkIcon.single(
-                          i == 0
-                              ? PlacemarkIconStyle(
-                                  image: BitmapDescriptor.fromAssetImage(
-                                    ImagesSources.startPlacemark,
+          body: Center(
+            child: BlocBuilder<PerformanceBloc, PerformanceState>(
+              builder: (context, state) {
+                if (state is PerformanceLoadInProgress) {
+                  return const YandexMapPage(
+                    mapObjects: [],
+                  );
+                } else if (state is PerformanceLoadSuccess) {
+                  List<PlacemarkMapObject> placeMarks = [];
+                  for (var perf in state.perfomances) {
+                    List<Place> places =
+                        perf.info.chapters.map((e) => e.place).toList();
+                    for (var i = 0; i < places.length; i++) {
+                      placeMarks.add(
+                        PlacemarkMapObject(
+                          onTap: (mapObject, point) {
+                            _mapPinTapped(
+                              mapObject,
+                              perf.info.chapters.length,
+                              point,
+                              context,
+                            );
+                          },
+                          mapId: MapObjectId(
+                            '${perf.id}/$i',
+                          ),
+                          opacity: 1,
+                          point: Point(
+                            latitude: places[i].latitude,
+                            longitude: places[i].longitude,
+                          ),
+                          isDraggable: true,
+                          icon: PlacemarkIcon.single(
+                            i == 0
+                                ? PlacemarkIconStyle(
+                                    image: BitmapDescriptor.fromAssetImage(
+                                      ImagesSources.startPlacemark,
+                                    ),
+                                    scale: 3,
+                                  )
+                                : PlacemarkIconStyle(
+                                    image: BitmapDescriptor.fromAssetImage(
+                                      ImagesSources.yellowPlacemark,
+                                    ),
+                                    scale: 3.5,
                                   ),
-                                  scale: 3,
-                                )
-                              : PlacemarkIconStyle(
-                                  image: BitmapDescriptor.fromAssetImage(
-                                    ImagesSources.yellowPlacemark,
-                                  ),
-                                  scale: 3.5,
-                                ),
+                          ),
                         ),
                       );
                     }
+                    placeMarks.add(
+                      PlacemarkMapObject(
+                        mapId: const MapObjectId("user"),
+                        point: const Point(latitude: 2, longitude: 2),
+                        icon: PlacemarkIcon.single(
+                          PlacemarkIconStyle(
+                            image: BitmapDescriptor.fromAssetImage(
+                              ImagesSources.userPlacemark,
+                            ),
+                            scale: 1.5,
+                            isFlat: true,
+                            rotationType: RotationType.rotate,
+                          ),
+                        ),
+                      ),
+                    );
                   }
-
                   placeMarks.add(
                     PlacemarkMapObject(
                       mapId: const MapObjectId("user"),
-                      point: Point(latitude: 2, longitude: 2),
+                      point: Point(
+                        latitude: currentLocation.latitude,
+                        longitude: currentLocation.longitude,
+                      ),
                       icon: PlacemarkIcon.single(
                         PlacemarkIconStyle(
                           image: BitmapDescriptor.fromAssetImage(
@@ -265,33 +283,14 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     ),
                   );
+                  return YandexMapPage(
+                    mapObjects: placeMarks,
+                  );
+                } else {
+                  return const YandexMap();
                 }
-                placeMarks.add(
-                  PlacemarkMapObject(
-                    mapId: const MapObjectId("user"),
-                    point: Point(
-                      latitude: currentLocation.latitude,
-                      longitude: currentLocation.longitude,
-                    ),
-                    icon: PlacemarkIcon.single(
-                      PlacemarkIconStyle(
-                        image: BitmapDescriptor.fromAssetImage(
-                            ImagesSources.userPlacemark),
-                        scale: 1.5,
-                        isFlat: true,
-                        rotationType: RotationType.rotate,
-                      ),
-                    ),
-                  ),
-                );
-                return YandexMapPage(
-                  mapObjects: placeMarks,
-                );
-              } else {
-                return const YandexMap();
-              }
-            },
-
+              },
+            ),
           ),
           borderRadius: panelRadius,
           backdropEnabled: true,
@@ -327,7 +326,6 @@ class _MainScreenState extends State<MainScreen> {
 
     final String userId =
         context.read<AuthenticationRepositoryImpl>().currentUser.id;
-    log(id);
     if (id.endsWith('0') && count == 1) {
       context.read<PerformanceBloc>().add(
             PerformanceLoadFullInfo(
