@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shebalin/src/features/audio/bloc/audio_manager_bloc.dart';
 import 'package:shebalin/src/features/audio/view/audio_manager.dart';
 import 'package:shebalin/src/features/connectivity/bloc/connectivity_bloc.dart';
@@ -24,8 +23,6 @@ import 'package:shebalin/src/theme/ui/app_button.dart';
 import 'package:shebalin/src/theme/ui/app_placeholer.dart';
 import 'package:shebalin/src/theme/ui/app_text_header.dart';
 import 'package:shebalin/src/theme/ui/image_card.dart';
-import 'package:shebalin/src/theme/ui/skeleton_loaders.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class DetailedPerformancePage extends StatefulWidget {
@@ -42,6 +39,7 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
   late final ScrollController _controller = ScrollController();
   bool get _isExpended =>
       _controller.hasClients && _controller.offset <= (kToolbarHeight);
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<InternetConnectionBloc, InternetConnectionState>(
@@ -63,146 +61,7 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
             return previous is DetailedPerformanceLoadInProgress;
           },
           builder: (context, state) {
-            if (state is DetailedPerformanceLoadInProgress) {
-              return CustomScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                slivers: [
-                  SliverAppBar(
-                    elevation: 0.7,
-                    backgroundColor: AppColor.whiteBackground,
-                    expandedHeight: MediaQuery.of(context).size.height * 0.32,
-                    floating: false,
-                    pinned: true,
-                    flexibleSpace: LayoutBuilder(
-                      builder: (context, constraints) {
-                        top = constraints.biggest.height;
-                        top ==
-                            MediaQuery.of(context).padding.top + kToolbarHeight;
-                        return Shimmer.fromColors(
-                          baseColor: Colors.grey.shade300,
-                          highlightColor: Colors.grey.shade100,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColor.whiteBackground,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            height: MediaQuery.of(context).size.height * 0.32,
-                          ),
-                        );
-                      },
-                    ),
-                    leading: Row(
-                      children: [
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Container(
-                          width: 32,
-                          height: 32,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColor.grey,
-                          ),
-                          child: Center(
-                            child: IconButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              icon: Image.asset(
-                                ImagesSources.closePerformance,
-                                color: AppColor.whiteText,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Shimmer.fromColors(
-                      baseColor: Colors.grey.shade300,
-                      highlightColor: Colors.grey.shade100,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: AppColor.whiteBackground,
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      width: MediaQuery.of(context).size.width *
-                                          0.18,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: AppColor.whiteBackground,
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      width: MediaQuery.of(context).size.width *
-                                          0.27,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    const SizedBox(
-                                      height: 12,
-                                    ),
-                                    const DescriptionSkeleton(),
-                                    const SizedBox(
-                                      height: 12,
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 16.0),
-                                      child: Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.25,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.9,
-                                        decoration: BoxDecoration(
-                                          color: AppColor.whiteBackground,
-                                          borderRadius:
-                                              BorderRadius.circular(6),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 32,
-                                    ),
-                                    const HeaderPlaceholder(),
-                                    const AudioDemoSkeleton()
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            } else if (state is DetailedPerformanceUnPaid ||
+            if (state is DetailedPerformanceUnPaid ||
                 state is DetailedPerformanceDownLoaded ||
                 state is DetailedPerformancePaid) {
               return CustomScrollView(
@@ -425,7 +284,46 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                 ],
               );
             }
-            return const Center(child: Text('Ошибка загрузки данных'));
+
+            return SafeArea(
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Positioned(
+                    top: 9,
+                    left: 16,
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColor.grey,
+                      ),
+                      child: Center(
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: Image.asset(
+                            ImagesSources.closePerformance,
+                            color: AppColor.whiteText,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 0,
+                    left: 0,
+                    child: Lottie.asset(
+                      'assets/images/lottie.json',
+                      width: 80,
+                      height: 80,
+                    ),
+                  ),
+                ],
+              ),
+            );
           },
         ),
         floatingActionButton: Padding(
@@ -446,6 +344,7 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                 title = 'Приобрести за ${state.performance.price} ₽';
 
                 onTap = () async {
+                  audioManagerBloc.add(const AudioManagerAudioCompleted());
                   final userId = context
                       .read<AuthenticationRepositoryImpl>()
                       .currentUser
@@ -455,7 +354,6 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                     arguments: PaymentPageArgs(state.performance.id),
                   );
 
-                  log('refreshe');
                   bloc.add(
                     DetailedPerformanceRefreshed(
                       userId,

@@ -29,8 +29,7 @@ class PaymentServiceImpl implements PaymentService {
   Future<void> activate(
       {required String userId, required int performanceId}) async {
     await _apiClient.dio.post(_PaymentEndpoint.activate.endpoint,
-        options: Options(
-            headers: {'Content-type': 'application/x-www-form-urlencoded'}),
-        queryParameters: {'user_id': userId, 'performance_id': performanceId});
+        options: Options(responseType: ResponseType.json),
+        queryParameters: {'user_id': userId, 'perfomance_id': performanceId});
   }
 }

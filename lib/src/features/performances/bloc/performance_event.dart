@@ -15,12 +15,11 @@ class PerformancesStarted extends PerformanceEvent {
 
 class PerformancesRefreshed extends PerformanceEvent {
   final String userId;
-  final List<Performance> performances;
 
-  const PerformancesRefreshed(this.performances, this.userId);
+  const PerformancesRefreshed(this.userId);
 
   @override
-  List<Object> get props => [performances];
+  List<Object> get props => [userId];
 }
 
 class PerformanceLoadFullInfo extends PerformanceEvent {

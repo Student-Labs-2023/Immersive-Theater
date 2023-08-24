@@ -56,26 +56,32 @@ class _AudioPlayerPanelState extends State<AudioPlayerPanel> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ProgressBar(
+              thumbGlowRadius: 0,
+              thumbRadius: 8,
               progress: state.position,
               total: state.duration,
               timeLabelLocation: TimeLabelLocation.sides,
-              thumbColor: AppColor.purplePrimary,
-              progressBarColor: AppColor.purplePrimary,
+              thumbColor: state is AudioPlayerFinishedState ||
+                      state is AudioPlayerFailureState
+                  ? Colors.transparent
+                  : AppColor.purplePrimary,
+              progressBarColor: state is AudioPlayerFinishedState ||
+                      state is AudioPlayerFailureState
+                  ? AppColor.grey
+                  : AppColor.purplePrimary,
               baseBarColor: AppColor.grey,
               timeLabelTextStyle: Theme.of(context)
                   .textTheme
                   .bodySmall!
                   .copyWith(color: AppColor.greyText),
-              onSeek: (value) {
-                state is AudioPlayerFinishedState ||
-                        state is AudioPlayerFailureState
-                    ? null
-                    : context.read<AudioPlayerBloc>().add(
-                          AudioPlayerChangeSliderEvent(
-                            value.inSeconds.toDouble(),
-                          ),
-                        );
-              },
+              onSeek: state is AudioPlayerFinishedState ||
+                      state is AudioPlayerFailureState
+                  ? null
+                  : (value) => context.read<AudioPlayerBloc>().add(
+                        AudioPlayerChangeSliderEvent(
+                          value.inSeconds.toDouble(),
+                        ),
+                      ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
