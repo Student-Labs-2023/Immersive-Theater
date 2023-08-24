@@ -42,6 +42,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   ) async {
     controller
       ..loadRequest(Uri.parse(state.paymentLink))
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
           onUrlChange: (change) {
