@@ -37,6 +37,24 @@ class _YandexMapState extends State<YandexMapPage> {
           backgroundColor: Colors.white,
           onPressed: () async {
             var position = await Geolocator.getCurrentPosition();
+            widget.mapObjects.add(
+              PlacemarkMapObject(
+                mapId: const MapObjectId("user"),
+                point: Point(
+                  latitude: position.latitude,
+                  longitude: position.longitude,
+                ),
+                icon: PlacemarkIcon.single(
+                  PlacemarkIconStyle(
+                    image: BitmapDescriptor.fromAssetImage(
+                        ImagesSources.userPlacemark),
+                    scale: 1.5,
+                    isFlat: true,
+                    rotationType: RotationType.rotate,
+                  ),
+                ),
+              ),
+            );
             _moveCamera(
               coords: Point(
                 latitude: position.latitude,

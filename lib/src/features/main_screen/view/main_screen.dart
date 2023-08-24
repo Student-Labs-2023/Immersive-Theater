@@ -34,11 +34,9 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final panelController = PanelController();
   bool isPerfomnceButtonPressed = true;
-  late Position currentLocation;
   @override
   void initState() {
     checkLocationPermission();
-    _getCurrentLocation();
     super.initState();
   }
 
