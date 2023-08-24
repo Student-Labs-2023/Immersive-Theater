@@ -8,6 +8,7 @@ import 'package:shebalin/src/features/detailed_performaces/view/detailed_perform
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_page.dart';
 import 'package:shebalin/src/features/locations/view/widgets/historical_content_location_panel.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
+import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/app_button.dart';
 import 'package:shebalin/src/theme/ui/skeleton_loaders.dart';
 import 'package:shebalin/src/features/locations/view/widgets/images_content_location_panel.dart';
@@ -32,6 +33,7 @@ class _LocationDescriptionPanelPageState
     extends State<LocationDescriptionPanelPage> {
   late Chapter currentLocation;
   late final AudioManagerBloc _bloc;
+  late String title;
   @override
   void initState() {
     _bloc = AudioManagerBloc();
@@ -138,8 +140,10 @@ class _LocationDescriptionPanelPageState
                             currentLocation.place.address,
                             style: Theme.of(context)
                                 .textTheme
-                                .labelSmall
-                                ?.copyWith(color: AppColor.greyText),
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: AppColor.greyText,
+                                ),
                           )
                         : Container(
                             width: mediaQuerySize.width * 0.34,
@@ -158,7 +162,13 @@ class _LocationDescriptionPanelPageState
                           photoHeight: mediaQuerySize.height * 0.108,
                           photoWidth: mediaQuerySize.width * 0.234,
                         ),
+                  const SizedBox(
+                    height: 12,
+                  ),
                   const AppTextHeader(title: 'Историческая справка'),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   isLoaded
                       ? Padding(
                           padding: const EdgeInsets.only(right: 16.0),
@@ -188,8 +198,21 @@ class _LocationDescriptionPanelPageState
                             return Padding(
                               padding: const EdgeInsets.only(right: 16),
                               child: AudioWidget(
-                                title: currentLocation.title,
-                                subtitle: currentLocation.title,
+                                title: 'Глава ${int.parse(
+                                      widget.mapObjectId.substring(
+                                        widget.mapObjectId.indexOf('/') + 1,
+                                      ),
+                                    ) + 1}',
+                                subtitle: context
+                                    .read<PerformanceBloc>()
+                                    .state
+                                    .perfomances[int.parse(
+                                      widget.mapObjectId.substring(
+                                        0,
+                                        widget.mapObjectId.indexOf('/'),
+                                      ),
+                                    )]
+                                    .title,
                                 image: currentLocation.images[0],
                                 duration: state is AudioManagerInitial
                                     ? ''
@@ -203,7 +226,7 @@ class _LocationDescriptionPanelPageState
                         )
                       : const AudioCardSkeleton(),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.1,
+                    height: MediaQuery.of(context).size.height * 0.15,
                   )
                 ],
               );

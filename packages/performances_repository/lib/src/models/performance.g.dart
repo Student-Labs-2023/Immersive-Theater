@@ -11,9 +11,11 @@ Performance _$PerformanceFromJson(Map<String, dynamic> json) => Performance(
       title: json['name'] as String,
       imageLink: json['image_link'] as String,
       tag: json['tag'] as String,
-      info: FullInfoPerformance.empty(chapters: [
-        Chapter.fromJson(json['first_place'] as Map<String, dynamic>)
-      ]),
+      info: json['description'] == null
+          ? FullInfoPerformance.empty(chapters: [
+              Chapter.fromJson(json['first_place'] as Map<String, dynamic>)
+            ])
+          : FullInfoPerformance.fromJson(json),
       price: json['price'] as int,
       duration: Duration(seconds: json['duration'] as int),
       bought: json['access'] as bool,

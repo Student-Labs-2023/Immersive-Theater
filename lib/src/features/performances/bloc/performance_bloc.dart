@@ -53,7 +53,8 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
   ) async {
     emit(PerformanceLoadInProgress(perfomances: state.perfomances));
     try {
-      final info = await _performanceRepository.fetchPerformanceById(
+      final Performance performance =
+          await _performanceRepository.fetchPerformanceById(
         event.id,
         event.userId,
       );
@@ -62,8 +63,9 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
         PerformanceLoadSuccess(
           perfomances: state.perfomances
               .map(
-                (perf) =>
-                    (perf.id != event.id) ? perf : perf.copyWith(info: info),
+                (perf) => (perf.id != event.id)
+                    ? perf
+                    : perf.copyWith(info: performance.info),
               )
               .toList(),
         ),

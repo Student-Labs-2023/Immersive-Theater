@@ -43,6 +43,7 @@ class _PromocodePanelPageState extends State<PromocodePanelPage> {
                         scrollDirection: Axis.vertical,
                         itemBuilder: (BuildContext context, int index) {
                           return PerformanceCard(
+                            isTicket: true,
                             performance: state.tickets[index],
                           );
                         },

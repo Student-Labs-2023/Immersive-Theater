@@ -311,7 +311,7 @@ class _DetailedPerformancePageState extends State<DetailedPerformancePage> {
                                 ),
                                 Text(
                                   state.performance.info.description,
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ],
                             ),

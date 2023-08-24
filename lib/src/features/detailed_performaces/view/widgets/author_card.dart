@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shebalin/src/theme/app_color.dart';
 
 class AuthorCard extends StatelessWidget {
   const AuthorCard({
@@ -49,11 +50,14 @@ class AuthorCard extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 Text(
                   role,
-                  style: Theme.of(context).textTheme.titleSmall,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(color: AppColor.greyText),
                 ),
               ],
             )

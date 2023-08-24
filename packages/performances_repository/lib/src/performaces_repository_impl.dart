@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:performances_repository/src/models/full_info_performance.dart';
 import 'package:performances_repository/src/models/performance.dart';
 import 'package:performances_repository/src/performaces_repository.dart';
 import 'package:api_client/api_client.dart';
@@ -59,8 +58,7 @@ class PerformancesRepositoryImpl implements PerformancesRepository {
   }
 
   @override
-  Future<FullInfoPerformance> fetchPerformanceById(
-      int id, String userId) async {
+  Future<Performance> fetchPerformanceById(int id, String userId) async {
     final response = await _apiClient.dio
         .get(_PerformancesEndpoint.byId.endpoint + id.toString(),
             queryParameters: {
@@ -70,8 +68,8 @@ class PerformancesRepositoryImpl implements PerformancesRepository {
               responseType: ResponseType.json,
             ));
     log(response.data.toString());
-    final FullInfoPerformance info =
-        FullInfoPerformance.fromJson(jsonDecode(response.data));
-    return info;
+    final Performance performance =
+        Performance.fromJson(jsonDecode(response.data));
+    return performance;
   }
 }

@@ -52,4 +52,5 @@ class ImagesSources {
   static const String currentPlacemark = 'assets/images/mark.png';
   static const String logout = 'assets/icons/logout.png';
   static const String warning = 'assets/icons/warning.png';
+  static const String errorPhoto = 'assets/images/error_photo.svg';
 }

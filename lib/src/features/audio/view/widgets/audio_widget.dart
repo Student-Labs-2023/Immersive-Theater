@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shebalin/src/features/audio/view/widgets/circle_progress.dart';
 import 'package:shebalin/src/theme/app_color.dart';
 import 'package:shebalin/src/theme/images.dart';
+import 'package:shebalin/src/theme/theme.dart';
 
 class AudioWidget extends StatelessWidget {
   final String title;
@@ -64,14 +65,16 @@ class AudioWidget extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              Text(
-                subtitle,
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium!
-                    .copyWith(color: AppColor.greyText),
+                    .copyWith(fontFamily: secondaryFont),
+              ),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: AppColor.greyText,
+                    ),
               ),
             ],
           ),
@@ -81,7 +84,7 @@ class AudioWidget extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium!
-                .copyWith(color: AppColor.greyText),
+                .copyWith(color: AppColor.greyText, fontFamily: secondaryFont),
           )
         ],
       ),
@@ -109,7 +112,7 @@ class AudioImageBack extends StatelessWidget {
       height: height,
       width: height,
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.4),
+        color: AppColor.lightGray.withOpacity(0.3),
         borderRadius: BorderRadius.circular(8),
         image: DecorationImage(
           image: CachedNetworkImageProvider(image),

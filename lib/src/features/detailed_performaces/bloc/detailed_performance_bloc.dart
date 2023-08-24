@@ -28,15 +28,17 @@ class DetailedPerformanceBloc
     Emitter<DetailedPerformanceState> emit,
   ) async {
     try {
-      emit(DetailedPerformanceLoadInProgress(performance: performance));
-      final info = await performanceRepository.fetchPerformanceById(
-        performance.id,
+      emit(DetailedPerformanceLoadInProgress(performance: state.performance));
+      final Performance performance =
+          await performanceRepository.fetchPerformanceById(
+        state.performance.id,
         event.userId,
       );
       await Future.delayed(const Duration(seconds: 2));
       add(
         DetailedPerformanceInfoLoaded(
-          performance: state.performance.copyWith(info: info),
+          performance: state.performance
+              .copyWith(info: performance.info, bought: performance.bought),
         ),
       );
     } catch (_) {
@@ -59,15 +61,17 @@ class DetailedPerformanceBloc
     Emitter<DetailedPerformanceState> emit,
   ) async {
     try {
-      emit(DetailedPerformanceLoadInProgress(performance: performance));
-      final info = await performanceRepository.fetchPerformanceById(
-        performance.id,
+      emit(DetailedPerformanceLoadInProgress(performance: state.performance));
+      final Performance performance =
+          await performanceRepository.fetchPerformanceById(
+        state.performance.id,
         event.userId,
       );
       await Future.delayed(const Duration(seconds: 2));
       add(
         DetailedPerformanceInfoLoaded(
-          performance: state.performance.copyWith(info: info),
+          performance: state.performance
+              .copyWith(info: performance.info, bought: performance.bought),
         ),
       );
     } catch (_) {

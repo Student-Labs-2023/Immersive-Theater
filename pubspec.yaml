@@ -125,7 +125,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: RFDewi
+    - family: RFDewiExtended
       fonts:
         - asset: assets/fonts/RFDewiExtended-Thin.ttf
           weight: 200
@@ -142,6 +142,24 @@ flutter:
         - asset: assets/fonts/RFDewiExtended-Ultrabold.ttf
           weight: 800
         - asset: assets/fonts/RFDewiExtended-Black.ttf
+          weight: 900
+    - family: RFDewi
+      fonts:
+        - asset: assets/fonts/RFDewi-Thin.ttf
+          weight: 200
+        - asset: assets/fonts/RFDewi-Ultralight.ttf
+          weight: 300
+        - asset: assets/fonts/RFDewi-Light.ttf
+          weight: 400
+        - asset: assets/fonts/RFDewi-Regular.ttf
+          weight: 500
+        - asset: assets/fonts/RFDewi-Semibold.ttf
+          weight: 600
+        - asset: assets/fonts/RFDewi-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/RFDewi-Ultrabold.ttf
+          weight: 800
+        - asset: assets/fonts/RFDewi-Black.ttf
           weight: 900
   #   - family: Trajan Pro
   #     fonts:
