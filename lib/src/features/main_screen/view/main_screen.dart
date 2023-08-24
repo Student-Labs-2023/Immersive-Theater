@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,15 +34,17 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final panelController = PanelController();
   bool isPerfomnceButtonPressed = true;
-
+  late Position currentLocation;
   @override
   void initState() {
     checkLocationPermission();
+    _getCurrentLocation();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    _getCurrentLocation();
     return Scaffold(
       floatingActionButton: AppCircleButton(
         tag: 'logout',
@@ -199,7 +200,6 @@ class _MainScreenState extends State<MainScreen> {
                 );
               } else if (state is PerformanceLoadSuccess) {
                 List<PlacemarkMapObject> placeMarks = [];
-
                 for (var perf in state.perfomances) {
                   List<Place> places =
                       perf.info.chapters.map((e) => e.place).toList();
@@ -224,17 +224,58 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                         isDraggable: true,
                         icon: PlacemarkIcon.single(
-                          PlacemarkIconStyle(
-                            image: BitmapDescriptor.fromAssetImage(
-                              ImagesSources.currentPlacemark,
-                            ),
-                            scale: 0.3,
-                          ),
+                          i == 0
+                              ? PlacemarkIconStyle(
+                                  image: BitmapDescriptor.fromAssetImage(
+                                    ImagesSources.startPlacemark,
+                                  ),
+                                  scale: 3,
+                                )
+                              : PlacemarkIconStyle(
+                                  image: BitmapDescriptor.fromAssetImage(
+                                    ImagesSources.yellowPlacemark,
+                                  ),
+                                  scale: 3.5,
+                                ),
                         ),
                       ),
                     );
                   }
+                  placeMarks.add(
+                    PlacemarkMapObject(
+                      mapId: const MapObjectId("user"),
+                      point: Point(latitude: 2, longitude: 2),
+                      icon: PlacemarkIcon.single(
+                        PlacemarkIconStyle(
+                          image: BitmapDescriptor.fromAssetImage(
+                            ImagesSources.userPlacemark,
+                          ),
+                          scale: 1.5,
+                          isFlat: true,
+                          rotationType: RotationType.rotate,
+                        ),
+                      ),
+                    ),
+                  );
                 }
+                placeMarks.add(
+                  PlacemarkMapObject(
+                    mapId: const MapObjectId("user"),
+                    point: Point(
+                      latitude: currentLocation.latitude,
+                      longitude: currentLocation.longitude,
+                    ),
+                    icon: PlacemarkIcon.single(
+                      PlacemarkIconStyle(
+                        image: BitmapDescriptor.fromAssetImage(
+                            ImagesSources.userPlacemark),
+                        scale: 1.5,
+                        isFlat: true,
+                        rotationType: RotationType.rotate,
+                      ),
+                    ),
+                  ),
+                );
                 return YandexMapPage(
                   mapObjects: placeMarks,
                 );
@@ -313,5 +354,9 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ) ??
         false;
+  }
+
+  void _getCurrentLocation() async {
+    currentLocation = await Geolocator.getCurrentPosition();
   }
 }

@@ -38,7 +38,7 @@ class AppTextSubtitle extends StatelessWidget {
       title,
       style: Theme.of(context)
           .textTheme
-          .bodyMedium
+          .bodyLarge
           ?.copyWith(color: AppColor.greyText),
     );
   }

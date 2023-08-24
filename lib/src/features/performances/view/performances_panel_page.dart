@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shebalin/src/theme/theme.dart';
 
 import '../bloc/performance_bloc.dart';
 import 'widgets/performance_card.dart';
@@ -40,13 +39,16 @@ class _PerformancesPanelPageState extends State<PerformancesPanelPage> {
                       scrollDirection: Axis.vertical,
                       itemBuilder: (BuildContext context, int index) {
                         return PerformanceCard(
+                          isTicket: false,
+                          key: ValueKey(
+                            state.perfomances[index].bought.toString(),
+                          ),
                           performance: state.perfomances[index],
                         );
                       },
                     ),
                   );
                 } else {
-                  print("---- $state ----");
                   return const Text('Oops...Something went wrong!');
                 }
               },

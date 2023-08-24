@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shebalin/src/theme/app_color.dart';
+import 'package:shebalin/src/theme/theme.dart';
 
 class AppButton extends StatelessWidget {
   final String title;
@@ -54,10 +55,10 @@ class AppButton extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge
-                ?.copyWith(color: textColor),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: textColor,
+                  fontFamily: primaryFont,
+                ),
           ),
         ],
       ),

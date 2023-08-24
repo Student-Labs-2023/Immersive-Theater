@@ -37,13 +37,13 @@ ThemeData defaultTheme() => ThemeData(
           borderSide: const BorderSide(color: AppColor.grey),
         ),
       ),
-      fontFamily: defaultFont,
+      fontFamily: primaryFont,
       textTheme: TextTheme(
         displayLarge: TextStyle(
           height: baseTextHeight,
           color: defaultTextColor,
           fontSize: heading1FontSize,
-          fontFamily: defaultFont,
+          fontFamily: primaryFont,
           fontWeight: FontWeight.w600,
           letterSpacing: letterSpacing,
         ),
@@ -51,7 +51,7 @@ ThemeData defaultTheme() => ThemeData(
           height: baseTextHeight,
           color: defaultTextColor,
           fontSize: heading2FontSize,
-          fontFamily: defaultFont,
+          fontFamily: primaryFont,
           fontWeight: FontWeight.w600,
           letterSpacing: letterSpacing,
         ),
@@ -59,7 +59,7 @@ ThemeData defaultTheme() => ThemeData(
           height: baseTextHeight,
           color: defaultTextColor,
           fontSize: heading3FontSize,
-          fontFamily: defaultFont,
+          fontFamily: primaryFont,
           fontWeight: FontWeight.w600,
           letterSpacing: letterSpacing,
         ),
@@ -67,7 +67,7 @@ ThemeData defaultTheme() => ThemeData(
           height: baseTextHeight,
           color: defaultTextColor,
           fontSize: heading4FontSize,
-          fontFamily: defaultFont,
+          fontFamily: primaryFont,
           fontWeight: FontWeight.w600,
           letterSpacing: letterSpacing,
         ),
@@ -75,7 +75,7 @@ ThemeData defaultTheme() => ThemeData(
           height: baseTextHeight,
           color: defaultTextColor,
           fontSize: paragraph1FontSize,
-          fontFamily: defaultFont,
+          fontFamily: secondaryFont,
           fontWeight: FontWeight.w600,
           letterSpacing: letterSpacing,
         ),
@@ -83,7 +83,7 @@ ThemeData defaultTheme() => ThemeData(
           height: baseTextHeight,
           color: defaultTextColor,
           fontSize: paragraph2FontSize,
-          fontFamily: defaultFont,
+          fontFamily: secondaryFont,
           fontWeight: FontWeight.w600,
           letterSpacing: letterSpacing,
         ),
@@ -91,7 +91,7 @@ ThemeData defaultTheme() => ThemeData(
           height: baseTextHeight,
           color: defaultTextColor,
           fontSize: paragraph3FontSize,
-          fontFamily: defaultFont,
+          fontFamily: secondaryFont,
           fontWeight: FontWeight.w600,
           letterSpacing: letterSpacing,
         ),
@@ -100,7 +100,9 @@ ThemeData defaultTheme() => ThemeData(
 
 const double letterSpacing = -0.33;
 
-String defaultFont = 'RFDewi';
+String primaryFont = 'RFDewiExtended';
+String secondaryFont = 'RFDewi';
+
 const double baseTextHeight = 1.5;
 const double heading1FontSize = 28;
 const double heading2FontSize = 22;

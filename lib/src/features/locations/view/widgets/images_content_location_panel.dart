@@ -53,6 +53,7 @@ class ImagesContentLocationPanel extends StatelessWidget {
                   imageUrl: imageLinks[index],
                   fit: BoxFit.fill,
                   placeholder: (context, string) => const AppProgressBar(),
+                  errorWidget: (context, url, error) => const AppProgressBar(),
                 ),
               ),
             );

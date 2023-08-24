@@ -55,7 +55,8 @@ class TicketBloc extends Bloc<TicketEvent, TicketState> {
   ) async {
     emit(TicketLoadInProgress(tickets: state.tickets));
     try {
-      final info = await _performancesRepository.fetchPerformanceById(
+      final Performance performance =
+          await _performancesRepository.fetchPerformanceById(
         event.id,
         event.userId,
       );
@@ -64,8 +65,9 @@ class TicketBloc extends Bloc<TicketEvent, TicketState> {
         TicketLoadSuccess(
           tickets: state.tickets
               .map(
-                (perf) =>
-                    (perf.id != event.id) ? perf : perf.copyWith(info: info),
+                (perf) => (perf.id != event.id)
+                    ? perf
+                    : perf.copyWith(info: performance.info),
               )
               .toList(),
         ),

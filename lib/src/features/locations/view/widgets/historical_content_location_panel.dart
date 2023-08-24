@@ -15,8 +15,8 @@ class HistoricalContentLocationPanel extends StatelessWidget {
         locationDescription,
         style: Theme.of(context)
             .textTheme
-            .labelSmall
-            ?.copyWith(color: primaryTextColor, fontSize: 14),
+            .bodyMedium
+            ?.copyWith(color: primaryTextColor),
       ),
     );
   }

@@ -36,6 +36,7 @@ class ImagesSources {
   static const String onboardNext = 'assets/images/onboard_next.png';
   static const String onboardWelcome = 'assets/images/onboard_welcome.png';
   static const String purplePlacemark = "assets/images/purple_placemark.png";
+  static const String yellowPlacemark = "assets/images/placemark.png";
   static const String grayPlacemark = "assets/images/gray_placemark.png";
   static const String userPlacemark = "assets/images/user_placemark.png";
   static const String opinion = "assets/images/opinion.png";
@@ -52,4 +53,5 @@ class ImagesSources {
   static const String currentPlacemark = 'assets/images/mark.png';
   static const String logout = 'assets/icons/logout.png';
   static const String warning = 'assets/icons/warning.png';
+  static const String errorPhoto = 'assets/images/error_photo.svg';
 }

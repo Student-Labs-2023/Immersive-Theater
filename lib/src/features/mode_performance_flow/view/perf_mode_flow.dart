@@ -1,6 +1,8 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:payment_service/payment_service.dart';
 import 'package:performances_repository/performances_repository.dart';
 import 'package:shebalin/src/features/audio_player/bloc/audio_player_bloc.dart';
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_page.dart';
@@ -48,7 +50,9 @@ class PerfModeFlowState extends State<PerfModeFlow> {
     );
   }
 
-  void _onOnboardingComplete(bool listenAtHome) {
+  void _onOnboardingComplete(
+    bool listenAtHome,
+  ) {
     if (listenAtHome) {
       _navigatorKey.currentState!.pushNamedAndRemoveUntil(
         PerformanceAtHomeModePage.routeName,
@@ -60,6 +64,11 @@ class PerfModeFlowState extends State<PerfModeFlow> {
         (route) => false,
       );
     }
+    final String userId =
+        context.read<AuthenticationRepositoryImpl>().currentUser.id;
+    context
+        .read<PaymentServiceImpl>()
+        .activate(userId: userId, performanceId: widget.performance.id);
   }
 
   void _onPerfModeComplete() {
