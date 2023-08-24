@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,10 +35,11 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final panelController = PanelController();
   bool isPerfomnceButtonPressed = true;
-
+  late Position currentLocation;
   @override
   void initState() {
     checkLocationPermission();
+    _getCurrentLocation();
     super.initState();
   }
 
@@ -55,6 +55,7 @@ class _MainScreenState extends State<MainScreen> {
             context.read<AuthenticationRepositoryImpl>().currentUser.id;
         context.read<PerformanceBloc>().add(PerformancesRefreshed(userId));
       },
+  _getCurrentLocation();
       child: Scaffold(
         floatingActionButton: AppCircleButton(
           tag: 'logout',
@@ -102,7 +103,6 @@ class _MainScreenState extends State<MainScreen> {
                                       : AppColor.greyText,
                                 ),
                           ),
-                        ),
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.45,
@@ -197,59 +197,101 @@ class _MainScreenState extends State<MainScreen> {
               },
             ),
           ),
-          body: Center(
-            child: BlocBuilder<PerformanceBloc, PerformanceState>(
-              builder: (context, state) {
-                if (state is PerformanceLoadInProgress) {
-                  return const YandexMapPage(
-                    mapObjects: [],
-                  );
-                } else if (state is PerformanceLoadSuccess) {
-                  List<PlacemarkMapObject> placeMarks = [];
-
-                  for (var perf in state.perfomances) {
-                    List<Place> places =
-                        perf.info.chapters.map((e) => e.place).toList();
-                    for (var i = 0; i < places.length; i++) {
-                      placeMarks.add(
-                        PlacemarkMapObject(
-                          onTap: (mapObject, point) {
-                            _mapPinTapped(
-                              mapObject,
-                              perf.info.chapters.length,
-                              point,
-                              context,
-                            );
-                          },
-                          mapId: MapObjectId(
-                            '${perf.id}/$i',
-                          ),
-                          opacity: 1,
-                          point: Point(
-                            latitude: places[i].latitude,
-                            longitude: places[i].longitude,
-                          ),
-                          isDraggable: true,
-                          icon: PlacemarkIcon.single(
-                            PlacemarkIconStyle(
-                              image: BitmapDescriptor.fromAssetImage(
-                                ImagesSources.currentPlacemark,
-                              ),
-                              scale: 0.3,
-                            ),
-                          ),
+    
+        body: Center(
+          child: BlocBuilder<PerformanceBloc, PerformanceState>(
+            builder: (context, state) {
+              if (state is PerformanceLoadInProgress) {
+                return const YandexMapPage(
+                  mapObjects: [],
+                );
+              } else if (state is PerformanceLoadSuccess) {
+                List<PlacemarkMapObject> placeMarks = [];
+                for (var perf in state.perfomances) {
+                  List<Place> places =
+                      perf.info.chapters.map((e) => e.place).toList();
+                  for (var i = 0; i < places.length; i++) {
+                    placeMarks.add(
+                      PlacemarkMapObject(
+                        onTap: (mapObject, point) {
+                          _mapPinTapped(
+                            mapObject,
+                            perf.info.chapters.length,
+                            point,
+                            context,
+                          );
+                        },
+                        mapId: MapObjectId(
+                          '${perf.id}/$i',
+                        ),
+                        opacity: 1,
+                        point: Point(
+                          latitude: places[i].latitude,
+                          longitude: places[i].longitude,
+                        ),
+                        isDraggable: true,
+                        icon: PlacemarkIcon.single(
+                          i == 0
+                              ? PlacemarkIconStyle(
+                                  image: BitmapDescriptor.fromAssetImage(
+                                    ImagesSources.startPlacemark,
+                                  ),
+                                  scale: 3,
+                                )
+                              : PlacemarkIconStyle(
+                                  image: BitmapDescriptor.fromAssetImage(
+                                    ImagesSources.yellowPlacemark,
+                                  ),
+                                  scale: 3.5,
+                                ),
                         ),
                       );
                     }
                   }
-                  return YandexMapPage(
-                    mapObjects: placeMarks,
+
+                  placeMarks.add(
+                    PlacemarkMapObject(
+                      mapId: const MapObjectId("user"),
+                      point: Point(latitude: 2, longitude: 2),
+                      icon: PlacemarkIcon.single(
+                        PlacemarkIconStyle(
+                          image: BitmapDescriptor.fromAssetImage(
+                            ImagesSources.userPlacemark,
+                          ),
+                          scale: 1.5,
+                          isFlat: true,
+                          rotationType: RotationType.rotate,
+                        ),
+                      ),
+                    ),
                   );
-                } else {
-                  return const YandexMap();
                 }
-              },
-            ),
+                placeMarks.add(
+                  PlacemarkMapObject(
+                    mapId: const MapObjectId("user"),
+                    point: Point(
+                      latitude: currentLocation.latitude,
+                      longitude: currentLocation.longitude,
+                    ),
+                    icon: PlacemarkIcon.single(
+                      PlacemarkIconStyle(
+                        image: BitmapDescriptor.fromAssetImage(
+                            ImagesSources.userPlacemark),
+                        scale: 1.5,
+                        isFlat: true,
+                        rotationType: RotationType.rotate,
+                      ),
+                    ),
+                  ),
+                );
+                return YandexMapPage(
+                  mapObjects: placeMarks,
+                );
+              } else {
+                return const YandexMap();
+              }
+            },
+
           ),
           borderRadius: panelRadius,
           backdropEnabled: true,
@@ -321,5 +363,9 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ) ??
         false;
+  }
+
+  void _getCurrentLocation() async {
+    currentLocation = await Geolocator.getCurrentPosition();
   }
 }

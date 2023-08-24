@@ -36,6 +36,7 @@ class ImagesSources {
   static const String onboardNext = 'assets/images/onboard_next.png';
   static const String onboardWelcome = 'assets/images/onboard_welcome.png';
   static const String purplePlacemark = "assets/images/purple_placemark.png";
+  static const String yellowPlacemark = "assets/images/placemark.png";
   static const String grayPlacemark = "assets/images/gray_placemark.png";
   static const String userPlacemark = "assets/images/user_placemark.png";
   static const String opinion = "assets/images/opinion.png";
