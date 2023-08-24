@@ -40,7 +40,7 @@ class OnboardPerformance {
       subtitleAccent: '',
     ),
     OnboardPerformance(
-      title: 'Спектакль можно прослушать 1 раз',
+      title: 'Спектакль можно прослушать\n1 раз',
       subtitle:
           'Если вы готовы начать прослушивание, нажмите "Начать спектакль"',
       subtitleAccent: '',
@@ -60,13 +60,13 @@ class OnboardPerformance {
     ),
     OnboardPerformance(
       title: 'Треки переключаются автоматически',
-      subtitle: 'Весь спектакль будет воспроизводиться без пауз',
+      subtitle: 'Весь спектакль будет\nвоспроизводиться без пауз',
       buttonTitle: 'Начать спектакль',
       image: ImagesSources.onboardNext,
       subtitleAccent: '',
     ),
     OnboardPerformance(
-      title: 'Спектакль можно прослушать 1 раз',
+      title: 'Спектакль можно прослушать\n1 раз',
       subtitle:
           'Если вы готовы начать прослушивание, нажмите "Начать спектакль"',
       subtitleAccent: '',

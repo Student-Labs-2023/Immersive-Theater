@@ -17,6 +17,7 @@ class AnimatedImage extends StatelessWidget {
         key: Key(image),
         child: Image.asset(
           width: double.infinity,
+          height: 400,
           image,
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shebalin/src/features/performances/view/widgets/performance_card.dart';
 
 import 'package:shebalin/src/features/tickets/bloc/ticket_bloc.dart';
@@ -29,8 +30,10 @@ class _PromocodePanelPageState extends State<PromocodePanelPage> {
                 builder: (context, state) {
                   if (state is TicketLoadInProgress) {
                     return Center(
-                      child: CircularProgressIndicator(
-                        color: accentTextColor,
+                      child: Lottie.asset(
+                        'assets/images/lottie.json',
+                        width: 80,
+                        height: 80,
                       ),
                     );
                   }

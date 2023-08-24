@@ -8,7 +8,6 @@ import 'package:shebalin/src/features/detailed_performaces/view/detailed_perform
 import 'package:shebalin/src/features/detailed_performaces/view/detailed_performance_page.dart';
 import 'package:shebalin/src/features/locations/view/widgets/historical_content_location_panel.dart';
 import 'package:shebalin/src/features/main_screen/view/main_screen.dart';
-import 'package:shebalin/src/theme/theme.dart';
 import 'package:shebalin/src/theme/ui/app_button.dart';
 import 'package:shebalin/src/theme/ui/skeleton_loaders.dart';
 import 'package:shebalin/src/features/locations/view/widgets/images_content_location_panel.dart';
