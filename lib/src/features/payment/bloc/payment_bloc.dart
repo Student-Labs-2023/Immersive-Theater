@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -45,9 +44,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
-          onUrlChange: (change) {
-            log(change.url.toString());
-          },
+          onUrlChange: (change) {},
         ),
       );
   }

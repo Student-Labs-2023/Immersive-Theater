@@ -16,6 +16,9 @@ class ImageCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: CachedNetworkImage(
+        errorWidget: (context, url, error) {
+          return const AppProgressBar();
+        },
         placeholder: (context, url) => const AppProgressBar(),
         imageUrl: imageUrl,
         height: size,

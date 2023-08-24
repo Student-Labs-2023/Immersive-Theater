@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:authentication_repository/src/exceptions/exceptions.dart';
@@ -23,7 +22,6 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
       final user = firebaseUser == null ? UserModel.empty : firebaseUser.toUser;
       _cache.write<UserModel>(key: userCacheKey, value: user);
-      log(user.id);
       return user;
     });
   }
@@ -42,7 +40,6 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
           _verificationId = verificationId;
         },
         verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
-          log('verificationCompleted');
           await _firebaseAuth.signInWithCredential(phoneAuthCredential);
         },
         verificationFailed: (FirebaseAuthException error) {},

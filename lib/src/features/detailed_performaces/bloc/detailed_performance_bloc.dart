@@ -34,7 +34,6 @@ class DetailedPerformanceBloc
         state.performance.id,
         event.userId,
       );
-      await Future.delayed(const Duration(seconds: 2));
       add(
         DetailedPerformanceInfoLoaded(
           performance: state.performance
@@ -67,7 +66,6 @@ class DetailedPerformanceBloc
         state.performance.id,
         event.userId,
       );
-      await Future.delayed(const Duration(seconds: 2));
       add(
         DetailedPerformanceInfoLoaded(
           performance: state.performance
