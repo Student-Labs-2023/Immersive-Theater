@@ -48,7 +48,8 @@ class _YandexMapState extends State<YandexMapPage> {
                   icon: PlacemarkIcon.single(
                     PlacemarkIconStyle(
                       image: BitmapDescriptor.fromAssetImage(
-                          ImagesSources.userPlacemark),
+                        ImagesSources.userPlacemark,
+                      ),
                       scale: 1.5,
                       isFlat: true,
                       rotationType: RotationType.rotate,
