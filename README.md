@@ -4,33 +4,17 @@ Note: Project is in active development as part of internship at Student Labs & E
 
 A working platform in the form of a mobile application for the Omsk Actor's House. The application will implement the ability to listen to the performance in Omsk in open space, as well as outside it.
 
-### How to Use
-
-**Step 1:**
-
-Download or clone this repo by using the link below:
-
-```
-https://github.com/effectivemade/labs-shebalin-flutter-app.git
-```
-
-**Step 2:**
-
-Go to project root and execute the following command in console to get the required dependencies: 
-
-```
-flutter pub get 
-```
-**Step 3:**
-
-Add api key for yandex_mapkit and base url to .env: 
-
-```
-BASE_URL=PASTE_BASE_URL
-API_KEY=PASTE_API_KEY
-```
-
-
+### How to test
+### Android
+1. Install apk from here: https://disk.yandex.com/d/93UoPtqpL1GQQw
+2. Insert test phone number and code (duplicated in disk's readme) if your personal number doesn't work:
+    n: +7 985 865-56-56
+    code: 000000
+### iOS
+1. Ask https://t.me/maxbushuev for testflight permission
+2. Insert test phone number and code (duplicated in disk's readme) if your personal number doesn't work:
+    n: +7 985 865-56-56
+    code: 000000
 ### Libraries & Tools Used
 
 * [Dio](https://pub.dev/packages/dio)
