@@ -115,5 +115,5 @@ Auto playback when chapter ended.
 
 New chapter starts when user on the place and current chapter ended.
 
-<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/b21be364-ab4e-4fa9-b9d3-7b7fe0bd4f28" height="400"> 
+<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/88a91c45-3f53-4ffa-ac8d-9ea30d191478" height="400"> 
 
