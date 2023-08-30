@@ -64,30 +64,40 @@ flutter build apk --no-tree-shake-icons
 
 - Onboarding
 - Phone Number Authentification with [Firebase](https://firebase.flutter.dev/docs/overview/)
+- Maps on main screen with control points of each performance.
 - Listening performances in genre promenade with user geolocation update.
 - Listening performances at home.
-- Maps on main screen with control points of each performance.
 
 
-## Screenshots 
 
-### Main Screen
+## Demo 
 
-The screen contains two parts: list of all performances and list of bought tickets.
+### Onboarding screens.
 
-<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/79749070/b5793a1f-e808-402d-a631-13165d2ddc17" height="400"> 
+Info about this application.
 
-### Performance Description
+<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/ed6468dc-b5e0-42ba-823b-a4a58a45de49" height="400"> 
 
-Screeen shows various information about performance: text description, duration, location of 1st chapter, images, chapters and map overview
+### Login and verification screens.
 
-<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/79749070/97de31fc-6c2f-4c32-b4db-72b9af185f5e" height="400"> 
+Phone number authentification with test data.
 
-### Location Description
+<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/426bb6d4-5044-4b84-aee9-05a8e7e23d8f" height="400"> 
 
-This bottomsheet shows information about choosen location.
 
-<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/79749070/4c03785d-21f7-4b58-96e0-1d284a19f1ed" height="400"> 
+### Main Screen.
+
+The screen contains two parts: list of all performances and list of bought tickets. Placemarks on the map contain info about control points of performances route.
+
+<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/0eb6b560-9b54-4f18-b443-57746be77899" height="400"> 
+
+### Detailed Performance Screen.
+
+Screeen shows detailed information about performance: description, duration, location of 1st chapter, images, chapters and route of performance.
+
+
+<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/f079dc9c-c260-42b7-b8c3-fdb79ffc9e5a" height="400"> 
+
 
 
 ### Performance Mode
