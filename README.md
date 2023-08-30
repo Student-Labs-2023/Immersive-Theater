@@ -1,5 +1,4 @@
-
-![banner](https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/f2f18e8b-42ec-4aed-beda-ea3f4cbecc4e)
+![](assets/banner.png)
 
 
 Note: Flutter project is in active development as part of internship at Student Labs & Effective.
