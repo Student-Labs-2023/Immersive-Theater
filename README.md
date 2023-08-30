@@ -117,18 +117,3 @@ New chapter starts when user on the place and current chapter ended.
 
 <img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/b21be364-ab4e-4fa9-b9d3-7b7fe0bd4f28" height="400"> 
 
-### Performance Mode
-
-|                         Chapter overview            |                    Chapter switch example                   |
-|:----------------------------------------------------------:|:------------------------------------------------------------:|
-| <img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/79749070/5a3625b2-dd03-485c-acee-e802cdfebc87" height="400">  | <img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/79749070/12b4fb62-e94c-4e25-a2be-dd0e2481dd27" height="400"> |
-
-
-
-
-### Onboarding before performance and route planning
-
-|                         Onboarding -> performance mode            |                    Route planning                   |
-|:----------------------------------------------------------:|:------------------------------------------------------------:|
-| <img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/79749070/832b8707-f6df-4713-ac4d-aba564a7e281" height="400">  | <img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/79749070/02c15477-c825-4db6-9d3e-be13344f5828" height="400"> |
-
