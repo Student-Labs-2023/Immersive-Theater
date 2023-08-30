@@ -1,19 +1,22 @@
-# Immersive Theater
+
+![banner](https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/f2f18e8b-42ec-4aed-beda-ea3f4cbecc4e)
+
 
 Note: Flutter project is in active development as part of internship at Student Labs & Effective.
 
 A working platform in the form of a mobile application for the Omsk Actor's House. The application will implement the ability to listen to the performance in Omsk in open space, as well as outside it.
 
 
+
 ## Getting Started
 Clone the repo and follow these steps to setup the project.
 
-#### Environment
-Dart 2.19.2 or greater, but lesser 3.0.0 and Flutter 3 or greater is required. 
+### Environment
+Dart 2.19.2 or greater, but lesser 3.0.0 and Flutter 3 or greater is required.
 
 [Follow this guide to setup your flutter environment](https://docs.flutter.dev/get-started/install) based on your platform.
 
-#### Flutter
+### Flutter
 First and foremost make sure you have Flutter 3 setup on your system. 
 You can check the version by running
 ```bash
