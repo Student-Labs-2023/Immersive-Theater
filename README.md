@@ -72,33 +72,43 @@ flutter build apk --no-tree-shake-icons
 
 ## Demo 
 
-### Onboarding screens.
+### Onboarding screens
 
 Info about this application.
 
 <img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/ed6468dc-b5e0-42ba-823b-a4a58a45de49" height="400"> 
 
-### Login and verification screens.
+### Login and verification screens
 
 Phone number authentification with test data.
 
 <img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/426bb6d4-5044-4b84-aee9-05a8e7e23d8f" height="400"> 
 
 
-### Main Screen.
+### Main Screen
 
 The screen contains two parts: list of all performances and list of bought tickets. Placemarks on the map contain info about control points of performances route.
 
 <img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/0eb6b560-9b54-4f18-b443-57746be77899" height="400"> 
 
-### Detailed Performance Screen.
+### Detailed Performance Screen
 
-Screeen shows detailed information about performance: description, duration, location of 1st chapter, images, chapters and route of performance.
-
+Detailed information contains description, duration, location of 1st chapter, images, chapters and route of performance.
 
 <img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/f079dc9c-c260-42b7-b8c3-fdb79ffc9e5a" height="400"> 
 
 
+### Introduction To Performance Mode
+
+Information about right way of listening performance.
+
+<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/dffbcd00-bcc5-4889-8190-3c431686ffdd" height="400"> 
+
+### Performance Mode At Home
+
+Auto playback when chapter ended.
+
+<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/b21be364-ab4e-4fa9-b9d3-7b7fe0bd4f28" height="400"> 
 
 ### Performance Mode
 
@@ -106,10 +116,6 @@ Screeen shows detailed information about performance: description, duration, loc
 |:----------------------------------------------------------:|:------------------------------------------------------------:|
 | <img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/79749070/5a3625b2-dd03-485c-acee-e802cdfebc87" height="400">  | <img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/79749070/12b4fb62-e94c-4e25-a2be-dd0e2481dd27" height="400"> |
 
-### First-run Ondoarding 
-<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/79749070/28cb64d4-57cb-481e-8962-7c121c7d566f" height="400"> 
-<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/79749070/7b282137-7178-46b1-a378-eb89a4d7b41d" height="400">
-<img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/79749070/0685243e-ebc8-4e0a-90a5-bf645ee9a3e6" height=400>
 
 
 
