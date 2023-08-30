@@ -70,7 +70,7 @@ flutter build apk --no-tree-shake-icons
 
 
 
-## Demo 
+## Features Demo 
 
 ### Onboarding screens
 
@@ -116,4 +116,12 @@ Auto playback when chapter ended.
 New chapter starts when user on the place and current chapter ended.
 
 <img src="https://github.com/Student-Labs-2023/Immersive-Theater/assets/108602792/88a91c45-3f53-4ffa-ac8d-9ea30d191478" height="400"> 
+
+## Project Demo
+
+
+
+[![Video](https://img.youtube.com/vi/70d7AhSQMmY/maxresdefault.jpg)](https://www.youtube.com/watch?v=70d7AhSQMmY)
+
+
 
